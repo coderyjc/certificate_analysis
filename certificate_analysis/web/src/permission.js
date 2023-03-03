@@ -1,64 +1,92 @@
-import router from './router'
-import store from './store'
-import { Message } from 'element-ui'
-import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
-import getPageTitle from '@/utils/get-page-title'
+import { ElLoading } from 'element-plus'
+import router from '@/router'
+// import store from '@/store'
+import { TOKEN } from './pinia/modules/app' // TOKEN变量名
+import { nextTick } from 'vue'
+import { useApp } from './pinia/modules/app'
+import { useAccount } from './pinia/modules/account'
+import { useMenus } from './pinia/modules/menu'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+const getPageTitle = title => {
+  const { title: appTitle } = useApp()
+  if (title) {
+    return `${title} - ${appTitle}`
+  }
+  return appTitle
+}
 
-const whiteList = ['/login'] // no redirect whitelist
+// 白名单，里面是路由对象的name
+const WhiteList = ['login', 'lock']
 
-router.beforeEach(async(to, from, next) => {
-  // start progress bar
-  NProgress.start()
+let loadingInstance = null
 
-  // set page title
-  document.title = getPageTitle(to.meta.title)
+// vue-router4的路由守卫不再是通过next放行，而是通过return返回true或false或者一个路由地址
+router.beforeEach(async to => {
+  loadingInstance = ElLoading.service({
+    lock: true,
+    // text: '正在加载数据，请稍候~',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
 
-  // determine whether the user has logged in
-  const hasToken = getToken()
-
-  if (hasToken) {
-    if (to.path === '/login') {
-      // if is logged in, redirect to the home page
-      next({ path: '/' })
-      NProgress.done()
-    } else {
-      const hasGetUserInfo = store.getters.name
-      if (hasGetUserInfo) {
-        next()
-      } else {
-        try {
-          // get user info
-          await store.dispatch('user/getInfo')
-
-          next()
-        } catch (error) {
-          // remove token and go to login page to re-login
-          await store.dispatch('user/resetToken')
-          Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
-          NProgress.done()
-        }
-      }
+  if (WhiteList.includes(to.name)) {
+    return true
+  }
+  if (!window.localStorage[TOKEN]) {
+    return {
+      name: 'login',
+      query: {
+        redirect: to.fullPath, // redirect是指登录之后可以跳回到redirect指定的页面
+      },
+      replace: true,
     }
   } else {
-    /* has no token*/
+    const { userinfo, getUserinfo } = useAccount()
+    // 获取用户角色信息，根据角色判断权限
+    if (!userinfo) {
+      try {
+        // 获取用户信息
+        await getUserinfo()
+      } catch (err) {
+        loadingInstance.close()
+        return false
+      }
 
-    if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
-      next()
-    } else {
-      // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`)
-      NProgress.done()
+      return to.fullPath
+    }
+
+    // 生成菜单（如果你的项目有动态菜单，在此处会添加动态路由）
+    const { menus, generateMenus } = useMenus()
+    if (menus.length <= 0) {
+      try {
+        await generateMenus()
+        return to.fullPath // 添加动态路由后，必须加这一句触发重定向，否则会404
+      } catch (err) {
+        loadingInstance.close()
+        return false
+      }
+    }
+
+    // 判断是否处于锁屏状态
+    if (to.name !== 'lock') {
+      const { authorization } = useApp()
+      if (!!authorization && !!authorization.screenCode) {
+        return {
+          name: 'lock',
+          query: {
+            redirect: to.path,
+          },
+          replace: true,
+        }
+      }
     }
   }
 })
 
-router.afterEach(() => {
-  // finish progress bar
-  NProgress.done()
+router.afterEach(to => {
+  loadingInstance.close()
+  if (router.currentRoute.value.name === to.name) {
+    nextTick(() => {
+      document.title = getPageTitle(!!to.meta && to.meta.truetitle)
+    })
+  }
 })

@@ -1,56 +1,80 @@
 <template>
-  <div :class="{'has-logo':showLogo}">
-    <logo v-if="showLogo" :collapse="isCollapse" />
-    <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu
-        :default-active="activeMenu"
-        :collapse="isCollapse"
-        :background-color="variables.menuBg"
-        :text-color="variables.menuText"
-        :unique-opened="false"
-        :active-text-color="variables.menuActiveText"
-        :collapse-transition="false"
-        mode="vertical"
-      >
-        <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
-      </el-menu>
-    </el-scrollbar>
+  <div
+    class="left"
+    :class="{ collapse: collapse, mobile: device === 'mobile' }"
+  >
+    <logo />
+    <menus :collapse="collapse" />
   </div>
+  <div class="mask" @click="closeSidebar"></div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Logo from './Logo'
-import SidebarItem from './SidebarItem'
-import variables from '@/styles/variables.scss'
+import { useApp } from '@/pinia/modules/app'
+import { storeToRefs } from 'pinia'
+import { computed, defineComponent } from 'vue'
+import Logo from './Logo.vue'
+import Menus from './Menus.vue'
 
-export default {
-  components: { SidebarItem, Logo },
-  computed: {
-    ...mapGetters([
-      'sidebar'
-    ]),
-    routes() {
-      return this.$router.options.routes
-    },
-    activeMenu() {
-      const route = this.$route
-      const { meta, path } = route
-      // if set path, the sidebar will highlight the path you set
-      if (meta.activeMenu) {
-        return meta.activeMenu
+export default defineComponent({
+  components: {
+    Logo,
+    Menus,
+  },
+  setup() {
+    const appStore = useApp()
+    const { sidebar, device } = storeToRefs(appStore)
+    const { setCollapse } = appStore
+    const collapse = computed(() => sidebar.value.collapse)
+
+    const closeSidebar = () => {
+      setCollapse(1)
+    }
+
+    return {
+      collapse,
+      device,
+      closeSidebar,
+    }
+  },
+})
+</script>
+
+<style lang="scss" scoped>
+.left {
+  width: 210px;
+  background: $menuBg;
+  transition: all 0.3s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  &.collapse {
+    width: 64px;
+    ::v-deep(.brand .title) {
+      display: none;
+    }
+  }
+  &.mobile {
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    & + .mask {
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 9;
+    }
+    &.collapse {
+      transform: translateX(-100%);
+      & + .mask {
+        display: none;
       }
-      return path
-    },
-    showLogo() {
-      return this.$store.state.settings.sidebarLogo
-    },
-    variables() {
-      return variables
-    },
-    isCollapse() {
-      return !this.sidebar.opened
     }
   }
 }
-</script>
+</style>

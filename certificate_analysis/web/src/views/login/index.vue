@@ -1,237 +1,220 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Date: 2021-04-20 11:06:21
+ * @LastEditors: huzhushan@126.com
+ * @LastEditTime: 2022-09-27 18:24:27
+ * @Author: huzhushan@126.com
+ * @HomePage: https://huzhushan.gitee.io/vue3-element-admin
+ * @Github: https://github.com/huzhushan/vue3-element-admin
+ * @Donate: https://huzhushan.gitee.io/vue3-element-admin/donate/
+-->
 <template>
-  <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
-      <div class="title-container">
-        <h3 class="title">Login Form</h3>
-      </div>
-
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
+  <div class="login">
+    <el-form class="form" :model="model" :rules="rules" ref="loginForm">
+      <h1 class="title">Vue3 Element Admin</h1>
+      <el-form-item prop="userName">
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
+          class="text"
+          v-model="model.userName"
+          prefix-icon="User"
+          clearable
+          :placeholder="$t('login.username')"
         />
       </el-form-item>
-
       <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
         <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
+          class="text"
+          v-model="model.password"
+          prefix-icon="Lock"
+          show-password
+          clearable
+          :placeholder="$t('login.password')"
         />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
       </el-form-item>
-
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
-
+      <el-form-item>
+        <el-button
+          :loading="loading"
+          type="primary"
+          class="btn"
+          size="large"
+          @click="submit"
+        >
+          {{ btnText }}
+        </el-button>
+      </el-form-item>
     </el-form>
+  </div>
+  <div class="change-lang">
+    <change-lang />
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import {
+  defineComponent,
+  getCurrentInstance,
+  reactive,
+  toRefs,
+  ref,
+  computed,
+  watch,
+} from 'vue'
+import { Login } from '@/api/login'
+import { useRouter, useRoute } from 'vue-router'
+import ChangeLang from '@/layout/components/Topbar/ChangeLang.vue'
+import useLang from '@/i18n/useLang'
+import { useApp } from '@/pinia/modules/app'
 
-export default {
-  name: 'Login',
-  data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
-    return {
-      loginForm: {
-        username: 'admin',
-        password: '111111'
+export default defineComponent({
+  components: { ChangeLang },
+  name: 'login',
+  setup() {
+    const { proxy: ctx } = getCurrentInstance() // 可以把ctx当成vue2中的this
+    const router = useRouter()
+    const route = useRoute()
+    const { lang } = useLang()
+    watch(lang, () => {
+      state.rules = getRules()
+    })
+    const getRules = () => ({
+      userName: [
+        {
+          required: true,
+          message: ctx.$t('login.rules-username'),
+          trigger: 'blur',
+        },
+      ],
+      password: [
+        {
+          required: true,
+          message: ctx.$t('login.rules-password'),
+          trigger: 'blur',
+        },
+        {
+          min: 6,
+          max: 12,
+          message: ctx.$t('login.rules-regpassword'),
+          trigger: 'blur',
+        },
+      ],
+    })
+    const state = reactive({
+      model: {
+        userName: 'admin',
+        password: '123456',
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-      },
+      rules: getRules(),
       loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
-  },
-  watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
-  },
-  methods: {
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
-    },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
+      btnText: computed(() =>
+        state.loading ? ctx.$t('login.logining') : ctx.$t('login.login')
+      ),
+      loginForm: ref(null),
+      submit: () => {
+        if (state.loading) {
+          return
         }
-      })
+        state.loginForm.validate(async valid => {
+          if (valid) {
+            state.loading = true
+            const { code, data, message } = await Login(state.model)
+            if (+code === 200) {
+              ctx.$message.success({
+                message: ctx.$t('login.loginsuccess'),
+                duration: 1000,
+              })
+
+              const targetPath = decodeURIComponent(route.query.redirect)
+              if (targetPath.startsWith('http')) {
+                // 如果是一个url地址
+                window.location.href = targetPath
+              } else if (targetPath.startsWith('/')) {
+                // 如果是内部路由地址
+                router.push(targetPath)
+              } else {
+                router.push('/')
+              }
+              useApp().initToken(data)
+            } else {
+              ctx.$message.error(message)
+            }
+            state.loading = false
+          }
+        })
+      },
+    })
+
+    return {
+      ...toRefs(state),
     }
-  }
-}
+  },
+})
 </script>
 
-<style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
-$bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
-
-/* reset element-ui css */
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
-  }
-
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
-}
-</style>
-
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
-
-.login-container {
-  min-height: 100%;
+.login {
+  transition: transform 1s;
+  transform: scale(1);
   width: 100%;
-  background-color: $bg;
+  height: 100%;
   overflow: hidden;
-
-  .login-form {
-    position: relative;
+  background: #2d3a4b;
+  .form {
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
-    overflow: hidden;
-  }
-
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-
-    span {
-      &:first-of-type {
-        margin-right: 16px;
+    padding: 0 24px;
+    box-sizing: border-box;
+    margin: 160px auto 0;
+    :deep {
+      .el-input__wrapper {
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        background: rgba(0, 0, 0, 0.1);
+      }
+      .el-input-group--append > .el-input__wrapper {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      .el-input-group--prepend > .el-input__wrapper {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
       }
     }
-  }
-
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-
-  .title-container {
-    position: relative;
-
     .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
+      color: #fff;
       text-align: center;
-      font-weight: bold;
+      font-size: 24px;
+      margin: 0 0 24px;
+    }
+    .text {
+      font-size: 16px;
+      :deep(.el-input__inner) {
+        color: #fff;
+        height: 48px;
+        line-height: 48px;
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+    .btn {
+      width: 100%;
     }
   }
-
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
+}
+.change-lang {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  :deep {
+    .change-lang {
+      height: 24px;
+      &:hover {
+        background: none;
+      }
+      .icon {
+        color: #fff;
+      }
+    }
   }
 }
 </style>

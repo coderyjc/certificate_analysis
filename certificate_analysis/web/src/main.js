@@ -1,43 +1,51 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
+import App from './App.vue'
 
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
+const app = createApp(App)
 
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+// 引入element-plus
+import ElementPlus from 'element-plus'
+import './assets/style/element-variables.scss'
 
-import '@/styles/index.scss' // global css
+// 国际化
+import i18n from '@/i18n'
 
-import App from './App'
-import store from './store'
+// 全局注册element-plus/icons-vue
+import * as ICONS from '@element-plus/icons-vue'
+Object.entries(ICONS).forEach(([key, component]) => {
+  // app.component(key === 'PieChart' ? 'PieChartIcon' : key, component)
+  app.component(key, component)
+})
+
+// 引入路由
 import router from './router'
 
-import '@/icons' // icon
-import '@/permission' // permission control
+// 引入pinia
+import pinia from './pinia'
 
-/**
- * If you don't want to use mock-server
- * you want to use MockJs for mock api
- * you can execute: mockXHR()
- *
- * Currently MockJs will be used in the production environment,
- * please remove it before going online ! ! !
- */
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+// 权限控制
+import './permission'
 
-// set ElementUI lang to EN
-Vue.use(ElementUI, { locale })
-// 如果想要中文版 element-ui，按如下方式声明
-// Vue.use(ElementUI)
+// 引入svg图标注册脚本
+import 'vite-plugin-svg-icons/register'
 
-Vue.config.productionTip = false
-
-new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
+// 注册全局组件
+import * as Components from './global-components'
+Object.entries(Components).forEach(([key, component]) => {
+  app.component(key, component)
 })
+
+// 注册自定义指令
+import * as Directives from '@/directive'
+Object.values(Directives).forEach(fn => fn(app))
+
+// 错误日志
+import useErrorHandler from './error-log'
+useErrorHandler(app)
+
+app
+  .use(i18n)
+  .use(ElementPlus)
+  .use(pinia)
+  .use(router)
+  .mount('#app')

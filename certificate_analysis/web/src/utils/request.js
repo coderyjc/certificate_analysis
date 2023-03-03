@@ -1,83 +1,100 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
-import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { ElMessage } from 'element-plus'
+import router from '@/router'
+import { useApp } from '@/pinia/modules/app'
 
-// create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  baseURL: '/',
+  timeout: 10000,
+  withCredentials: true,
 })
 
-// request interceptor
+// 拦截请求
 service.interceptors.request.use(
   config => {
-    // do something before request is sent
-
-    if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+    const { authorization } = useApp()
+    if (authorization) {
+      config.headers.Authorization = `Bearer ${authorization.token}`
     }
     return config
   },
   error => {
-    // do something with request error
-    console.log(error) // for debug
+    // console.log(error);
     return Promise.reject(error)
   }
 )
 
-// response interceptor
+// 拦截响应
 service.interceptors.response.use(
-  /**
-   * If you want to get http information such as headers or status
-   * Please return  response => response
-  */
-
-  /**
-   * Determine the request status by custom code
-   * Here is just an example
-   * You can also judge the status by HTTP Status Code
-   */
+  // 响应成功进入第1个函数，该函数的参数是响应对象
   response => {
-    const res = response.data
-
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
-      Message({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
-
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        })
-      }
-      return Promise.reject(new Error(res.message || 'Error'))
-    } else {
-      return res
-    }
+    return response.data
   },
-  error => {
-    console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
+  // 响应失败进入第2个函数，该函数的参数是错误对象
+  async error => {
+    // 如果响应码是 401 ，则请求获取新的 token
+    // 响应拦截器中的 error 就是那个响应的错误对象
+    if (error.response && error.response.status === 401) {
+      // 校验是否有 refresh_token
+      const { authorization, clearToken, setToken } = useApp()
+      if (!authorization || !authorization.refresh_token) {
+        if (router.currentRoute.value.name === 'login') {
+          return Promise.reject(error)
+        }
+        const redirect = encodeURIComponent(window.location.href)
+        router.push(`/login?redirect=${redirect}`)
+        // 清除token
+        clearToken()
+        setTimeout(() => {
+          ElMessage.closeAll()
+          try {
+            ElMessage.error(error.response.data.msg)
+          } catch (err) {
+            ElMessage.error(error.message)
+          }
+        })
+        // 代码不要往后执行了
+        return Promise.reject(error)
+      }
+      // 如果有refresh_token，则请求获取新的 token
+      try {
+        const res = await axios({
+          method: 'PUT',
+          url: '/api/authorizations',
+          timeout: 10000,
+          headers: {
+            Authorization: `Bearer ${authorization.refresh_token}`,
+          },
+        })
+        // 如果获取成功，则把新的 token 更新到容器中
+        // console.log('刷新 token  成功', res)
+        setToken({
+          token: res.data.data.token, // 最新获取的可用 token
+          refresh_token: authorization.refresh_token, // 还是原来的 refresh_token
+        })
+        // 把之前失败的用户请求继续发出去
+        // config 是一个对象，其中包含本次失败请求相关的那些配置信息，例如 url、method 都有
+        // return 把 request 的请求结果继续返回给发请求的具体位置
+        return service(error.config)
+      } catch (err) {
+        // 如果获取失败，直接跳转 登录页
+        // console.log('请求刷新 token 失败', err)
+        const redirect = encodeURIComponent(window.location.href)
+        router.push(`/login?redirect=${redirect}`)
+        // 清除token
+        clearToken()
+        return Promise.reject(error)
+      }
+    }
+
+    // console.dir(error) // 可在此进行错误上报
+    ElMessage.closeAll()
+    try {
+      ElMessage.error(error.response.data.msg)
+    } catch (err) {
+      ElMessage.error(error.message)
+    }
+
     return Promise.reject(error)
   }
 )

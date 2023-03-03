@@ -1,93 +1,102 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <sidebar class="sidebar-container" />
-    <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
+  <div class="wrapper" :class="{ fluid: isFluid }">
+    <sidebar v-if="isMenusShow && !isHorizontalMenu" />
+    <div class="right" :class="{ flex: isTopbarFixed }">
+      <div class="top">
+        <topbar />
+        <menus mode="horizontal" v-if="isMenusShow && isHorizontalMenu" />
+        <tagsbar />
+        <breadcrumbs
+          v-if="isBreadcrumbsShow"
+          @on-breadcrumbs-change="handleBreadcrumbsChange"
+        />
       </div>
-      <app-main />
+      <div class="main" :class="{ pt0: isBreadcrumbsShow && paddingFlag }">
+        <Content />
+      </div>
     </div>
   </div>
 </template>
-
 <script>
-import { Navbar, Sidebar, AppMain } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
+import { defineComponent, ref, computed } from 'vue'
+import Sidebar from './components/Sidebar/index.vue'
+import Topbar from './components/Topbar/index.vue'
+import Menus from './components/Sidebar/Menus.vue'
+import Tagsbar from './components/Tagsbar/index.vue'
+import Breadcrumbs from './components/Topbar/Breadcrumbs.vue'
+import Content from './components/Content/index.vue'
+import { useResizeHandler } from './hooks/useResizeHandler'
+import { storeToRefs } from 'pinia'
+import { useLayoutsettings } from '@/pinia/modules/layoutSettings'
 
-export default {
-  name: 'Layout',
+export default defineComponent({
+  name: 'layout',
   components: {
-    Navbar,
     Sidebar,
-    AppMain
+    Topbar,
+    Menus,
+    Tagsbar,
+    Breadcrumbs,
+    Content,
   },
-  mixins: [ResizeMixin],
-  computed: {
-    sidebar() {
-      return this.$store.state.app.sidebar
-    },
-    device() {
-      return this.$store.state.app.device
-    },
-    fixedHeader() {
-      return this.$store.state.settings.fixedHeader
-    },
-    classObj() {
-      return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
-      }
+  setup() {
+    useResizeHandler()
+    const defaultSettings = useLayoutsettings()
+    const isFluid = defaultSettings.layout.isFluid
+    const isTopbarFixed = defaultSettings.topbar.isFixed
+    const isMenusShow = defaultSettings.menus.isShow
+    const isHorizontalMenu = defaultSettings.menus.mode === 'horizontal'
+    const isBreadcrumbsShow = computed(
+      () => isHorizontalMenu && defaultSettings.breadcrumbs.isShow
+    )
+    const paddingFlag = ref(true)
+    const handleBreadcrumbsChange = boo => {
+      paddingFlag.value = boo
+    }
+
+    return {
+      isFluid,
+      isTopbarFixed,
+      isMenusShow,
+      isHorizontalMenu,
+      isBreadcrumbsShow,
+      paddingFlag,
+      handleBreadcrumbsChange,
     }
   },
-  methods: {
-    handleClickOutside() {
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    }
-  }
-}
+})
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/mixin.scss";
-  @import "~@/styles/variables.scss";
-
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
+.wrapper {
+  display: flex;
+  margin: 0 auto;
+  width: 1440px;
+  height: 100%;
+  &.fluid {
     width: 100%;
-    &.mobile.openSidebar{
-      position: fixed;
-      top: 0;
+  }
+
+  .right {
+    flex: 1;
+    overflow: auto;
+    &.flex {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .top {
+      background: #fff;
+    }
+    .main {
+      flex: 1;
+      background: #f5f5f5;
+      padding: 16px;
+      overflow: auto;
+      &.pt0 {
+        padding-top: 0;
+      }
     }
   }
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
-  }
-
-  .fixed-header {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 9;
-    width: calc(100% - #{$sideBarWidth});
-    transition: width 0.28s;
-  }
-
-  .hideSidebar .fixed-header {
-    width: calc(100% - 54px)
-  }
-
-  .mobile .fixed-header {
-    width: 100%;
-  }
+}
 </style>
