@@ -18,3 +18,7 @@ def board_topics(req, pk):
     board = get_object_or_404(Board, pk=pk)
     return render(req, 'topics.html', {'board': board})
 
+
+def new_topic(req, pk):
+    board = get_object_or_404(Board, pk=pk)
+    return render(req, 'new_topic.html', {'board':board})
