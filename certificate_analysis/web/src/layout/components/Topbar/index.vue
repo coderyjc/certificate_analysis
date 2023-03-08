@@ -34,8 +34,8 @@ export default defineComponent({
     Hamburger,
     Breadcrumbs,
     Userinfo,
-    ChangeLang,
     ErrorLog,
+    ChangeLang
   },
   setup() {
     const defaultSettings = useLayoutsettings()

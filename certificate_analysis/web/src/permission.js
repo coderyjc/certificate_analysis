@@ -65,20 +65,6 @@ router.beforeEach(async to => {
         return false
       }
     }
-
-    // 判断是否处于锁屏状态
-    if (to.name !== 'lock') {
-      const { authorization } = useApp()
-      if (!!authorization && !!authorization.screenCode) {
-        return {
-          name: 'lock',
-          query: {
-            redirect: to.path,
-          },
-          replace: true,
-        }
-      }
-    }
   }
 })
 

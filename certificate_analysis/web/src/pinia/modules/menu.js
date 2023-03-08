@@ -15,8 +15,6 @@ export const useMenus = defineStore('menu', () => {
 
   const getFilterRoutes = (targetRoutes, ajaxRoutes) => {
 
-    console.log(targetRoutes, ajaxRoutes);
-
     const filterRoutes = []
 
     ajaxRoutes.forEach(item => {
@@ -67,7 +65,7 @@ export const useMenus = defineStore('menu', () => {
   const setMenus = data => {
     menus.value = data
   }
-  
+
   const generateMenus = async () => {
     // // 方式一：只有固定菜单
     // const menus = getFilterMenus(fixedRoutes)
