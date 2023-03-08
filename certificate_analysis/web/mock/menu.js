@@ -18,10 +18,10 @@ export default [
           name: 'testEdit',
           title: '编辑',
         },
-        // {
-        //   name: 'testAuth',
-        //   title: '权限测试',
-        // },
+        {
+          name: 'testAuth',
+          title: '权限测试',
+        },
         {
           name: 'test-cache',
           title: '该页面可缓存',

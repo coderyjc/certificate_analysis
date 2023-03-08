@@ -3,7 +3,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import redirect from './modules/redirect'
 import error from './modules/error'
 import login from './modules/login'
-import lock from './modules/lock'
 import home from './modules/home'
 import test from './modules/test'
 
@@ -16,13 +15,9 @@ export const asyncRoutes = [...test]
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
-    {
-      path: '/',
-      redirect: '/home',
-    },
+    { path: '/', redirect: '/home', },
     ...redirect, // 统一的重定向配置
     ...login,
-    ...lock,
     ...fixedRoutes,
     ...error,
   ],

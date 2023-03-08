@@ -47,23 +47,23 @@ export default [
         },
         hidden: true, // 不在菜单中显示
       },
-      // {
-      //   path: 'auth',
-      //   name: 'testAuth',
-      //   component: Auth,
-      //   meta: {
-      //     title: 'menu.testAuth',
-      //   },
-      // },
-      // {
-      //   path: 'noauth',
-      //   name: 'testNoAuth',
-      //   component: NoAuth,
-      //   meta: {
-      //     title: 'menu.testNoAuth',
-      //   },
-      //   hidden: true,
-      // },
+      {
+        path: 'auth',
+        name: 'testAuth',
+        component: Auth,
+        meta: {
+          title: 'menu.testAuth',
+        },
+      },
+      {
+        path: 'noauth',
+        name: 'testNoAuth',
+        component: NoAuth,
+        meta: {
+          title: 'menu.testNoAuth',
+        },
+        hidden: true,
+      },
       {
         path: 'cache',
         name: 'test-cache',
