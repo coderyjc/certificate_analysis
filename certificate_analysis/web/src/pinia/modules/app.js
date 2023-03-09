@@ -10,7 +10,7 @@ const COLLAPSE = 'VEA-COLLAPSE'
 
 export const useApp = defineStore('app', {
   state: () => ({
-    title: 'Vue3 Element Admin',
+    title: '教师资格证数据分析系统',
     authorization: getItem(TOKEN),
     sidebar: {
       collapse: getItem(COLLAPSE),
