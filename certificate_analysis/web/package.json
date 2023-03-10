@@ -35,6 +35,8 @@
     "autoprefixer": "^10.2.5",
     "babel-eslint": "^10.1.0",
     "crypto-js": "^4.0.0",
+    "echarts-liquidfill": "^3.1.0",
+    "echarts-wordcloud": "^2.1.0",
     "element-plus": "^2.2.13",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.3",

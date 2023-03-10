@@ -3,18 +3,18 @@ const Layout = () => import('@/layout/index.vue')
 
 export default [
   {
-    path: '/identity',
+    path: '/visualization',
     component: Layout,
-    name: 'identity',
+    name: 'visualization',
     meta: {
-      title: '认证信息可视化',
+      title: '数据可视化',
     },
-    icon: 'icon-home',
+    icon: 'CircleCheck',
     children: [
       {
         path: 'infomation',
         name: 'infomation',
-        component: () => import('@/views/identify/infomation.vue'),
+        component: () => import('@/views/visualization/infomation.vue'),
         meta: {
           title: '认证信息可视化',
           affix: true,
@@ -23,9 +23,18 @@ export default [
       {
         path: 'educate',
         name: 'educate',
-        component: () => import('@/views/identify/educate.vue'),
+        component: () => import('@/views/visualization/educate.vue'),
         meta: {
           title: '教育背景可视化',
+          affix: true,
+        },
+      },
+      {
+        path: 'score',
+        name: 'score',
+        component: () => import('@/views/visualization/score.vue'),
+        meta: {
+          title: '成绩可视化',
           affix: true,
         },
       },

@@ -6,11 +6,11 @@ import login from './modules/login'
 import home from './modules/home'
 import test from './modules/test'
 
-import identify from './modules/identify'
+import visualization from './modules/visualization'
 
 /* 菜单栏的路由 */
 // 固定菜单
-export const fixedRoutes = [...home, ...identify]
+export const fixedRoutes = [...home, ...visualization]
 // 动态菜单
 export const asyncRoutes = [...test]
 

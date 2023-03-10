@@ -11,7 +11,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.echarts)
     let myChart = this.$echarts.init(document.getElementById("myChart"));
     // 绘制图表
     myChart.setOption({
