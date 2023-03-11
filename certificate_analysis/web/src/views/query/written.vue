@@ -9,9 +9,9 @@
   >
     <!-- 工具栏 -->
     <template #toolbar>
-      <el-button type="primary" icon="Delete" @click="batchDelete">
+      <!-- <el-button type="primary" icon="Delete" @click="batchDelete">
         {{ $t('test/list.batchDelete') }}
-      </el-button>
+      </el-button> -->
       <el-button type="primary" icon="Plus" @click="$router.push('/test/add')">
         {{ $t('test/list.add') }}
       </el-button>
@@ -19,11 +19,25 @@
         {{ $t('test/list.refresh') }}
       </el-button>
     </template>
-    <template #status="{row}">
-      <el-tag :type="row.status === 1 ? 'success' : 'error'">
-        {{ row.status === 1 ? $t('public.enabled') : $t('public.disabled') }}
+
+    <template #pedagogyStatus="{row}">
+      <el-tag :type="row.pedagogyStatus === 1 ? 'success' : 'error'">
+        {{ row.pedagogyStatus === 1 ? $t('public.enabled') : $t('public.disabled') }}
       </el-tag>
     </template>
+    
+    <template #educationalPsychologyStatus="{row}">
+      <el-tag :type="row.educationalPsychologyStatus === 1 ? 'success' : 'error'">
+        {{ row.educationalPsychologyStatus === 1 ? $t('public.enabled') : $t('public.disabled') }}
+      </el-tag>
+    </template>
+    
+    <template #qualityStatus="{row}">
+      <el-tag :type="row.qualityStatus === 1 ? 'success' : 'error'">
+        {{ row.qualityStatus === 1 ? $t('public.enabled') : $t('public.disabled') }}
+      </el-tag>
+    </template>
+    
     <template #operate="scope">
       <el-button
         size="small"
@@ -36,12 +50,15 @@
         {{ $t('public.delete') }}
       </el-button>
     </template>
+
   </pro-table>
 </template>
 
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { getUsers } from '@/api/test'
+import { listWrittenScore } from '@/api/query'
+
 export default defineComponent({
   name: 'testList',
   setup() {
@@ -50,23 +67,67 @@ export default defineComponent({
     const state = reactive({
       // 表格列配置，大部分属性跟el-table-column配置一样
       columns: [
-        { type: 'selection', width: 56 },
-        { label: 'test/list.index', type: 'index', width: 80 },
+        // { type: 'selection', width: 56 },
+        {
+          label: 'test/list.index', 
+          type: 'index', 
+          width: 80 
+        },
         {
           label: 'test/list.name',
-          prop: 'nickName',
+          prop: 'name',
           sortable: true,
-          width: 180,
+          width: 120,
         },
         {
-          label: 'test/list.email',
-          prop: 'userEmail',
-          minWidth: 200,
+          label: 'test/list.examId',
+          prop: 'examId',
+          minWidth: 150,
         },
         {
-          label: 'public.status',
-          tdSlot: 'status',
-          width: 180,
+          label: 'test/list.workAddress',
+          prop: 'workAddress',
+          minWidth: 150,
+        },
+        {
+          label: 'test/list.id',
+          prop: 'id',
+          minWidth: 150,
+        },
+        {
+          label: 'test/list.pedagogyScore',
+          prop: 'pedagogyScore',
+          minWidth: 50,
+        },
+        {
+          label: 'test/list.educationalPsychologyScore',
+          prop: 'educationalPsychologyScore',
+          minWidth: 50,
+        },
+        {
+          label: 'test/list.qualityScore',
+          prop: 'qualityScore',
+          minWidth: 50,
+        },
+        {
+          label: 'public.pedagogyStatus',
+          tdSlot: 'pedagogyStatus',
+          width: 100,
+        },
+        {
+          label: 'public.educationalPsychologyStatus',
+          tdSlot: 'educationalPsychologyStatus',
+          width: 100,
+        },
+        {
+          label: 'public.qualityStatus',
+          tdSlot: 'qualityStatus',
+          width: 100,
+        },
+        {
+          label: 'public.testDate',
+          prop: 'testDate',
+          width: 100,
         },
         {
           label: 'public.operate',
@@ -83,8 +144,8 @@ export default defineComponent({
           {
             type: 'text',
             label: 'test/list.name',
-            name: 'nickName',
-            defaultValue: 'abc',
+            name: 'name',
+            defaultValue: 'enter name',
           },
           {
             label: 'public.status',
@@ -159,7 +220,6 @@ export default defineComponent({
                 value: 'bit',
               },
             ],
-            // transform: (val) => val.join(","),
           },
           {
             label: 'test/list.fruit',
@@ -228,9 +288,6 @@ export default defineComponent({
       //   style: { 'justify-content': 'flex-end' },
       // },
       selectedItems: [],
-      batchDelete() {
-        console.log(state.selectedItems)
-      },
       // 选择
       handleSelectionChange(arr) {
         state.selectedItems = arr
@@ -239,7 +296,7 @@ export default defineComponent({
       async getList(params) {
         console.log(params)
         // params是从组件接收的，包含分页和搜索字段。
-        const { data } = await getUsers(params)
+        const { data } = await listWrittenScore(params)
 
         // 必须要返回一个对象，包含data数组和total总数
         return {
