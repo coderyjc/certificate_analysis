@@ -5,11 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDate;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * <p>
@@ -62,6 +61,6 @@ public class Certification implements Serializable {
     /**
      * 有效期
      */
-    @TableField("validate_time")
-    private LocalDate validateTime;
+    @TableField("validate_date")
+    private Date validateDate;
 }

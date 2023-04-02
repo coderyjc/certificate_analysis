@@ -3,7 +3,6 @@ package top.coderyjc.certificate.GeneratorTest;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
-import com.baomidou.mybatisplus.generator.config.TemplateConfig;
 
 /**
  * ClassName: BaseGenerator
@@ -37,6 +36,10 @@ public class BaseGeneratorTest {
         strategyConfig.mapperBuilder()
                 .enableBaseColumnList()
                 .enableBaseResultMap();
+//        指定生成名
+        strategyConfig.addInclude("tbl_user")
+                .addInclude("tbl_route");
+
         return strategyConfig;
     }
 

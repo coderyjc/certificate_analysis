@@ -39,9 +39,9 @@ export default [
         },
       },
       {
-        path: 'certificate',
-        name: 'certificate',
-        component: () => import('@/views/query/certificate.vue'),
+        path: 'certification',
+        name: 'certification',
+        component: () => import('@/views/query/certification.vue'),
         meta: {
           title: '证书信息查询',
           affix: true,
