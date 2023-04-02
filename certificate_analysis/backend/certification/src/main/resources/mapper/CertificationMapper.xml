@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.coderyjc.certification.mapper.CertificationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="top.coderyjc.certification.entity.Certification">
+        <id column="id" property="id" />
+        <result column="身份证" property="身份证" />
+        <result column="姓名" property="姓名" />
+        <result column="面试年份" property="面试年份" />
+        <result column="合格证号" property="合格证号" />
+        <result column="专业" property="专业" />
+        <result column="有效期" property="有效期" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, 身份证, 姓名, 面试年份, 合格证号, 专业, 有效期
+    </sql>
+
+</mapper>
