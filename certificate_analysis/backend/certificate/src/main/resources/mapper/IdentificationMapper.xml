@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.coderyjc.certificate.mapper.IdentificationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="top.coderyjc.certificate.model.entity.Identification">
+        <id column="id" property="id" />
+        <result column="qualification_type" property="qualificationType" />
+        <result column="identification_type" property="identificationType" />
+        <result column="highest_degree" property="highestDegree" />
+        <result column="affirm_batch" property="affirmBatch" />
+        <result column="confirm_address" property="confirmAddress" />
+        <result column="identification_id" property="identificationId" />
+        <result column="graduation_school" property="graduationSchool" />
+        <result column="affirm_institution" property="affirmInstitution" />
+        <result column="exam_type" property="examType" />
+        <result column="orgnization_type" property="orgnizationType" />
+        <result column="subject" property="subject" />
+        <result column="certification_id" property="certificationId" />
+        <result column="major" property="major" />
+        <result column="city" property="city" />
+        <result column="name" property="name" />
+        <result column="highest_education_background" property="highestEducationBackground" />
+        <result column="major_type" property="majorType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, qualification_type, identification_type, highest_degree, affirm_batch, confirm_address, identification_id, graduation_school, affirm_institution, exam_type, orgnization_type, subject, certification_id, major, city, name, highest_education_background, major_type
+    </sql>
+
+</mapper>

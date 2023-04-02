@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.coderyjc.certificate.mapper.WrittenScoreMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="top.coderyjc.certificate.model.entity.WrittenScore">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="exam_id" property="examId" />
+        <result column="identification_id" property="identificationId" />
+        <result column="education_score" property="educationScore" />
+        <result column="education_psychology_score" property="educationPsychologyScore" />
+        <result column="professional_ethic_score" property="professionalEthicScore" />
+        <result column="education_status" property="educationStatus" />
+        <result column="education_psychology_status" property="educationPsychologyStatus" />
+        <result column="professional_ethic_status" property="professionalEthicStatus" />
+        <result column="work_address" property="workAddress" />
+        <result column="exam_date" property="examDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, exam_id, identification_id, education_score, education_psychology_score, professional_ethic_score, education_status, education_psychology_status, professional_ethic_status, work_address, exam_date
+    </sql>
+
+</mapper>

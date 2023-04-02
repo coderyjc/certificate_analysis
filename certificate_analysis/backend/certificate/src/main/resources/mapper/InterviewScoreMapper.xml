@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.coderyjc.certificate.mapper.InterviewScoreMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="top.coderyjc.certificate.model.entity.InterviewScore">
+        <id column="id" property="id" />
+        <result column="exam_address" property="examAddress" />
+        <result column="name" property="name" />
+        <result column="identification_id" property="identificationId" />
+        <result column="work_address" property="workAddress" />
+        <result column="apply_major" property="applyMajor" />
+        <result column="level" property="level" />
+        <result column="exam_time" property="examTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, exam_address, name, identification_id, work_address, apply_major, level, exam_time
+    </sql>
+
+</mapper>
