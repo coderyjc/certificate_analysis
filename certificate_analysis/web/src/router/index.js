@@ -11,10 +11,8 @@ import query from './modules/query'
 import predict from './modules/predict'
 
 /* 菜单栏的路由 */
-// 固定菜单
-export const fixedRoutes = [...home, ...visualization, ...query, ...predict]
-// 动态菜单
-export const asyncRoutes = [...test]
+// 只有固定菜单
+export const fixedRoutes = [...home, ...visualization, ...query, ...predict, ...test]
 
 const router = createRouter({
   history: createWebHashHistory(),

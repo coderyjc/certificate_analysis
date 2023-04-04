@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
-import { fixedRoutes, asyncRoutes } from '@/router'
-import { GetMenus } from '@/api/menu'
-import router from '@/router'
+import { fixedRoutes } from '@/router'
 import { ref } from 'vue'
 
 export const useMenus = defineStore('menu', () => {
@@ -11,30 +9,6 @@ export const useMenus = defineStore('menu', () => {
       : path
       ? `${parentPath}/${path}`
       : parentPath
-  }
-
-  const getFilterRoutes = (targetRoutes, ajaxRoutes) => {
-
-    const filterRoutes = []
-
-    ajaxRoutes.forEach(item => {
-      const target = targetRoutes.find(target => target.name === item.name)
-
-      if (target) {
-        const { children: targetChildren, ...rest } = target
-        const route = {
-          ...rest,
-        }
-
-        if (item.children) {
-          route.children = getFilterRoutes(targetChildren, item.children)
-        }
-
-        filterRoutes.push(route)
-      }
-    })
-
-    return filterRoutes
   }
 
   const getFilterMenus = (arr, parentPath = '') => {
@@ -66,28 +40,10 @@ export const useMenus = defineStore('menu', () => {
     menus.value = data
   }
 
+  // 生成菜单
   const generateMenus = async () => {
-    // // 方式一：只有固定菜单
-    // const menus = getFilterMenus(fixedRoutes)
-    // setMenus(menus)
-
-    // 方式二：有动态菜单
-    // 从后台获取菜单
-    const { code, data } = await GetMenus()
-
-    if (+code === 200) {
-      // 添加路由之前先删除所有动态路由
-      asyncRoutes.forEach(item => {
-        router.removeRoute(item.name)
-      })
-      // 过滤出需要添加的动态路由
-      const filterRoutes = getFilterRoutes(asyncRoutes, data)
-      filterRoutes.forEach(route => router.addRoute(route))
-
-      // 生成菜单
-      const menus = getFilterMenus([...fixedRoutes, ...filterRoutes])
-      setMenus(menus)
-    }
+    const menus = getFilterMenus(fixedRoutes)
+    setMenus(menus)
   }
 
   return {
