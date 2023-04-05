@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { GetUserinfo } from '@/api/login'
 
 export const useAccount = defineStore('account', {
   state: () => ({
@@ -11,13 +10,15 @@ export const useAccount = defineStore('account', {
     clearUserinfo() {
       this.userinfo = null
     },
-    // 获取用户信息
-    async getUserinfo() {
-      const { code, data } = await GetUserinfo()
-      if (+code === 200) {
-        this.userinfo = data
-        return Promise.resolve(data)
+    // 设置用户信息
+    setUserinfo(userName) {
+      this.userinfo = {
+        userName: userName,
       }
+    },
+    // 获取用户信息
+    getUserInfo() {
+      return this.userinfo
     },
   },
 })

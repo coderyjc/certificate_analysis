@@ -29,7 +29,7 @@ public class UserMapperTest {
     public void insertUser(){
         User user = new User();
         user.setUsername("admin");
-        user.setPassword(MD5Util.getMD5("333"));
+        user.setPassword(MD5Util.getMD5("123456"));
         user.setCreateDate(new Date());
         userMapper.insert(user);
         System.out.println(user + "插入成功");

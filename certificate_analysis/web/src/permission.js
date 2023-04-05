@@ -1,7 +1,7 @@
 import { ElLoading } from 'element-plus'
 import router from '@/router'
 // import store from '@/store'
-import { TOKEN } from './pinia/modules/app' // TOKEN变量名
+// import { TOKEN } from './pinia/modules/app' // TOKEN变量名
 import { nextTick } from 'vue'
 import { useApp } from './pinia/modules/app'
 import { useAccount } from './pinia/modules/account'
@@ -16,7 +16,7 @@ const getPageTitle = title => {
 }
 
 // 白名单，里面是路由对象的name
-const WhiteList = ['login', 'lock']
+const WhiteList = ['login']
 
 let loadingInstance = null
 
@@ -27,11 +27,13 @@ router.beforeEach(async to => {
     // text: '正在加载数据，请稍候~',
     background: 'rgba(0, 0, 0, 0.7)',
   })
+  const { userinfo, getUserinfo } = useAccount()
 
   if (WhiteList.includes(to.name)) {
     return true
   }
-  if (!window.localStorage[TOKEN]) {
+  // if (!window.localStorage[TOKEN]) {
+  if (!userinfo) {
     return {
       name: 'login',
       query: {
@@ -40,19 +42,19 @@ router.beforeEach(async to => {
       replace: true,
     }
   } else {
-    const { userinfo, getUserinfo } = useAccount()
+    // const { userinfo, getUserinfo } = useAccount()
     // 获取用户角色信息，根据角色判断权限
-    if (!userinfo) {
-      try {
-        // 获取用户信息
-        await getUserinfo()
-      } catch (err) {
-        loadingInstance.close()
-        return false
-      }
+    // if (!userinfo) {
+    //   try {
+    //     // 获取用户信息
+    //     await getUserinfo()
+    //   } catch (err) {
+    //     loadingInstance.close()
+    //     return false
+    //   }
 
-      return to.fullPath
-    }
+    //   return to.fullPath
+    // }
 
     // 生成菜单（如果你的项目有动态菜单，在此处会添加动态路由）
     const { menus, generateMenus } = useMenus()

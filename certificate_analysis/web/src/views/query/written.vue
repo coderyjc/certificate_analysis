@@ -1,51 +1,44 @@
 <template>
-  <pro-table
-    ref="table"
-    :title="$t('test/list.title')"
-    :request="getList"
-    :columns="columns"
-    :search="searchConfig"
-    @selectionChange="handleSelectionChange"
-  >
+  <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
+    @selectionChange="handleSelectionChange" :pagination="paginationConfig">
     <!-- 工具栏 -->
     <template #toolbar>
-      <!-- <el-button type="primary" icon="Delete" @click="batchDelete">
-        {{ $t('test/list.batchDelete') }}
-      </el-button> -->
+      <el-button type="danger" icon="Delete" @click="batchDelete">
+        {{ $t('table.batchDelete') }}
+      </el-button>
       <el-button type="primary" icon="Plus" @click="$router.push('/test/add')">
-        {{ $t('test/list.add') }}
+        {{ $t('table.add') }}
       </el-button>
       <el-button type="primary" icon="Refresh" @click="refresh">
-        {{ $t('test/list.refresh') }}
+        {{ $t('table.refresh') }}
+      </el-button>
+      <el-button type="primary" icon="Upload" @click="importFile">
+        {{ $t('table.import') }}
+      </el-button>
+      <el-button type="primary" icon="Download" @click="exportFile">
+        {{ $t('table.export') }}
       </el-button>
     </template>
 
-    <template #pedagogyStatus="{row}">
-      <el-tag :type="row.pedagogyStatus === 1 ? 'success' : 'error'">
-        {{ row.pedagogyStatus === 1 ? $t('public.enabled') : $t('public.disabled') }}
+    <template #educationStatus="{ row }">
+      <el-tag :type="row.educationStatus === '正常' ? 'success' : 'error'">
+        {{ row.educationStatus }}
       </el-tag>
     </template>
-    
-    <template #educationalPsychologyStatus="{row}">
-      <el-tag :type="row.educationalPsychologyStatus === 1 ? 'success' : 'error'">
-        {{ row.educationalPsychologyStatus === 1 ? $t('public.enabled') : $t('public.disabled') }}
+
+    <template #educationPsychologyStatus="{ row }">
+      <el-tag :type="row.educationPsychologyStatus === '正常' ? 'success' : 'error'">
+        {{ row.educationPsychologyStatus }}
       </el-tag>
     </template>
-    
-    <template #qualityStatus="{row}">
-      <el-tag :type="row.qualityStatus === 1 ? 'success' : 'error'">
-        {{ row.qualityStatus === 1 ? $t('public.enabled') : $t('public.disabled') }}
+
+    <template #professionalEthicStatus="{ row }">
+      <el-tag :type="row.professionalEthicStatus === '正常' ? 'success' : 'error'">
+        {{ row.professionalEthicStatus }}
       </el-tag>
     </template>
-    
+
     <template #operate="scope">
-      <el-button
-        size="small"
-        type="primary"
-        @click="$router.push(`/test/edit/${scope.row.id}`)"
-      >
-        {{ $t('public.edit') }}
-      </el-button>
       <el-button size="small" type="danger">
         {{ $t('public.delete') }}
       </el-button>
@@ -56,117 +49,101 @@
 
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
-import { getUsers } from '@/api/test'
-import { listWrittenScore } from '@/api/query'
+
+import { listWrittenScore, listExamYear, listWorkAddress } from '@/api/query/written'
 
 export default defineComponent({
-  name: 'testList',
+  name: 'writtenScoreManagement',
   setup() {
-    // const { proxy } = getCurrentInstance()
 
     const state = reactive({
-      // 表格列配置，大部分属性跟el-table-column配置一样
+      // 字段配置
       columns: [
-        // { type: 'selection', width: 56 },
+        { type: 'selection', width: 56 },
         {
-          label: 'test/list.index', 
-          type: 'index', 
-          width: 80 
+          label: 'query/written.name',
+          prop: 'name',
+          width: 80,
         },
         {
-          label: 'test/list.name',
-          prop: 'name',
+          label: 'query/written.examId',
+          prop: 'examId',
           sortable: true,
+          minWidth: 120,
+        },
+        {
+          label: 'query/written.identificationId',
+          prop: 'identificationId',
+          minWidth: 170,
+        },
+        {
+          label: 'query/written.educationScore',
+          prop: 'educationScore',
+          sortable: true,
+          minWidth: 100,
+        },
+        {
+          label: 'query/written.educationPsychologyScore',
+          prop: 'educationPsychologyScore',
+          sortable: true,
+          minWidth: 130,
+        },
+        {
+          label: 'query/written.professionalEthicScore',
+          prop: 'professionalEthicScore',
+          sortable: true,
+          minWidth: 120,
+        },
+        {
+          label: 'query/written.educationStatus',
+          tdSlot: 'educationStatus',
+          width: 90,
+        },
+        {
+          label: 'query/written.educationPsychologyStatus',
+          tdSlot: 'educationPsychologyStatus',
+          width: 100,
+        },
+        {
+          label: 'query/written.professionalEthicStatus',
+          tdSlot: 'professionalEthicStatus',
+          width: 100,
+        },
+        {
+          label: 'query/written.workAddress',
+          prop: 'workAddress',
           width: 120,
         },
         {
-          label: 'test/list.examId',
-          prop: 'examId',
-          minWidth: 150,
-        },
-        {
-          label: 'test/list.workAddress',
-          prop: 'workAddress',
-          minWidth: 150,
-        },
-        {
-          label: 'test/list.id',
-          prop: 'id',
-          minWidth: 150,
-        },
-        {
-          label: 'test/list.pedagogyScore',
-          prop: 'pedagogyScore',
-          minWidth: 50,
-        },
-        {
-          label: 'test/list.educationalPsychologyScore',
-          prop: 'educationalPsychologyScore',
-          minWidth: 50,
-        },
-        {
-          label: 'test/list.qualityScore',
-          prop: 'qualityScore',
-          minWidth: 50,
-        },
-        {
-          label: 'public.pedagogyStatus',
-          tdSlot: 'pedagogyStatus',
-          width: 100,
-        },
-        {
-          label: 'public.educationalPsychologyStatus',
-          tdSlot: 'educationalPsychologyStatus',
-          width: 100,
-        },
-        {
-          label: 'public.qualityStatus',
-          tdSlot: 'qualityStatus',
-          width: 100,
-        },
-        {
-          label: 'public.testDate',
-          prop: 'testDate',
+          label: 'query/written.examDate',
+          prop: 'examDate',
+          sortable: true,
           width: 100,
         },
         {
           label: 'public.operate',
-          width: 180,
+          width: 100,
           align: 'center',
+          fixed: 'right',
           tdSlot: 'operate', // 自定义单元格内容的插槽名称
         },
       ],
       // 搜索配置
       searchConfig: {
-        labelWidth: '90px', // 必须带上单位
-        inputWidth: '400px', // 必须带上单位
+        labelWidth: '230px', // 必须带上单位
+        inputWidth: '200px', // 必须带上单位
         fields: [
           {
             type: 'text',
-            label: 'test/list.name',
+            label: 'query/written.name',
             name: 'name',
-            defaultValue: 'enter name',
+            defaultValue: ""
           },
           {
-            label: 'public.status',
-            name: 'status',
-            type: 'select',
-            defaultValue: 1,
-            options: [
-              {
-                name: 'test/list.publish',
-                value: 1,
-              },
-              {
-                name: 'test/list.nopublish',
-                value: 0,
-              },
-            ],
-          },
-          {
-            label: 'test/list.gender',
-            name: 'sex',
+            label: 'public.gender',
+            name: 'gender',
             type: 'radio',
+            defaultValue: "",
             options: [
               {
                 name: 'public.male',
@@ -179,114 +156,147 @@ export default defineComponent({
             ],
           },
           {
-            label: 'test/list.city',
-            name: 'city',
-            type: 'radio-button',
+            type: 'text',
+            label: 'query/written.examId',
+            name: 'examId',
+            defaultValue: "",
+          },
+          {
+            type: 'text',
+            label: 'query/written.identificationId',
+            name: 'identificationId',
+            defaultValue: "",
+          },
+          {
+            type: 'text',
+            label: 'query/written.workAddress',
+            name: 'workAddress',
+            defaultValue: "",
+          },
+          {
+            label: 'query/written.examDate',
+            name: 'examDate',
+            type: 'text',
+            defaultValue: '',
+          },
+          {
+            label: 'query/written.educationStatus',
+            name: 'educationStatus',
+            type: 'select',
+            defaultValue: '',
             options: [
               {
-                name: 'test/list.bj',
-                value: 'bj',
+                name: 'query/written.attend',
+                value: "正常",
               },
               {
-                name: 'test/list.sh',
-                value: 'sh',
+                name: 'query/written.miss',
+                value: "缺考",
               },
               {
-                name: 'test/list.gz',
-                value: 'gz',
-              },
-              {
-                name: 'test/list.sz',
-                value: 'sz',
+                name: 'query/written.cheat',
+                value: "作弊",
               },
             ],
           },
           {
-            label: 'test/list.hobby',
-            name: 'hobby',
-            type: 'checkbox',
-            defaultValue: ['eat'],
+            label: 'query/written.educationPsychologyStatus',
+            name: 'educationPsychologyStatus',
+            type: 'select',
+            defaultValue: '',
             options: [
               {
-                name: 'test/list.eat',
-                value: 'eat',
+                name: 'query/written.attend',
+                value: "正常",
               },
               {
-                name: 'test/list.sleep',
-                value: 'sleep',
+                name: 'query/written.miss',
+                value: "缺考",
               },
               {
-                name: 'test/list.bit',
-                value: 'bit',
+                name: 'query/written.cheat',
+                value: "作弊",
               },
             ],
           },
           {
-            label: 'test/list.fruit',
-            name: 'fruit',
-            type: 'checkbox-button',
+            label: 'query/written.professionalEthicStatus',
+            name: 'professionalEthicStatus',
+            type: 'select',
+            defaultValue: '',
             options: [
               {
-                name: 'test/list.apple',
-                value: 'apple',
+                name: 'query/written.attend',
+                value: "正常",
               },
               {
-                name: 'test/list.banana',
-                value: 'banana',
+                name: 'query/written.miss',
+                value: "缺考",
               },
               {
-                name: 'test/list.orange',
-                value: 'orange',
-              },
-              {
-                name: 'test/list.grape',
-                value: 'grape',
+                name: 'query/written.cheat',
+                value: "作弊",
               },
             ],
-            transform: val => val.join(','),
           },
           {
-            label: 'test/list.date',
-            name: 'date',
-            type: 'date',
+            label: 'query/written.educationSort',
+            name: 'educationSort',
+            type: 'radio',
+            defaultValue: "",
+            options: [
+              {
+                name: 'public.asc',
+                value: 1,
+              },
+              {
+                name: 'public.desc',
+                value: 0,
+              },
+            ],
           },
           {
-            label: 'test/list.time',
-            name: 'datetime',
-            type: 'datetime',
-            defaultValue: '2020-10-10 8:00:00',
+            label: 'query/written.educationPsychologySort',
+            name: 'educationPsychologySort',
+            type: 'radio',
+            defaultValue: "",
+            options: [
+              {
+                name: 'public.asc',
+                value: 1,
+              },
+              {
+                name: 'public.desc',
+                value: 0,
+              },
+            ],
           },
           {
-            label: 'test/list.daterange',
-            name: 'daterange',
-            type: 'daterange',
-            trueNames: ['startDate', 'endDate'],
-            style: { width: '400px' },
-          },
-          {
-            label: 'test/list.timerange',
-            name: 'datetimerange',
-            type: 'datetimerange',
-            trueNames: ['startTime', 'endTime'],
-            style: { width: '400px' },
-            defaultValue: ['2020-10-10 9:00:00', '2020-10-11 18:30:00'],
-          },
-          {
-            label: 'test/list.num',
-            name: 'num',
-            type: 'number',
-            min: 0,
-            max: 10,
+            label: 'query/written.professionalEthicSort',
+            name: 'professionalEthicSort',
+            type: 'radio',
+            defaultValue: "",
+            options: [
+              {
+                name: 'public.asc',
+                value: 1,
+              },
+              {
+                name: 'public.desc',
+                value: 0,
+              },
+            ],
           },
         ],
       },
       // 分页配置
-      // paginationConfig: {
-      //   layout: 'total, prev, pager, next, sizes', // 分页组件显示哪些功能
-      //   pageSize: 10, // 每页条数
-      //   pageSizes: [5, 10, 20, 50],
-      //   style: { 'justify-content': 'flex-end' },
-      // },
+      paginationConfig: {
+        layout: 'total, prev, pager, next, sizes', // 分页组件显示哪些功能
+        pageSize: 30, // 每页条数
+        pageSizes: [30, 50, 100],
+        style: { 'justify-content': 'flex-end' },
+      },
+      // 多项选择
       selectedItems: [],
       // 选择
       handleSelectionChange(arr) {
@@ -294,25 +304,33 @@ export default defineComponent({
       },
       // 请求函数
       async getList(params) {
-        console.log(params)
+
         // params是从组件接收的，包含分页和搜索字段。
-        const { data } = await listWrittenScore(params)
+        const { code, msg, data } = await listWrittenScore(params)
 
         // 必须要返回一个对象，包含data数组和total总数
         return {
-          data: data.list,
-          total: +data.total,
+          data: data.data.records,
+          total: data.data.total,
         }
       },
     })
 
     const table = ref(null)
-    
+
     const refresh = () => {
       table.value.refresh()
     }
 
-    return { ...toRefs(state), refresh, table }
+    const exportFile = () => {
+      console.log("this is export file");
+    }
+
+    const importFile = () => {
+      console.log("this is import file");
+    }
+
+    return { ...toRefs(state), refresh, exportFile, importFile, table }
   },
 })
 </script>

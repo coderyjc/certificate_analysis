@@ -7,43 +7,43 @@ export default [
     component: Layout,
     name: 'query',
     meta: {
-      title: '数据查询',
+      title: '数据管理',
     },
     icon: 'CircleCheck',
     children: [
       {
-        path: 'written',
-        name: 'written',
+        path: 'writtenManagement',
+        name: 'writtenManagement',
         component: () => import('@/views/query/written.vue'),
         meta: {
-          title: '笔试信息查询',
+          title: '笔试信息管理',
           affix: true,
         },
       },
       {
-        path: 'interview',
-        name: 'interview',
+        path: 'interviewManagement',
+        name: 'interviewManagement',
         component: () => import('@/views/query/interview.vue'),
         meta: {
-          title: '面试信息查询',
+          title: '面试信息管理',
           affix: true,
         },
       },
       {
-        path: 'identify',
-        name: 'identify',
-        component: () => import('@/views/query/identify.vue'),
+        path: 'identificationManagement',
+        name: 'identificationManagement',
+        component: () => import('@/views/query/identification.vue'),
         meta: {
-          title: '认定信息查询',
+          title: '认定信息管理',
           affix: true,
         },
       },
       {
-        path: 'certification',
-        name: 'certification',
+        path: 'certificationManagement',
+        name: 'certificationManagement',
         component: () => import('@/views/query/certification.vue'),
         meta: {
-          title: '证书信息查询',
+          title: '证书信息管理',
           affix: true,
         },
       },

@@ -30,7 +30,7 @@
           <el-option
             v-for="option of item.options"
             :key="option.value"
-            :label="$t(option.name)"
+            :label="option.value"
             :value="option.value"
           ></el-option>
         </el-select>

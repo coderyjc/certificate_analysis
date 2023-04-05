@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <el-dropdown-item @click="dialogVisible = true">
     {{ $t('topbar.lock-title') }}
   </el-dropdown-item>
@@ -85,4 +85,4 @@ export default defineComponent({
 .lock-modal[aria-modal] {
   max-width: 90%;
 }
-</style>
+</style> -->

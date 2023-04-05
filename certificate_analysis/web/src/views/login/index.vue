@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form class="form" :model="model" :rules="rules" ref="loginForm">
-      <h1 class="title">Vue3 Element Admin</h1>
+      <h1 class="title">河北省教师资格证数据分析系统</h1>
       <el-form-item prop="userName">
         <el-input
           class="text"
@@ -49,11 +49,11 @@ import {
   computed,
   watch,
 } from 'vue'
-import { Login } from '@/api/login'
+import { Login } from '@/api/user'
 import { useRouter, useRoute } from 'vue-router'
 import ChangeLang from '@/layout/components/Topbar/ChangeLang.vue'
 import useLang from '@/i18n/useLang'
-import { useApp } from '@/pinia/modules/app'
+import { useAccount } from '@/pinia/modules/account'
 
 export default defineComponent({
   components: { ChangeLang },
@@ -70,20 +70,20 @@ export default defineComponent({
       userName: [
         {
           required: true,
-          message: ctx.$t('login.rules-username'),
+          message: '请输入用户名',
           trigger: 'blur',
         },
       ],
       password: [
         {
           required: true,
-          message: ctx.$t('login.rules-password'),
+          message: '请输入密码',
           trigger: 'blur',
         },
         {
           min: 6,
           max: 12,
-          message: ctx.$t('login.rules-regpassword'),
+          message: '密码长度在6-12个字符之间',
           trigger: 'blur',
         },
       ],
@@ -96,7 +96,7 @@ export default defineComponent({
       rules: getRules(),
       loading: false,
       btnText: computed(() =>
-        state.loading ? ctx.$t('login.logining') : ctx.$t('login.login')
+        state.loading ? '登录中' : '登录'
       ),
       loginForm: ref(null),
       submit: () => {
@@ -104,14 +104,20 @@ export default defineComponent({
           return
         }
         state.loginForm.validate(async valid => {
+
           if (valid) {
             state.loading = true
-            const { code, data, message } = await Login(state.model)
+            const { code, data, msg } = await Login(state.model)
+
             if (+code === 200) {
               ctx.$message.success({
-                message: ctx.$t('login.loginsuccess'),
+                message: '登录成功',
                 duration: 1000,
               })
+              
+              // 登录成功之后添加用户信息到本地（用户名等）
+              const account = useAccount()
+              account.setUserinfo(state.model.userName)
 
               const targetPath = decodeURIComponent(route.query.redirect)
               if (targetPath.startsWith('http')) {
@@ -123,9 +129,8 @@ export default defineComponent({
               } else {
                 router.push('/')
               }
-              useApp().initToken(data)
             } else {
-              ctx.$message.error(message)
+              ctx.$message.error(msg)
             }
             state.loading = false
           }

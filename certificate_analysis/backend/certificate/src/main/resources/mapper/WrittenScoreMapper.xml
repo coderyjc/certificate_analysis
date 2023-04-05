@@ -23,4 +23,12 @@
         id, name, exam_id, identification_id, education_score, education_psychology_score, professional_ethic_score, education_status, education_psychology_status, professional_ethic_status, work_address, exam_date
     </sql>
 
+    <select id="listWorkAddress" resultType="java.lang.String">
+        select distinct work_address from tbl_written_score
+    </select>
+    <select id="listExamYear" resultType="java.lang.String">
+        select distinct exam_date from tbl_written_score
+    </select>
+
+
 </mapper>

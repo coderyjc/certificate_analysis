@@ -29,7 +29,7 @@ public class Msg {
     private String msg;
 
     //用户要返回给浏览器的数据
-    private Map<String, Object> extend = new HashMap<String, Object>();
+    private Map<String, Object> data = new HashMap<String, Object>();
 
     /**
      * 用户信息过期
@@ -59,7 +59,7 @@ public class Msg {
      */
     public static Msg success(){
         Msg result = new Msg();
-        result.setCode(100);
+        result.setCode(200);
         result.setMsg("成功");
         return result;
     }
@@ -81,13 +81,13 @@ public class Msg {
      */
     public static Msg fail(){
         Msg result = new Msg();
-        result.setCode(200);
+        result.setCode(100);
         result.setMsg("失败！");
         return result;
     }
 
     public Msg add(String key,Object value){
-        this.getExtend().put(key, value);
+        this.getData().put(key, value);
         return this;
     }
 

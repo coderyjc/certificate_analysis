@@ -41,8 +41,6 @@ export default {
   height: 100%;
   width: 100%;
   
-  background-color: $bigScreenBackgroundColor;
-
   display: grid;
   grid-template-columns: repeat(16, 1fr);
   grid-template-rows: repeat(9, 1fr);

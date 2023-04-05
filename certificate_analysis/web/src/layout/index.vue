@@ -90,7 +90,6 @@ export default defineComponent({
     }
     .main {
       flex: 1;
-      background: #021124;
       // padding: 16px;
       overflow: auto;
       &.pt0 {

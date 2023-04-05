@@ -6,5 +6,5 @@ export default {
   interviewYear: '面试年份',
   qualificationId: '合格证号',
   major: '专业',
-  validateDate: '有效期'
+  validateDate: '有效期',
 }

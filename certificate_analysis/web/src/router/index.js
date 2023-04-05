@@ -4,15 +4,13 @@ import redirect from './modules/redirect'
 import error from './modules/error'
 import login from './modules/login'
 import home from './modules/home'
-import test from './modules/test'
 
-import visualization from './modules/visualization'
 import query from './modules/query'
-import predict from './modules/predict'
+import analysis from './modules/analysis'
 
 /* 菜单栏的路由 */
 // 只有固定菜单
-export const fixedRoutes = [...home, ...visualization, ...query, ...predict, ...test]
+export const fixedRoutes = [...home, ...query, ...analysis]
 
 const router = createRouter({
   history: createWebHashHistory(),

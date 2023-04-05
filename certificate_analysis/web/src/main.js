@@ -3,8 +3,8 @@ import App from './App.vue'
 
 const app = createApp(App)
 
-import * as echarts from 'echarts';
-app.config.globalProperties.$echarts = echarts;
+import * as echarts from 'echarts'
+app.config.globalProperties.$echarts = echarts
 
 // 引入element-plus
 import ElementPlus from 'element-plus'
@@ -47,7 +47,7 @@ import useErrorHandler from './error-log'
 useErrorHandler(app)
 
 app
-  .use(i18n)  
+  .use(i18n)
   .use(ElementPlus)
   .use(pinia)
   .use(router)
