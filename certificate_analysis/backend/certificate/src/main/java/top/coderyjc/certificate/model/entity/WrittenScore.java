@@ -93,4 +93,10 @@ public class WrittenScore implements Serializable {
      */
     @TableField("exam_date")
     private String examDate;
+
+    /**
+     * 性别
+     */
+    @TableField("gender")
+    private Integer gender;
 }

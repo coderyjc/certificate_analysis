@@ -16,7 +16,7 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     { path: '/', redirect: '/home', },
-    ...redirect, // 统一的重定向配置
+    ...redirect,
     ...login,
     ...fixedRoutes,
     ...error,

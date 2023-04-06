@@ -1,13 +1,35 @@
 import request from '@/utils/request'
 
 // 获取笔试成绩
-export const listWrittenScore = (data) => {
+export const listWrittenScore = data => {
   return request({
     url: '/writtenScore/all',
     method: 'get',
     params: {
-      ...data
-    }
+      ...data,
+    },
+  })
+}
+
+// 添加笔试成绩
+export const addWrittenScore = data => {
+  return request({
+    url: '/writtenScore/add',
+    method: 'post',
+    params: {
+      ...data,
+    },
+  })
+}
+
+// 删除笔试成绩
+export const deleteWrittenScore = data => {
+  return request({
+    url: '/writtenScore/delete',
+    method: 'post',
+    params: {
+      id: data,
+    },
   })
 }
 
@@ -26,4 +48,3 @@ export const listExamYear = () => {
     method: 'get',
   })
 }
-

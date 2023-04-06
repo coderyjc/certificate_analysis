@@ -1,59 +1,70 @@
 <template>
-  <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
-    @selectionChange="handleSelectionChange" :pagination="paginationConfig">
-    <!-- 工具栏 -->
-    <template #toolbar>
-      <el-button type="danger" icon="Delete" @click="batchDelete">
-        {{ $t('table.batchDelete') }}
-      </el-button>
-      <el-button type="primary" icon="Plus" @click="$router.push('/test/add')">
-        {{ $t('table.add') }}
-      </el-button>
-      <el-button type="primary" icon="Refresh" @click="refresh">
-        {{ $t('table.refresh') }}
-      </el-button>
-      <el-button type="primary" icon="Upload" @click="importFile">
-        {{ $t('table.import') }}
-      </el-button>
-      <el-button type="primary" icon="Download" @click="exportFile">
-        {{ $t('table.export') }}
-      </el-button>
-    </template>
+  <div class="container">
+    <AddWrittenScore :dialogFormVisible="addWrittenScoreFormVisible" @visibilityChange="changeVisibility">
+    </AddWrittenScore>
+    <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
+      @selectionChange="handleSelectionChange" :pagination="paginationConfig">
+      <!-- 工具栏 -->
+      <template #toolbar>
+        <el-button type="danger" icon="Delete" @click="batchDelete">
+          {{ $t('table.batchDelete') }}
+        </el-button>
+        <el-button type="primary" icon="Plus" @click="changeVisibility">
+          {{ $t('table.add') }}
+        </el-button>
+        <el-button type="primary" icon="Refresh" @click="refresh">
+          {{ $t('table.refresh') }}
+        </el-button>
+        <el-button type="primary" icon="Upload" @click="importFile">
+          {{ $t('table.import') }}
+        </el-button>
+        <el-button type="primary" icon="Download" @click="exportFile">
+          {{ $t('table.export') }}
+        </el-button>
+      </template>
 
-    <template #educationStatus="{ row }">
-      <el-tag :type="row.educationStatus === '正常' ? 'success' : 'error'">
-        {{ row.educationStatus }}
-      </el-tag>
-    </template>
+      <template #educationStatus="{ row }">
+        <el-tag :type="row.educationStatus === '正常' ? 'success' : 'error'">
+          {{ row.educationStatus }}
+        </el-tag>
+      </template>
 
-    <template #educationPsychologyStatus="{ row }">
-      <el-tag :type="row.educationPsychologyStatus === '正常' ? 'success' : 'error'">
-        {{ row.educationPsychologyStatus }}
-      </el-tag>
-    </template>
+      <template #educationPsychologyStatus="{ row }">
+        <el-tag :type="row.educationPsychologyStatus === '正常' ? 'success' : 'error'">
+          {{ row.educationPsychologyStatus }}
+        </el-tag>
+      </template>
 
-    <template #professionalEthicStatus="{ row }">
-      <el-tag :type="row.professionalEthicStatus === '正常' ? 'success' : 'error'">
-        {{ row.professionalEthicStatus }}
-      </el-tag>
-    </template>
+      <template #professionalEthicStatus="{ row }">
+        <el-tag :type="row.professionalEthicStatus === '正常' ? 'success' : 'error'">
+          {{ row.professionalEthicStatus }}
+        </el-tag>
+      </template>
 
-    <template #operate="scope">
-      <el-button size="small" type="danger">
-        {{ $t('public.delete') }}
-      </el-button>
-    </template>
-
-  </pro-table>
+      <template #operate="{ row }">
+        <el-popconfirm title="确定删除这条数据吗?" @confirm="deleteScore(row.id)">
+          <template #reference>
+            <el-button size="small" type="danger">
+              {{ $t('public.delete') }}
+            </el-button>
+          </template>
+        </el-popconfirm>
+      </template>
+    </pro-table>
+  </div>
 </template>
 
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
-
-import { listWrittenScore, listExamYear, listWorkAddress } from '@/api/query/written'
+import { ElMessage } from 'element-plus'
+import { listWrittenScore, deleteWrittenScore } from '@/api/query/written'
+import AddWrittenScore from './functional/AddWrittenScore.vue'
 
 export default defineComponent({
   name: 'writtenScoreManagement',
+  components: {
+    AddWrittenScore
+  },
   setup() {
 
     const state = reactive({
@@ -187,15 +198,15 @@ export default defineComponent({
             options: [
               {
                 name: 'query/written.attend',
-                value: "正常",
+                value: '正常',
               },
               {
                 name: 'query/written.miss',
-                value: "缺考",
+                value: '缺考',
               },
               {
                 name: 'query/written.cheat',
-                value: "作弊",
+                value: '作弊',
               },
             ],
           },
@@ -207,15 +218,15 @@ export default defineComponent({
             options: [
               {
                 name: 'query/written.attend',
-                value: "正常",
+                value: '正常',
               },
               {
                 name: 'query/written.miss',
-                value: "缺考",
+                value: '缺考',
               },
               {
                 name: 'query/written.cheat',
-                value: "作弊",
+                value: '作弊',
               },
             ],
           },
@@ -227,15 +238,15 @@ export default defineComponent({
             options: [
               {
                 name: 'query/written.attend',
-                value: "正常",
+                value: '正常',
               },
               {
                 name: 'query/written.miss',
-                value: "缺考",
+                value: '缺考',
               },
               {
                 name: 'query/written.cheat',
-                value: "作弊",
+                value: '作弊',
               },
             ],
           },
@@ -306,7 +317,7 @@ export default defineComponent({
       async getList(params) {
 
         // params是从组件接收的，包含分页和搜索字段。
-        const { code, msg, data } = await listWrittenScore(params)
+        const { data } = await listWrittenScore(params)
 
         // 必须要返回一个对象，包含data数组和total总数
         return {
@@ -322,15 +333,55 @@ export default defineComponent({
       table.value.refresh()
     }
 
+    // 导出成绩
     const exportFile = () => {
       console.log("this is export file");
     }
 
+    // 导入文件
     const importFile = () => {
       console.log("this is import file");
     }
 
-    return { ...toRefs(state), refresh, exportFile, importFile, table }
+    // 删除单个成绩
+    const deleteScore = async (id) => {
+      const { data } = await deleteWrittenScore(id)
+      ElMessage({
+        message: data.data,
+        type: 'success',
+      })
+      refresh()
+    }
+
+    // 删除多个成绩
+    const batchDelete = () => {
+      state.selectedItems.forEach(item => {
+        deleteWrittenScore(item.id)
+      })
+      ElMessage({
+        message: '批量删除成功',
+        type: 'success',
+      })
+      refresh()
+    }
+
+    // 添加成绩
+    const addWrittenScoreFormVisible = ref(false)
+    const changeVisibility = () => {
+      addWrittenScoreFormVisible.value = !addWrittenScoreFormVisible.value
+    }
+
+    return {
+      ...toRefs(state),
+      refresh,
+      exportFile,
+      importFile,
+      deleteScore,
+      batchDelete,
+      addWrittenScoreFormVisible,
+      changeVisibility,
+      table,
+    }
   },
 })
 </script>

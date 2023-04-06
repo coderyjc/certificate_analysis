@@ -35,7 +35,7 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
 
         QueryWrapper<WrittenScore> wrapper = new QueryWrapper<>();
 
-//        if(!gender.equals("")) wrapper.eq("sex", gender);
+        if(!gender.equals("")) wrapper.eq("gender", gender);
         if(!name.equals("")) wrapper.eq("name", name);
         if(!examId.equals("")) wrapper.eq("exam_id", examId);
         if(!examDate.equals("")) wrapper.like("exam_date", examDate);
