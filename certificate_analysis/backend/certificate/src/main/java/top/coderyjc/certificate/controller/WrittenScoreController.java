@@ -1,21 +1,19 @@
 package top.coderyjc.certificate.controller;
 
-import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.service.IWrittenScoreService;
 import top.coderyjc.certificate.util.DownloadUtil;
 import top.coderyjc.certificate.util.Msg;
 
-import javax.management.Query;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -98,7 +96,6 @@ public class WrittenScoreController {
         );
         return Msg.success().add("data", iPage);
     }
-
 
     /**
      * 添加笔试成绩
@@ -200,20 +197,26 @@ public class WrittenScoreController {
         return Msg.success().add("data", msg);
     }
 
-
-    @RequestMapping(value = "/export/all", method = RequestMethod.GET)
+    /**
+     * 导出excel
+     * @param response
+     * @param exportColumn
+     * @param exportId
+     * @param searchCondition
+     */
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
     public void exportExcel(
-            HttpServletResponse response) throws IOException {
+            HttpServletResponse response,
+            @RequestParam(value = "exportColumn[]", defaultValue = "null") List<String> exportColumn,
+            @RequestParam(value = "exportId[]", defaultValue = "null") List<String> exportId,
+            @RequestParam(value = "searchCondition", defaultValue = "null") String searchCondition
+    ) {
+        System.out.println(exportColumn);
+        System.out.println(exportId);
+        System.out.println(JSONObject.parse(searchCondition));
 
-//      先测试一下导出2013年的数据
-        QueryWrapper<WrittenScore> wrapper = new QueryWrapper<>();
-        wrapper.eq("exam_date", "2013");
-        List<WrittenScore> list = service.list(wrapper);
+        JSONObject condition = JSONObject.parseObject(searchCondition);
 
-        DownloadUtil.downloadExcel(response,new ExportParams(), WrittenScore.class, list);
+        service.exportExcel(response, exportId, exportColumn, condition);
     }
-
-    
-
-
 }

@@ -2,7 +2,9 @@
   <div class="container">
     <AddWrittenScore :dialogFormVisible="addWrittenScoreDialogVisibility" @visibilityChange="changeAddWrittenScoreDialogVisibility">
     </AddWrittenScore>
-    <ExportWrittenScore :dialogVisible="exportWrittenScoreDialogVisibility" @visibilityChange="changeExportWrittenScoreDialogVisibility">
+    <ExportWrittenScore :dialogVisible="exportWrittenScoreDialogVisibility" @visibilityChange="changeExportWrittenScoreDialogVisibility"
+    :selectedItems="selectedItems"
+    >
     </ExportWrittenScore>
     <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
       @selectionChange="handleSelectionChange" :pagination="paginationConfig">

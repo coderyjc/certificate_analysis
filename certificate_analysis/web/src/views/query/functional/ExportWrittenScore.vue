@@ -31,40 +31,39 @@
 <script>
 import { toRefs, reactive, defineComponent, computed, ref } from 'vue';
 import { ElMessage } from 'element-plus';
+import { exportWrittenScore } from '@/api/query/written';
 
 export default defineComponent({
   // 属性
   props: {
     dialogVisible: {
       type: Boolean,
-      default: false
+      default: false,
+    },
+    selectedItems: {
+      type: Array,
     }
   },
   setup(props, { emit }) {
     const state = reactive({
-      form: {
-        name: true,
-        examId: true,
-        gender: true,
-        identificationId: "",
-        educationScore: "",
-        educationPsychologyScore: "",
-        professionalEthicScore: "",
-        educationStatus: "",
-        educationPsychologyStatus: "",
-        professionalEthicStatus: "",
-        workAddress: "",
-        examDate: ""
-      },
       checkList: ['姓名','性别','准考证号','身份证号','教育学成绩','教育心理学成绩','职业道德修养和高等教育法规成绩','教育学考试状态','教育心理学考试状态','职业道德修养和高等教育法规状态','工作单位','考试时间'],
       handleVisibilityChange() {
         emit('visibilityChange')
       },
       async exportSelectedData() {
-        console.log(state.checkList)
+        // 导出选择的数据（不用查询参数）
+        const { selectedItems } = toRefs(props)
+        const ids = []
+        selectedItems.value.forEach(item => ids.push(item.id))
+        const outlink = await exportWrittenScore(state.checkList, ids, JSON.stringify({}))
+        // 通过在浏览器打开外部链接进行下载
+        window.open(outlink,"_blank")
       },
       async exportAllData() {
-        console.log('submit export')
+        // 导出所有数据
+        const outlink = await exportWrittenScore(state.checkList,[],JSON.stringify())
+        // 通过在浏览器打开外部链接进行下载
+        window.open(outlink,"_blank")
       }
     })
 
@@ -74,7 +73,11 @@ export default defineComponent({
       }
     })
 
-    // const checkList = ref()
+    const selected = computed({
+      get: () => {
+        return props.selectedItems
+      }
+    })
 
     return {
       ...toRefs(state),
