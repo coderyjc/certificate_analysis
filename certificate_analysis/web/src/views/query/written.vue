@@ -6,9 +6,13 @@
       @selectionChange="handleSelectionChange" :pagination="paginationConfig">
       <!-- 工具栏 -->
       <template #toolbar>
-        <el-button type="danger" icon="Delete" @click="batchDelete">
-          {{ $t('table.batchDelete') }}
-        </el-button>
+        <el-popconfirm title="确定删除选中数据吗?" @confirm="batchDelete">
+          <template #reference>
+            <el-button type="danger" icon="Delete">
+              {{ $t('table.batchDelete') }}
+            </el-button>
+          </template>
+        </el-popconfirm>
         <el-button type="primary" icon="Plus" @click="changeVisibility">
           {{ $t('table.add') }}
         </el-button>
