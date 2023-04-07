@@ -1,17 +1,22 @@
 package top.coderyjc.certificate.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.apache.ibatis.reflection.invoker.GetFieldInvoker;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import top.coderyjc.certificate.model.dto.WrittenScoreDTO;
 import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.service.IWrittenScoreService;
+import top.coderyjc.certificate.util.DownloadUtil;
 import top.coderyjc.certificate.util.Msg;
 
+import javax.management.Query;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -181,7 +186,7 @@ public class WrittenScoreController {
     }
 
     /**
-     * 删除单个的数据数据
+     * 删除单个的数据
      * @param id
      * @return
      */
@@ -196,16 +201,19 @@ public class WrittenScoreController {
     }
 
 
-//    @RequestMapping(value = "/work_address", method = RequestMethod.GET)
-//    public Msg listWorkAddress(){
-//        List<String> list = service.listWorkAddress();
-//        return Msg.success().add("data", list);
-//    }
-//
-//    @RequestMapping(value = "/exam_year", method = RequestMethod.GET)
-//    public Msg listExamYear(){
-//        List<String> list = service.listExamYear();
-//        return Msg.success().add("data", list);
-//    }
+    @RequestMapping(value = "/export/all", method = RequestMethod.GET)
+    public void exportExcel(
+            HttpServletResponse response) throws IOException {
+
+//      先测试一下导出2013年的数据
+        QueryWrapper<WrittenScore> wrapper = new QueryWrapper<>();
+        wrapper.eq("exam_date", "2013");
+        List<WrittenScore> list = service.list(wrapper);
+
+        DownloadUtil.downloadExcel(response,new ExportParams(), WrittenScore.class, list);
+    }
+
+    
+
 
 }

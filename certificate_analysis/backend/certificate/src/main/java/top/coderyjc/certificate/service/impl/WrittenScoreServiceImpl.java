@@ -3,7 +3,6 @@ package top.coderyjc.certificate.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import top.coderyjc.certificate.model.dto.WrittenScoreDTO;
 import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.mapper.WrittenScoreMapper;
 import top.coderyjc.certificate.service.IWrittenScoreService;
@@ -11,7 +10,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>

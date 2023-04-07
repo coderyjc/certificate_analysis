@@ -1,7 +1,9 @@
 <template>
   <div class="container">
-    <AddWrittenScore :dialogFormVisible="addWrittenScoreFormVisible" @visibilityChange="changeVisibility">
+    <AddWrittenScore :dialogFormVisible="addWrittenScoreDialogVisibility" @visibilityChange="changeAddWrittenScoreDialogVisibility">
     </AddWrittenScore>
+    <ExportWrittenScore :dialogVisible="exportWrittenScoreDialogVisibility" @visibilityChange="changeExportWrittenScoreDialogVisibility">
+    </ExportWrittenScore>
     <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
       @selectionChange="handleSelectionChange" :pagination="paginationConfig">
       <!-- 工具栏 -->
@@ -13,7 +15,7 @@
             </el-button>
           </template>
         </el-popconfirm>
-        <el-button type="primary" icon="Plus" @click="changeVisibility">
+        <el-button type="primary" icon="Plus" @click="changeAddWrittenScoreDialogVisibility">
           {{ $t('table.add') }}
         </el-button>
         <el-button type="primary" icon="Refresh" @click="refresh">
@@ -22,7 +24,7 @@
         <el-button type="primary" icon="Upload" @click="importFile">
           {{ $t('table.import') }}
         </el-button>
-        <el-button type="primary" icon="Download" @click="exportFile">
+        <el-button type="primary" icon="Download" @click="changeExportWrittenScoreDialogVisibility">
           {{ $t('table.export') }}
         </el-button>
       </template>
@@ -62,12 +64,15 @@
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
 import { listWrittenScore, deleteWrittenScore } from '@/api/query/written'
+
 import AddWrittenScore from './functional/AddWrittenScore.vue'
+import ExportWrittenScore from './functional/ExportWrittenScore.vue'
 
 export default defineComponent({
   name: 'writtenScoreManagement',
   components: {
-    AddWrittenScore
+    AddWrittenScore,
+    ExportWrittenScore
   },
   setup() {
 
@@ -337,16 +342,6 @@ export default defineComponent({
       table.value.refresh()
     }
 
-    // 导出成绩
-    const exportFile = () => {
-      console.log("this is export file");
-    }
-
-    // 导入文件
-    const importFile = () => {
-      console.log("this is import file");
-    }
-
     // 删除单个成绩
     const deleteScore = async (id) => {
       const { data } = await deleteWrittenScore(id)
@@ -370,20 +365,32 @@ export default defineComponent({
     }
 
     // 添加成绩
-    const addWrittenScoreFormVisible = ref(false)
-    const changeVisibility = () => {
-      addWrittenScoreFormVisible.value = !addWrittenScoreFormVisible.value
+    const addWrittenScoreDialogVisibility = ref(false)
+    const changeAddWrittenScoreDialogVisibility = () => {
+      addWrittenScoreDialogVisibility.value = !addWrittenScoreDialogVisibility.value
+    }
+
+    // 导出成绩
+    const exportWrittenScoreDialogVisibility = ref(false)
+    const changeExportWrittenScoreDialogVisibility = () => {
+      exportWrittenScoreDialogVisibility.value = !exportWrittenScoreDialogVisibility.value
+    }
+
+    // 导入文件
+    const importFile = () => {
+      console.log("this is import file");
     }
 
     return {
       ...toRefs(state),
       refresh,
-      exportFile,
       importFile,
       deleteScore,
       batchDelete,
-      addWrittenScoreFormVisible,
-      changeVisibility,
+      addWrittenScoreDialogVisibility, 
+      changeAddWrittenScoreDialogVisibility,
+      exportWrittenScoreDialogVisibility, 
+      changeExportWrittenScoreDialogVisibility,
       table,
     }
   },
