@@ -70,7 +70,6 @@ public class InterviewScoreController {
         interviewScore.setApplyMajor((String) jsonObject.get("applyMajor"));
         interviewScore.setLevel((String) jsonObject.get("level"));
         interviewScore.setExamDate((String) jsonObject.get("examDate"));
-        interviewScore.setGender((Integer)jsonObject.get("identificationId") % 2);
         boolean result = false;
         if(7 == jsonObject.size()){
             result = service.save(interviewScore);
@@ -99,11 +98,7 @@ public class InterviewScoreController {
     @RequestMapping(value = "/batch_delete", method = RequestMethod.POST)
     public Msg batchDeleteWrittenScore(@RequestParam(value = "ids[]", defaultValue = "null") List<String> ids){
 //        id是主键，必然不可能为空，因此可以直接删除
-        boolean result = true;
-        for (String id :
-                ids) {
-            result = service.removeById(id) && result;
-        }
+        boolean result = service.removeBatchByIds(ids);
         return Msg.success().add("data", result ? "删除成功" : "删除失败");
     }
 
