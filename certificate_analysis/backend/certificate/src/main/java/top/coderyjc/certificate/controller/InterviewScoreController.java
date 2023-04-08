@@ -66,6 +66,7 @@ public class InterviewScoreController {
         interviewScore.setApplyMajor((String) jsonObject.get("applyMajor"));
         interviewScore.setLevel((String) jsonObject.get("level"));
         interviewScore.setExamDate((String) jsonObject.get("examDate"));
+        interviewScore.setGender(Integer.parseInt(((String) jsonObject.get("identificationId")).substring(17, 18)) % 2);
         boolean result = false;
         if(7 == jsonObject.size()){
             result = service.save(interviewScore);

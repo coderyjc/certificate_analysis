@@ -12,17 +12,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
 import top.coderyjc.certificate.model.dto.InterviewScoreImportDTO;
-import top.coderyjc.certificate.model.dto.WrittenScoreImportDTO;
 import top.coderyjc.certificate.model.entity.InterviewScore;
 import top.coderyjc.certificate.mapper.InterviewScoreMapper;
-import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.service.IInterviewScoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.coderyjc.certificate.util.DownloadUtil;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,7 +125,7 @@ public class InterviewScoreServiceImpl extends ServiceImpl<InterviewScoreMapper,
     @Override
     public String importExcel(MultipartFile file) throws Exception {
 
-        //需保存到数据库的工时记录
+        //需保存到数据库的记录
         List<InterviewScore> resultData = new ArrayList<>();
         ImportParams params = new ImportParams();
         // 表头设置为首行

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import top.coderyjc.certificate.model.entity.Certification;
 import top.coderyjc.certificate.service.ICertificationService;
+import top.coderyjc.certificate.util.DateUtil;
 import top.coderyjc.certificate.util.Msg;
 
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Date;
 import java.util.List;
 
 /**
@@ -66,13 +66,9 @@ public class CertificationController {
         certification.setInterviewYear((String) jsonObject.get("interviewYear"));
         certification.setQualificationId((String) jsonObject.get("qualificationId"));
         certification.setMajor((String) jsonObject.get("major"));
-        certification.setValidateDate((Date) jsonObject.get("validateDate"));
-        certification.setGender((Integer) jsonObject.get("gender"));
-
-        boolean result = false;
-        if(7 == jsonObject.size()){
-            result = service.save(certification);
-        }
+        certification.setValidateDate(DateUtil.toDate(jsonObject.getString("validateDate")));
+        certification.setGender(Integer.parseInt(jsonObject.getString("identificationId").substring(17, 18)) % 2);
+        boolean result = service.save(certification);
         return Msg.success().add("data", result ? "添加成功" : "添加失败");
     }
 

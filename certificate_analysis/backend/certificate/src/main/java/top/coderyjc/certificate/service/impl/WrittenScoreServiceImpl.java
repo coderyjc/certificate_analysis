@@ -194,7 +194,7 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
     @Override
     public String importExcel(MultipartFile file) throws Exception {
 
-        //需保存到数据库的工时记录
+        //需保存到数据库的记录
         List<WrittenScore> resultData = new ArrayList<>();
         ImportParams params = new ImportParams();
         // 表头设置为首行
