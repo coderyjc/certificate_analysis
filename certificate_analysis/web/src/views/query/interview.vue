@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <AddWrittenScore :dialogFormVisible="addWrittenScoreDialogVisibility" @visibilityChange="changeAddWrittenScoreDialogVisibility">
-    </AddWrittenScore>
-    <ExportWrittenScore :dialogVisible="exportWrittenScoreDialogVisibility" @visibilityChange="changeExportWrittenScoreDialogVisibility"
+    <AddInterviewScore :dialogFormVisible="addInterviewScoreDialogVisibility" @visibilityChange="changeaddInterviewScoreDialogVisibility">
+    </AddInterviewScore>
+    <ExportInterviewScore :dialogVisible="exportInterviewScoreDialogVisibility" @visibilityChange="changeexportInterviewScoreDialogVisibility"
     :selectedItems="selectedItems" :searchModel="searchModal">
-    </ExportWrittenScore>
-    <ImportWrittenScore :dialogVisible="importWrittenScoreDialogVisibility" @visibilityChange="changeImportWrittenScoreDialogVisibility">
-    </ImportWrittenScore>
-    <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
+    </ExportInterviewScore>
+    <ImportInterviewScore :dialogVisible="importInterviewScoreDialogVisibility" @visibilityChange="changeimportInterviewScoreDialogVisibility">
+    </ImportInterviewScore>
+    <pro-table ref="table" :title="$t('query/interview.title')" :request="getList" :columns="columns" :search="searchConfig"
       @selectionChange="handleSelectionChange" :pagination="paginationConfig" @getModel="getSearchModal">
       <!-- 工具栏 -->
       <template #toolbar>
@@ -18,36 +18,22 @@
             </el-button>
           </template>
         </el-popconfirm>
-        <el-button type="primary" icon="Plus" @click="changeAddWrittenScoreDialogVisibility">
+        <el-button type="primary" icon="Plus" @click="changeaddInterviewScoreDialogVisibility">
           {{ $t('table.add') }}
         </el-button>
         <el-button type="primary" icon="Refresh" @click="refresh">
           {{ $t('table.refresh') }}
         </el-button>
-        <el-button type="primary" icon="Upload" @click="changeImportWrittenScoreDialogVisibility">
+        <el-button type="primary" icon="Upload" @click="changeimportInterviewScoreDialogVisibility">
           {{ $t('table.import') }}
         </el-button>
-        <el-button type="primary" icon="Download" @click="changeExportWrittenScoreDialogVisibility">
+        <el-button type="primary" icon="Download" @click="changeexportInterviewScoreDialogVisibility">
           {{ $t('table.export') }}
         </el-button>
       </template>
 
-      <template #educationStatus="{ row }">
-        <el-tag :type="row.educationStatus === '正常' ? 'success' : 'error'">
-          {{ row.educationStatus }}
-        </el-tag>
-      </template>
-
-      <template #educationPsychologyStatus="{ row }">
-        <el-tag :type="row.educationPsychologyStatus === '正常' ? 'success' : 'error'">
-          {{ row.educationPsychologyStatus }}
-        </el-tag>
-      </template>
-
-      <template #professionalEthicStatus="{ row }">
-        <el-tag :type="row.professionalEthicStatus === '正常' ? 'success' : 'error'">
-          {{ row.professionalEthicStatus }}
-        </el-tag>
+      <template #gender="{ row }">
+          {{ row.gender == 1 ? "男" : "女" }}
       </template>
 
       <template #operate="{ row }">
@@ -66,81 +52,58 @@
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
-import { listWrittenScore, deleteWrittenScore } from '@/api/query/written'
+import { listInterviewScore, deleteInterviewScore } from '@/api/query/interview'
 
-import AddWrittenScore from './functional/AddWrittenScore.vue'
-import ExportWrittenScore from './functional/ExportWrittenScore.vue'
-import ImportWrittenScore from './functional/ImportWrittenScore.vue'
+import AddInterviewScore from './functional/AddInterviewScore.vue'
+import ExportInterviewScore from './functional/ExportInterviewScore.vue'
+import ImportInterviewScore from './functional/ImportInterviewScore.vue'
+
 
 export default defineComponent({
-  name: 'writtenScoreManagement',
+  name: 'interviewScoreManagement',
   components: {
-    AddWrittenScore,
-    ExportWrittenScore,
-    ImportWrittenScore
-  },
+    AddInterviewScore,
+    ExportInterviewScore,
+    ImportInterviewScore,
+},
   setup() {
-
     const state = reactive({
       // 字段配置
       columns: [
         { type: 'selection', width: 56 },
         {
-          label: 'query/written.name',
+          label: 'query/interview.name',
           prop: 'name',
           width: 80,
         },
         {
-          label: 'query/written.examId',
-          prop: 'examId',
-          sortable: true,
-          minWidth: 120,
-        },
-        {
-          label: 'query/written.identificationId',
-          prop: 'identificationId',
-          minWidth: 170,
-        },
-        {
-          label: 'query/written.educationScore',
-          prop: 'educationScore',
-          sortable: true,
-          minWidth: 100,
-        },
-        {
-          label: 'query/written.educationPsychologyScore',
-          prop: 'educationPsychologyScore',
-          sortable: true,
-          minWidth: 130,
-        },
-        {
-          label: 'query/written.professionalEthicScore',
-          prop: 'professionalEthicScore',
-          sortable: true,
-          minWidth: 120,
-        },
-        {
-          label: 'query/written.educationStatus',
-          tdSlot: 'educationStatus',
-          width: 90,
-        },
-        {
-          label: 'query/written.educationPsychologyStatus',
-          tdSlot: 'educationPsychologyStatus',
-          width: 100,
-        },
-        {
-          label: 'query/written.professionalEthicStatus',
-          tdSlot: 'professionalEthicStatus',
-          width: 100,
-        },
-        {
-          label: 'query/written.workAddress',
-          prop: 'workAddress',
+          label: 'public.gender',
+          prop: 'gender',
           width: 120,
+          tdSlot: 'gender'
         },
         {
-          label: 'query/written.examDate',
+          label: 'query/interview.identificationId',
+          prop: 'identificationId',
+          minWidth: 220,
+        },
+        {
+          label: 'query/interview.examAddress',
+          prop: 'examAddress',
+          width: 150,
+        },
+        {
+          label: 'query/interview.workAddress',
+          prop: 'workAddress',
+          minWidth: 220,
+        },
+        {
+          label: 'query/interview.applyMajor',
+          prop: 'applyMajor',
+          minWidth: 270,
+        },
+        {
+          label: 'query/interview.examDate',
           prop: 'examDate',
           sortable: true,
           width: 100,
@@ -155,12 +118,12 @@ export default defineComponent({
       ],
       // 搜索配置
       searchConfig: {
-        labelWidth: '230px', // 必须带上单位
+        labelWidth: '100px', // 必须带上单位
         inputWidth: '200px', // 必须带上单位
         fields: [
           {
             type: 'text',
-            label: 'query/written.name',
+            label: 'query/interview.name',
             name: 'name',
             defaultValue: ""
           },
@@ -182,135 +145,39 @@ export default defineComponent({
           },
           {
             type: 'text',
-            label: 'query/written.examId',
-            name: 'examId',
-            defaultValue: "",
-          },
-          {
-            type: 'text',
-            label: 'query/written.identificationId',
+            label: 'query/interview.identificationId',
             name: 'identificationId',
             defaultValue: "",
           },
           {
             type: 'text',
-            label: 'query/written.workAddress',
+            label: 'query/interview.workAddress',
             name: 'workAddress',
             defaultValue: "",
           },
           {
-            label: 'query/written.examDate',
+            type: 'text',
+            label: 'query/interview.examAddress',
+            name: 'examAddress',
+            defaultValue: "",
+          },
+          {
+            type: 'text',
+            label: 'query/interview.level',
+            name: 'level',
+            defaultValue: "",
+          },
+          {
+            label: 'query/interview.examDate',
             name: 'examDate',
             type: 'text',
             defaultValue: '',
           },
           {
-            label: 'query/written.educationStatus',
-            name: 'educationStatus',
-            type: 'select',
+            label: 'query/interview.applyMajor',
+            name: 'applyMajor',
+            type: 'text',
             defaultValue: '',
-            options: [
-              {
-                name: 'query/written.attend',
-                value: '正常',
-              },
-              {
-                name: 'query/written.miss',
-                value: '缺考',
-              },
-              {
-                name: 'query/written.cheat',
-                value: '作弊',
-              },
-            ],
-          },
-          {
-            label: 'query/written.educationPsychologyStatus',
-            name: 'educationPsychologyStatus',
-            type: 'select',
-            defaultValue: '',
-            options: [
-              {
-                name: 'query/written.attend',
-                value: '正常',
-              },
-              {
-                name: 'query/written.miss',
-                value: '缺考',
-              },
-              {
-                name: 'query/written.cheat',
-                value: '作弊',
-              },
-            ],
-          },
-          {
-            label: 'query/written.professionalEthicStatus',
-            name: 'professionalEthicStatus',
-            type: 'select',
-            defaultValue: '',
-            options: [
-              {
-                name: 'query/written.attend',
-                value: '正常',
-              },
-              {
-                name: 'query/written.miss',
-                value: '缺考',
-              },
-              {
-                name: 'query/written.cheat',
-                value: '作弊',
-              },
-            ],
-          },
-          {
-            label: 'query/written.educationSort',
-            name: 'educationSort',
-            type: 'radio',
-            defaultValue: "",
-            options: [
-              {
-                name: 'public.asc',
-                value: 1,
-              },
-              {
-                name: 'public.desc',
-                value: 0,
-              },
-            ],
-          },
-          {
-            label: 'query/written.educationPsychologySort',
-            name: 'educationPsychologySort',
-            type: 'radio',
-            defaultValue: "",
-            options: [
-              {
-                name: 'public.asc',
-                value: 1,
-              },
-              {
-                name: 'public.desc',
-                value: 0,
-              },
-            ],
-          },
-          {
-            label: 'query/written.professionalEthicSort',
-            name: 'professionalEthicSort',
-            type: 'radio',
-            defaultValue: "",
-            options: [
-              {
-                name: 'public.asc',
-                value: 1,
-              },
-              {
-                name: 'public.desc',
-                value: 0,
-              },
-            ],
           },
         ],
       },
@@ -331,7 +198,7 @@ export default defineComponent({
       async getList(params) {
 
         // params是从组件接收的，包含分页和搜索字段。
-        const { data } = await listWrittenScore(params)
+        const { data } = await listInterviewScore(params)
 
         // 必须要返回一个对象，包含data数组和total总数
         return {
@@ -353,7 +220,7 @@ export default defineComponent({
 
     // 删除单个成绩
     const deleteScore = async (id) => {
-      const { data } = await deleteWrittenScore(id)
+      const { data } = await deleteInterviewScore(id)
       ElMessage({
         message: data.data,
         type: 'success',
@@ -364,7 +231,7 @@ export default defineComponent({
     // 删除多个成绩
     const batchDelete = () => {
       state.selectedItems.forEach(item => {
-        deleteWrittenScore(item.id)
+        deleteInterviewScore(item.id)
       })
       ElMessage({
         message: '批量删除成功',
@@ -374,21 +241,21 @@ export default defineComponent({
     }
 
     // 添加成绩
-    const addWrittenScoreDialogVisibility = ref(false)
-    const changeAddWrittenScoreDialogVisibility = () => {
-      addWrittenScoreDialogVisibility.value = !addWrittenScoreDialogVisibility.value
+    const addInterviewScoreDialogVisibility = ref(false)
+    const changeaddInterviewScoreDialogVisibility = () => {
+      addInterviewScoreDialogVisibility.value = !addInterviewScoreDialogVisibility.value
     }
 
     // 导出成绩
-    const exportWrittenScoreDialogVisibility = ref(false)
-    const changeExportWrittenScoreDialogVisibility = () => {
-      exportWrittenScoreDialogVisibility.value = !exportWrittenScoreDialogVisibility.value
+    const exportInterviewScoreDialogVisibility = ref(false)
+    const changeexportInterviewScoreDialogVisibility = () => {
+      exportInterviewScoreDialogVisibility.value = !exportInterviewScoreDialogVisibility.value
     }
 
     // 导入成绩
-    const importWrittenScoreDialogVisibility = ref(false)
-    const changeImportWrittenScoreDialogVisibility = () => {
-      importWrittenScoreDialogVisibility.value = !importWrittenScoreDialogVisibility.value
+    const importInterviewScoreDialogVisibility = ref(false)
+    const changeimportInterviewScoreDialogVisibility = () => {
+      importInterviewScoreDialogVisibility.value = !importInterviewScoreDialogVisibility.value
     }
 
     return {
@@ -396,12 +263,12 @@ export default defineComponent({
       refresh,
       deleteScore,
       batchDelete,
-      addWrittenScoreDialogVisibility, 
-      changeAddWrittenScoreDialogVisibility,
-      exportWrittenScoreDialogVisibility, 
-      changeExportWrittenScoreDialogVisibility,
-      importWrittenScoreDialogVisibility,
-      changeImportWrittenScoreDialogVisibility,
+      addInterviewScoreDialogVisibility, 
+      changeaddInterviewScoreDialogVisibility,
+      exportInterviewScoreDialogVisibility, 
+      changeexportInterviewScoreDialogVisibility,
+      importInterviewScoreDialogVisibility,
+      changeimportInterviewScoreDialogVisibility,
       table,
     }
   },

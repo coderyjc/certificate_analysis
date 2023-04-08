@@ -2,11 +2,14 @@ import request from '@/utils/request'
 
 // 获取面试成绩
 export const listInterviewScore = data => {
+  const {current, size} = { ...data }
   return request({
     url: '/interviewScore/all',
     method: 'get',
     params: {
-      ...data,
+      current: current,
+      size: size,
+      searchCondition: data,
     },
   })
 }
@@ -17,7 +20,7 @@ export const addInterviewScore = data => {
     url: '/interviewScore/add',
     method: 'post',
     params: {
-      ...data,
+      param: JSON.stringify(data),
     },
   })
 }

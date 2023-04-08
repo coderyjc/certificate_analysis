@@ -6,14 +6,10 @@
         <el-checkbox-group v-model="checkList">
           <el-checkbox label="姓名" border/>
           <el-checkbox label="性别" border/>
-          <el-checkbox label="准考证号" border/>
           <el-checkbox label="身份证号" border/>
-          <el-checkbox label="教育学成绩" border/>
-          <el-checkbox label="教育心理学成绩" border/>
-          <el-checkbox label="职业道德修养和高等教育法规成绩" border/>
-          <el-checkbox label="教育学考试状态" border/>
-          <el-checkbox label="教育心理学考试状态" border/>
-          <el-checkbox label="职业道德修养和高等教育法规状态" border/>
+          <el-checkbox label="测试点" border/>
+          <el-checkbox label="申请专业" border/>
+          <el-checkbox label="等级" border/>
           <el-checkbox label="工作单位" border/>
           <el-checkbox label="考试时间" border/>
       </el-checkbox-group>
@@ -31,7 +27,8 @@
 <script>
 import { toRefs, reactive, defineComponent, computed, ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import { exportWrittenScore } from '@/api/query/written';
+import { exportInterviewScore } from '@/api/query/interview';
+
 
 export default defineComponent({
   // 属性
@@ -50,7 +47,7 @@ export default defineComponent({
   setup(props, { emit }) {
 
     const state = reactive({
-      checkList: ['姓名','性别','准考证号','身份证号','教育学成绩','教育心理学成绩','职业道德修养和高等教育法规成绩','教育学考试状态','教育心理学考试状态','职业道德修养和高等教育法规状态','工作单位','考试时间'],
+      checkList: ['姓名','性别','测试点', '身份证号','工作单位','申请专业','等级','考试时间'],
       handleVisibilityChange() {
         emit('visibilityChange')
       },
@@ -66,7 +63,7 @@ export default defineComponent({
           })
           return
         }
-        const outlink = await exportWrittenScore(state.checkList, ids, JSON.stringify({}))
+        const outlink = await exportInterviewScore(state.checkList, ids, JSON.stringify({}))
         // 通过在浏览器打开外部链接进行下载
         window.open(outlink,"_blank")
         ElMessage({
@@ -76,7 +73,7 @@ export default defineComponent({
       },
       async exportAllData() {
         const model = props.searchModel
-        const outlink = await exportWrittenScore(state.checkList,[],JSON.stringify({...model}))
+        const outlink = await exportInterviewScore(state.checkList,[],JSON.stringify({...model}))
         // 通过在浏览器打开外部链接进行下载
         window.open(outlink,"_blank")
         ElMessage({

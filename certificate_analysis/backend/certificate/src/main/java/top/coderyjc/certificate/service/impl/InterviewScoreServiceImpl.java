@@ -1,20 +1,28 @@
 package top.coderyjc.certificate.service.impl;
 
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
+import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
+import top.coderyjc.certificate.model.dto.InterviewScoreImportDTO;
+import top.coderyjc.certificate.model.dto.WrittenScoreImportDTO;
 import top.coderyjc.certificate.model.entity.InterviewScore;
 import top.coderyjc.certificate.mapper.InterviewScoreMapper;
+import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.service.IInterviewScoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.coderyjc.certificate.util.DownloadUtil;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +44,7 @@ public class InterviewScoreServiceImpl extends ServiceImpl<InterviewScoreMapper,
 
         if(condition.size() > 0){
             if(!condition.get("name").equals("")) wrapper.eq("name", condition.get("name"));
-            if(!condition.get("examAddress").equals("")) wrapper.like("exam_address", condition.get("examAddress"));
+            if(!condition.get("examAddress").equals("")) wrapper.eq("exam_address", condition.get("examAddress"));
             if(!condition.get("identificationId").equals("")) wrapper.eq("identification_id", condition.get("identificationId"));
             if(!condition.get("workAddress").equals("")) wrapper.eq("work_address", condition.get("workAddress"));
             if(!condition.get("applyMajor").equals("")) wrapper.eq("apply_major", condition.get("applyMajor"));
@@ -118,7 +126,28 @@ public class InterviewScoreServiceImpl extends ServiceImpl<InterviewScoreMapper,
     }
 
     @Override
-    public String importExcel(MultipartFile file) {
-        return null;
+    public String importExcel(MultipartFile file) throws Exception {
+
+        //需保存到数据库的工时记录
+        List<InterviewScore> resultData = new ArrayList<>();
+        ImportParams params = new ImportParams();
+        // 表头设置为首行
+        params.setHeadRows(1);
+        params.setTitleRows(0);
+
+        ExcelImportResult<InterviewScoreImportDTO> result;
+        result = ExcelImportUtil.importExcelMore(file.getInputStream(), InterviewScoreImportDTO.class, params);
+
+        List<InterviewScoreImportDTO> correctResultList = result.getList();
+
+        for (InterviewScoreImportDTO interviewScoreImportDTO : correctResultList) {
+            InterviewScore interviewScore = new InterviewScore();
+            BeanUtils.copyProperties(interviewScoreImportDTO, interviewScore);
+            interviewScore.setGender(Integer.parseInt(interviewScore.getIdentificationId().substring(16,17)) % 2);
+            resultData.add(interviewScore);
+        }
+
+        saveBatch(resultData);
+        return "导入成功";
     }
 }

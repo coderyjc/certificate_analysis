@@ -28,13 +28,6 @@ public class InterviewScore implements Serializable {
     private Integer id;
 
     /**
-     * 考试地点（测试点）
-     */
-    @Excel(name = "测试点", width = 9)
-    @TableField("exam_address")
-    private String examAddress;
-
-    /**
      * 姓名
      */
     @Excel(name = "姓名", width = 10)
@@ -47,6 +40,15 @@ public class InterviewScore implements Serializable {
     @Excel(name = "身份证号", width = 25)
     @TableField("identification_id")
     private String identificationId;
+
+
+    /**
+     * 考试地点（测试点）
+     */
+    @Excel(name = "测试点", width = 9)
+    @TableField("exam_address")
+    private String examAddress;
+
 
     /**
      * 工作单位
