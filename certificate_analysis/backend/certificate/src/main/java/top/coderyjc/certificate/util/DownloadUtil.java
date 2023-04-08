@@ -4,6 +4,7 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -23,7 +24,7 @@ import java.util.List;
 public class DownloadUtil {
 
     /**
-     * 通用的文件下载工具
+     * 通用的文件下载工具,服务器 -> 客户端
      * @param response
      * @param fileName
      * @param directory
@@ -64,7 +65,7 @@ public class DownloadUtil {
     }
 
     /**
-     * 下载excel表格
+     * 下载excel表格，服务器 -> 客户端
      * @param response
      * @param entity
      * @param pojoClass

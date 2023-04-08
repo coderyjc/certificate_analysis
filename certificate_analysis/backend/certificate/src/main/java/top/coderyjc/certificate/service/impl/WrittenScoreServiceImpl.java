@@ -1,14 +1,17 @@
 package top.coderyjc.certificate.service.impl;
 
-import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
+import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.BeanUtils;
+import org.springframework.web.multipart.MultipartFile;
+import top.coderyjc.certificate.model.dto.WrittenScoreImportDTO;
 import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.mapper.WrittenScoreMapper;
 import top.coderyjc.certificate.service.IWrittenScoreService;
@@ -17,8 +20,7 @@ import org.springframework.stereotype.Service;
 import top.coderyjc.certificate.util.DownloadUtil;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -191,9 +193,34 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
         DownloadUtil.downloadExcel(response, new ExportParams(), beanList, WrittenScore.class, list);
     }
 
+    @Override
+    public String importExcel(MultipartFile file) throws Exception {
 
+        //需保存到数据库的工时记录
+        List<WrittenScore> resultData = new ArrayList<>();
+        ImportParams params = new ImportParams();
+        // 表头设置为首行
+        params.setHeadRows(1);
+        params.setTitleRows(0);
 
-    //    @Override
+        ExcelImportResult<WrittenScoreImportDTO> result;
+        result = ExcelImportUtil.importExcelMore(file.getInputStream(), WrittenScoreImportDTO.class, params);
+
+//        List<WrittenScoreImportDTO> failList = result.getFailList();
+        List<WrittenScoreImportDTO> correctResultList = result.getList();
+
+        for (WrittenScoreImportDTO writtenScoreImportDTO : correctResultList) {
+            WrittenScore writtenScore = new WrittenScore();
+            BeanUtils.copyProperties(writtenScoreImportDTO, writtenScore);
+            writtenScore.setGender(Integer.parseInt(writtenScore.getIdentificationId().substring(16,17)) % 2);
+            resultData.add(writtenScore);
+        }
+
+        saveBatch(resultData);
+        return "导入成功";
+    }
+
+//    @Override
 //    public List<String> listWorkAddress() {
 //        return baseMapper.listWorkAddress();
 //    }

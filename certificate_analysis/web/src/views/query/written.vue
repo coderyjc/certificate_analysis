@@ -5,6 +5,8 @@
     <ExportWrittenScore :dialogVisible="exportWrittenScoreDialogVisibility" @visibilityChange="changeExportWrittenScoreDialogVisibility"
     :selectedItems="selectedItems" :searchModel="searchModal">
     </ExportWrittenScore>
+    <ImportWrittenScore :dialogVisible="importWrittenScoreDialogVisibility" @visibilityChange="changeImportWrittenScoreDialogVisibility">
+    </ImportWrittenScore>
     <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
       @selectionChange="handleSelectionChange" :pagination="paginationConfig" @getModel="getSearchModal">
       <!-- 工具栏 -->
@@ -22,7 +24,7 @@
         <el-button type="primary" icon="Refresh" @click="refresh">
           {{ $t('table.refresh') }}
         </el-button>
-        <el-button type="primary" icon="Upload" @click="importFile">
+        <el-button type="primary" icon="Upload" @click="changeImportWrittenScoreDialogVisibility">
           {{ $t('table.import') }}
         </el-button>
         <el-button type="primary" icon="Download" @click="changeExportWrittenScoreDialogVisibility">
@@ -68,12 +70,14 @@ import { listWrittenScore, deleteWrittenScore } from '@/api/query/written'
 
 import AddWrittenScore from './functional/AddWrittenScore.vue'
 import ExportWrittenScore from './functional/ExportWrittenScore.vue'
+import ImportWrittenScore from './functional/ImportWrittenScore.vue'
 
 export default defineComponent({
   name: 'writtenScoreManagement',
   components: {
     AddWrittenScore,
-    ExportWrittenScore
+    ExportWrittenScore,
+    ImportWrittenScore
   },
   setup() {
 
@@ -381,9 +385,10 @@ export default defineComponent({
       exportWrittenScoreDialogVisibility.value = !exportWrittenScoreDialogVisibility.value
     }
 
-    // 导入文件
-    const importFile = () => {
-      console.log("this is import file");
+    // 导入成绩
+    const importWrittenScoreDialogVisibility = ref(false)
+    const changeImportWrittenScoreDialogVisibility = () => {
+      importWrittenScoreDialogVisibility.value = !importWrittenScoreDialogVisibility.value
     }
 
     return {
@@ -396,6 +401,8 @@ export default defineComponent({
       changeAddWrittenScoreDialogVisibility,
       exportWrittenScoreDialogVisibility, 
       changeExportWrittenScoreDialogVisibility,
+      importWrittenScoreDialogVisibility,
+      changeImportWrittenScoreDialogVisibility,
       table,
     }
   },

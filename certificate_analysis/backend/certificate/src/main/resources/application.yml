@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql://localhost:3306/certificate_analysis?characterEncoding=utf-8
     username: root
     password: 333
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 50MB
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:
