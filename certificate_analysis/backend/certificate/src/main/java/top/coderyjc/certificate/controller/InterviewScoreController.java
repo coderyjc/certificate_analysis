@@ -60,8 +60,22 @@ public class InterviewScoreController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Msg addInterviewScore(@RequestParam(value = "param", defaultValue = "{}") String data){
 //        插入
-   
-        return Msg.success().add("data", true ? "添加成功" : "添加失败");
+        InterviewScore interviewScore = new InterviewScore();
+        JSONObject jsonObject = JSONObject.parseObject(data);
+//        赋值
+        interviewScore.setName((String) jsonObject.get("name"));
+        interviewScore.setExamAddress((String) jsonObject.get("examAddress"));
+        interviewScore.setIdentificationId((String) jsonObject.get("identificationId"));
+        interviewScore.setWorkAddress((String) jsonObject.get("workAddress"));
+        interviewScore.setApplyMajor((String) jsonObject.get("applyMajor"));
+        interviewScore.setLevel((String) jsonObject.get("level"));
+        interviewScore.setExamDate((String) jsonObject.get("examDate"));
+        interviewScore.setGender((Integer)jsonObject.get("identificationId") % 2);
+        boolean result = false;
+        if(7 == jsonObject.size()){
+            result = service.save(interviewScore);
+        }
+        return Msg.success().add("data", result ? "添加成功" : "添加失败");
     }
 
     /**
