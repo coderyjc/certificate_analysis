@@ -220,7 +220,7 @@ public class WrittenScoreController {
             HttpServletResponse response,
             @RequestParam(value = "exportColumn[]", defaultValue = "null") List<String> exportColumn,
             @RequestParam(value = "exportId[]", defaultValue = "null") List<String> exportId,
-            @RequestParam(value = "searchCondition", defaultValue = "null") String searchCondition
+            @RequestParam(value = "searchCondition", defaultValue = "{}") String searchCondition
     ) {
         JSONObject condition = JSONObject.parseObject(searchCondition);
         service.exportExcel(response, exportId, exportColumn, condition);

@@ -88,7 +88,6 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
             list = baseMapper.selectBatchIds(exportId);
         }
         else if(condition.size() > 0) {
-
 //        搜索
             if(!condition.get("name").equals("")) wrapper.eq("name", condition.get("name"));
             if(!condition.get("examId").equals("")) wrapper.eq("exam_id", condition.get("examId"));

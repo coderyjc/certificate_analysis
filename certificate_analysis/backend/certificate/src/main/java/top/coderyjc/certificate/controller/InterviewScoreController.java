@@ -3,16 +3,12 @@ package top.coderyjc.certificate.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import top.coderyjc.certificate.model.dto.InterviewScoreDTO;
 import top.coderyjc.certificate.model.entity.InterviewScore;
-import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.service.IInterviewScoreService;
 import top.coderyjc.certificate.util.Msg;
 
@@ -112,14 +108,13 @@ public class InterviewScoreController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     public void exportExcel(
             HttpServletResponse response,
-            @RequestParam(value = "exportColumn[]", defaultValue = "null") List<String> exportColumn,
-            @RequestParam(value = "exportId[]", defaultValue = "null") List<String> exportId,
-            @RequestParam(value = "searchCondition", defaultValue = "null") String searchCondition
+            @RequestParam(value = "exportColumn[]", defaultValue = "") List<String> exportColumn,
+            @RequestParam(value = "exportId[]", defaultValue = "") List<String> exportId,
+            @RequestParam(value = "searchCondition", defaultValue = "{}") String searchCondition
     ) {
         JSONObject condition = JSONObject.parseObject(searchCondition);
         service.exportExcel(response, exportId, exportColumn, condition);
     }
-
 
     /**
      * 导入面试成绩的Excel

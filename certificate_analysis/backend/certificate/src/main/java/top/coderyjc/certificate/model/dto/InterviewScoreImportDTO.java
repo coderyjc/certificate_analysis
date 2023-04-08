@@ -12,7 +12,7 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
-public class InterviewScoreDTO {
+public class InterviewScoreImportDTO {
 
     private String name;
     private String examAddress;
