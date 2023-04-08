@@ -1,33 +1,22 @@
-package top.coderyjc.certificate.model.entity;
+package top.coderyjc.certificate.model.dto;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.sql.Date;
-import java.time.LocalDate;
-
 import lombok.Data;
 
+import java.sql.Date;
+
 /**
- * <p>
- * 证书表哦
- * </p>
+ * ClassName: CertificationImportDTO
+ * Package: top.coderyjc.certificate.model.dto
+ * Description:
  *
- * @author Yan Jingcun
- * @since 2023-04-02
+ * @Author Yan Jingcun
+ * @Create 4/8/2023 8:10 PM
+ * @Version 1.0
  */
 @Data
-@TableName("tbl_certification")
-public class Certification implements Serializable {
-
-    /**
-     * 主键，无意义，自增
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+public class CertificationImportDTO {
 
     /**
      * 姓名
@@ -71,11 +60,5 @@ public class Certification implements Serializable {
     @TableField("validate_date")
     private Date validateDate;
 
-    /**
-     * 性别
-     */
-    @Excel(name = "性别")
-    @TableField("gender")
-    private Integer gender;
 
 }
