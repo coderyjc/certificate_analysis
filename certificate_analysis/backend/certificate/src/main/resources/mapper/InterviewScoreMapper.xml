@@ -11,7 +11,7 @@
         <result column="work_address" property="workAddress" />
         <result column="apply_major" property="applyMajor" />
         <result column="level" property="level" />
-        <result column="exam_time" property="examTime" />
+        <result column="exam_time" property="examDate" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

@@ -64,6 +64,14 @@ public class InterviewScore implements Serializable {
     /**
      * 考试时间
      */
-    @TableField("exam_time")
-    private String examTime;
+    @TableField("exam_date")
+    private String examDate;
+
+    /**
+     *  性别
+     */
+    @TableField("gender")
+    private Integer gender;
+
+
 }

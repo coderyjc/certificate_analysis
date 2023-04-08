@@ -10,7 +10,7 @@
         <result column="interview_year" property="interviewYear" />
         <result column="qualification_id" property="qualificationId" />
         <result column="major" property="major" />
-        <result column="validate_time" property="validateTime" />
+        <result column="validate_time" property="validateDate" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

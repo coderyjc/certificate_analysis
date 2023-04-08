@@ -43,7 +43,6 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
                                        String workAddress,String examDate) {
 
         IPage<WrittenScore> iPage = new Page<>(pn, limit);
-
         QueryWrapper<WrittenScore> wrapper = new QueryWrapper<>();
 
         if(!gender.equals("")) wrapper.eq("gender", gender);
