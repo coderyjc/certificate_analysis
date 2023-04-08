@@ -394,7 +394,6 @@ export default defineComponent({
     return {
       ...toRefs(state),
       refresh,
-      importFile,
       deleteScore,
       batchDelete,
       addWrittenScoreDialogVisibility, 
