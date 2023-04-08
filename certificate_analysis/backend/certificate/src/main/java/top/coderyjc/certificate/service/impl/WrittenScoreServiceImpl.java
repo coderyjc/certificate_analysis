@@ -87,55 +87,107 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
             list = baseMapper.selectBatchIds(exportId);
         }
         else if(condition.size() > 0) {
+
 //        搜索
-            if(condition.containsKey("name")) wrapper.eq("name", condition.get("name"));
-            if(condition.containsKey("examId")) wrapper.eq("exam_id", condition.get("examId"));
-            if(condition.containsKey("gender")) wrapper.eq("gender", condition.get("gender"));
-            if(condition.containsKey("identificationId")) wrapper.eq("identification_id", condition.get("identificationId"));
-            if(condition.containsKey("educationStatus")) wrapper.eq("education_score", condition.get("educationStatus"));
-            if(condition.containsKey("educationPsychologyStatus")) wrapper.eq("education_psychology_status", condition.get("educationPsychologyStatus"));
-            if(condition.containsKey("professionalEthicStatus")) wrapper.eq("professional_ethic_status", condition.get("professionalEthicStatus"));
-            if(condition.containsKey("educationSort")){
+            if(!condition.get("name").equals("")) wrapper.eq("name", condition.get("name"));
+            if(!condition.get("examId").equals("")) wrapper.eq("exam_id", condition.get("examId"));
+            if(!condition.get("gender").equals("")) wrapper.eq("gender", condition.get("gender"));
+            if(!condition.get("identificationId").equals("")) wrapper.eq("identification_id", condition.get("identificationId"));
+            if(!condition.get("educationStatus").equals("")) wrapper.eq("education_score", condition.get("educationStatus"));
+            if(!condition.get("educationPsychologyStatus").equals("")) wrapper.eq("education_psychology_status", condition.get("educationPsychologyStatus"));
+            if(!condition.get("professionalEthicStatus").equals("")) wrapper.eq("professional_ethic_status", condition.get("professionalEthicStatus"));
+            if(!condition.get("educationSort").equals("")){
                 if ((Integer) condition.get("educationSort") == 1) {
                     wrapper.orderByAsc("education_score");
                 } else {
                     wrapper.orderByDesc("education_score");
                 }
             }
-            if(condition.containsKey("educationPsychologySort")){
+            if(!condition.get("educationPsychologySort").equals("")){
                 if ((Integer) condition.get("educationPsychologySort") == 1) {
                     wrapper.orderByAsc("education_psychology_score");
                 } else {
                     wrapper.orderByDesc("education_psychology_score");
                 }
             }
-            if(condition.containsKey("professionalEthicSort")){
+            if(!condition.get("professionalEthicSort").equals("")){
                 if ((Integer) condition.get("professionalEthicSort") == 1) {
                     wrapper.orderByAsc("professional_ethic_score");
                 } else {
                     wrapper.orderByDesc("professional_ethic_score");
                 }
             }
-            if(condition.containsKey("workAddress"))  wrapper.eq("work_address", condition.get("workAddress"));
-            if(condition.containsKey("examDate")) wrapper.eq("exam_date", condition.get("examDate"));
+            if(!condition.get("workAddress").equals(""))  wrapper.eq("work_address", condition.get("workAddress"));
+            if(!condition.get("examDate").equals("")) wrapper.eq("exam_date", condition.get("examDate"));
             list = baseMapper.selectList(wrapper);
         }
 
 //        筛选列名
         List<ExcelExportEntity> beanList = new ArrayList<>();
-        if(exportColumn.contains("姓名")) beanList.add(new ExcelExportEntity("姓名", "name"));
-        if(exportColumn.contains("性别")) beanList.add(new ExcelExportEntity("性别", "gender"));
-        if(exportColumn.contains("准考证号")) beanList.add(new ExcelExportEntity("准考证号", "examId"));
-        if(exportColumn.contains("身份证号")) beanList.add(new ExcelExportEntity("身份证号", "identificationId"));
-        if(exportColumn.contains("教育学成绩")) beanList.add(new ExcelExportEntity("教育学成绩", "educationScore"));
-        if(exportColumn.contains("教育心理学成绩")) beanList.add(new ExcelExportEntity("教育心理学成绩", "educationPsychologyScore"));
-        if(exportColumn.contains("职业道德修养和高等教育法规成绩")) beanList.add(new ExcelExportEntity("职业道德修养和高等教育法规成绩", "professionalEthicScore"));
-        if(exportColumn.contains("教育学考试状态")) beanList.add(new ExcelExportEntity("教育学考试状态", "educationStatus"));
-        if(exportColumn.contains("教育心理学考试状态")) beanList.add(new ExcelExportEntity("教育心理学考试状态", "educationPsychologyStatus"));
-        if(exportColumn.contains("职业道德修养和高等教育法规状态")) beanList.add(new ExcelExportEntity("职业道德修养和高等教育法规状态", "professionalEthicStatus"));
-        if(exportColumn.contains("工作单位")) beanList.add(new ExcelExportEntity("工作单位", "workAddress"));
-        if(exportColumn.contains("考试时间")) beanList.add(new ExcelExportEntity("考试时间", "examDate"));
-
+        if(exportColumn.contains("姓名")) {
+            ExcelExportEntity nameEntity = new ExcelExportEntity("姓名", "name");
+            beanList.add(nameEntity);
+        }
+        if(exportColumn.contains("性别")) {
+            ExcelExportEntity genderEntity = new ExcelExportEntity("性别", "gender");
+            genderEntity.setWidth(8);
+            genderEntity.setReplace(new String[]{ "男_1", "女_0" });
+            beanList.add(genderEntity);
+        }
+        if(exportColumn.contains("准考证号")) {
+            ExcelExportEntity examIdEntity = new ExcelExportEntity("准考证号", "examId");
+            examIdEntity.setWidth(12);
+            beanList.add(examIdEntity);
+        }
+        if(exportColumn.contains("身份证号")) {
+            ExcelExportEntity identificationIdEntity = new ExcelExportEntity("身份证号", "identificationId");
+            identificationIdEntity.setWidth(20);
+            beanList.add(identificationIdEntity);
+        }
+        if(exportColumn.contains("教育学成绩")) {
+            ExcelExportEntity educationScoreEntity = new ExcelExportEntity("教育学成绩", "educationScore");
+            educationScoreEntity.setWidth(12);
+            educationScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            beanList.add(educationScoreEntity);
+        }
+        if(exportColumn.contains("教育心理学成绩")) {
+            ExcelExportEntity educationPsychologyScoreEntity = new ExcelExportEntity("教育心理学成绩", "educationPsychologyScore");
+            educationPsychologyScoreEntity.setWidth(15);
+            educationPsychologyScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            beanList.add(educationPsychologyScoreEntity);
+        }
+        if(exportColumn.contains("职业道德修养和高等教育法规成绩")) {
+            ExcelExportEntity professionalEthicScoreEntity = new ExcelExportEntity("职业道德修养和高等教育法规成绩", "professionalEthicScore");
+            professionalEthicScoreEntity.setWidth(30);
+            professionalEthicScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            beanList.add(professionalEthicScoreEntity);
+        }
+        if(exportColumn.contains("教育学考试状态")) {
+            ExcelExportEntity educationStatusEntity = new ExcelExportEntity("教育学考试状态", "educationStatus");
+            educationStatusEntity.setWidth(15);
+            beanList.add(educationStatusEntity);
+        }
+        if(exportColumn.contains("教育心理学考试状态")) {
+            ExcelExportEntity educationPsychologyStatusEntity = new ExcelExportEntity("教育心理学考试状态", "educationPsychologyStatus");
+            educationPsychologyStatusEntity.setWidth(20);
+            beanList.add(educationPsychologyStatusEntity);
+        }
+        if(exportColumn.contains("职业道德修养和高等教育法规状态")) {
+            ExcelExportEntity professionalEthicStatusEntity = new ExcelExportEntity("职业道德修养和高等教育法规状态", "professionalEthicStatus");
+            professionalEthicStatusEntity.setWidth(30);
+            beanList.add(professionalEthicStatusEntity);
+        }
+        if(exportColumn.contains("工作单位")) {
+            ExcelExportEntity workAddressEntity = new ExcelExportEntity("工作单位", "workAddress");
+            workAddressEntity.setWidth(20);
+            beanList.add(workAddressEntity);
+        }
+        if(exportColumn.contains("考试时间")) {
+            ExcelExportEntity examDateEntity = new ExcelExportEntity("考试时间", "examDate");
+            examDateEntity.setWidth(10);
+            examDateEntity.setSuffix("年");
+            beanList.add(examDateEntity);
+        }
         DownloadUtil.downloadExcel(response, new ExportParams(), beanList, WrittenScore.class, list);
     }
 

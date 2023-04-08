@@ -3,11 +3,10 @@
     <AddWrittenScore :dialogFormVisible="addWrittenScoreDialogVisibility" @visibilityChange="changeAddWrittenScoreDialogVisibility">
     </AddWrittenScore>
     <ExportWrittenScore :dialogVisible="exportWrittenScoreDialogVisibility" @visibilityChange="changeExportWrittenScoreDialogVisibility"
-    :selectedItems="selectedItems"
-    >
+    :selectedItems="selectedItems" :searchModel="searchModal">
     </ExportWrittenScore>
     <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
-      @selectionChange="handleSelectionChange" :pagination="paginationConfig">
+      @selectionChange="handleSelectionChange" :pagination="paginationConfig" @getModel="getSearchModal">
       <!-- 工具栏 -->
       <template #toolbar>
         <el-popconfirm title="确定删除选中数据吗?" @confirm="batchDelete">
@@ -335,6 +334,10 @@ export default defineComponent({
           data: data.data.records,
           total: data.data.total,
         }
+      },
+      searchModal: {},
+      getSearchModal: (model) => {
+        state.searchModal = model
       },
     })
 

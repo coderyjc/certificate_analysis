@@ -42,9 +42,13 @@ export default defineComponent({
     },
     selectedItems: {
       type: Array,
+    },
+    searchModel: {
+      type: Object,
     }
   },
   setup(props, { emit }) {
+
     const state = reactive({
       checkList: ['姓名','性别','准考证号','身份证号','教育学成绩','教育心理学成绩','职业道德修养和高等教育法规成绩','教育学考试状态','教育心理学考试状态','职业道德修养和高等教育法规状态','工作单位','考试时间'],
       handleVisibilityChange() {
@@ -55,27 +59,36 @@ export default defineComponent({
         const { selectedItems } = toRefs(props)
         const ids = []
         selectedItems.value.forEach(item => ids.push(item.id))
+        if(ids.length == 0){
+          ElMessage({
+            message: '请先选择或者筛选数据',
+            type: 'warning',
+          })
+          return
+        }
         const outlink = await exportWrittenScore(state.checkList, ids, JSON.stringify({}))
         // 通过在浏览器打开外部链接进行下载
         window.open(outlink,"_blank")
+        ElMessage({
+          message: '开始下载',
+          type: 'success',
+        })
       },
       async exportAllData() {
-        // 导出所有数据
-        const outlink = await exportWrittenScore(state.checkList,[],JSON.stringify())
+        const model = props.searchModel
+        const outlink = await exportWrittenScore(state.checkList,[],JSON.stringify({...model}))
         // 通过在浏览器打开外部链接进行下载
         window.open(outlink,"_blank")
-      }
+        ElMessage({
+          message: '开始下载',
+          type: 'success',
+        })
+      },
     })
 
     const visible = computed({
       get: () => {
         return props.dialogVisible
-      }
-    })
-
-    const selected = computed({
-      get: () => {
-        return props.selectedItems
       }
     })
 

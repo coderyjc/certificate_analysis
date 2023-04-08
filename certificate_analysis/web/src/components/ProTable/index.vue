@@ -1,7 +1,6 @@
 <template>
   <div class="page-box">
     <!-- 搜索选项 -->
-
     <el-form
       v-if="!!search"
       class="search"
@@ -176,6 +175,7 @@
         <slot name="toolbar"></slot>
       </div>
     </div>
+
     <!-- table表格栏 -->
     <div class="table">
       <el-table
@@ -204,6 +204,7 @@
         </el-table-column>
       </el-table>
     </div>
+
     <!-- 分页 -->
     <el-pagination
       v-if="paginationConfig.show && total > 0"
@@ -353,6 +354,9 @@ export default defineComponent({
     const getTableData = async () => {
       state.loading = true
       const searchModel = optimizeFields(props.search)
+
+      emit('getModel', searchModel)
+
       const { data, total } = await props.request({
         current: state.pageNum,
         size: state.pageSize,
