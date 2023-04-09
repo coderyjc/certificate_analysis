@@ -186,7 +186,7 @@ public class WrittenScoreController {
         writtenScore.setProfessionalEthicStatus(professionalEthicStatus);
         writtenScore.setWorkAddress(workAddress);
         writtenScore.setExamDate(examDate);
-        writtenScore.setGender(Integer.parseInt(identificationId.substring(17, 18)) % 2);
+        writtenScore.setGender(Integer.parseInt(String.valueOf(identificationId.charAt(16))) % 2);
 
         boolean result = service.save(writtenScore);
 

@@ -43,10 +43,10 @@ public class CertificationServiceImpl extends ServiceImpl<CertificationMapper, C
         if(condition.size() > 0){
             if(!condition.get("name").equals(""))  wrapper.eq("name", condition.get("name"));
             if(!condition.get("identificationId").equals(""))  wrapper.eq("identification_id", condition.get("identificationId"));
-            if(!condition.get("interviewYear").equals(""))  wrapper.eq("interview_year", condition.get("interviewYear"));
+            if(!condition.get("interviewYear").equals(""))  wrapper.like("interview_year", condition.get("interviewYear"));
             if(!condition.get("qualificationId").equals(""))  wrapper.eq("qualification_id", condition.get("qualificationId"));
             if(!condition.get("major").equals(""))  wrapper.eq("major", condition.get("major"));
-            if(!condition.get("validateDate").equals(""))  wrapper.eq("validate_date", condition.get("validateDate"));
+            if(!condition.get("validateDate").equals(""))  wrapper.like("validate_date", condition.get("validateDate"));
             if(!condition.get("gender").equals(""))  wrapper.eq("gender", condition.get("gender"));
         }
 

@@ -56,7 +56,7 @@ public class CertificationImportDTO {
     /**
      * 有效期
      */
-    @Excel(name = "有效期")
+    @Excel(name = "有效期", format = "yyyy-MM-dd")
     @TableField("validate_date")
     private Date validateDate;
 

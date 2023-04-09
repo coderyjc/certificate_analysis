@@ -34,5 +34,4 @@ public class UserMapperTest {
         userMapper.insert(user);
         System.out.println(user + "插入成功");
     }
-
 }

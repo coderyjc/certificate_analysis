@@ -67,7 +67,7 @@ public class CertificationController {
         certification.setQualificationId((String) jsonObject.get("qualificationId"));
         certification.setMajor((String) jsonObject.get("major"));
         certification.setValidateDate(DateUtil.toDate(jsonObject.getString("validateDate")));
-        certification.setGender(Integer.parseInt(jsonObject.getString("identificationId").substring(17, 18)) % 2);
+        certification.setGender(Integer.parseInt(String.valueOf(jsonObject.getString("identificationId").charAt(16))) % 2);
         boolean result = service.save(certification);
         return Msg.success().add("data", result ? "添加成功" : "添加失败");
     }
