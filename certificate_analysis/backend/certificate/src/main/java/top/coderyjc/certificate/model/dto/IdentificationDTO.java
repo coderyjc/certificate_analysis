@@ -1,31 +1,20 @@
-package top.coderyjc.certificate.model.entity;
+package top.coderyjc.certificate.model.dto;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-
 import lombok.Data;
 
 /**
- * <p>
- * 认定表
- * </p>
+ * ClassName: IdentificationDTO
+ * Package: top.coderyjc.certificate.model.dto
+ * Description:
  *
- * @author Yan Jingcun
- * @since 2023-04-02
+ * @Author Yan Jingcun
+ * @Create 4/9/2023 8:31 AM
+ * @Version 1.0
  */
 @Data
-@TableName("tbl_identification")
-public class Identification implements Serializable {
-
-    /**
-     * 主键、自增、无意义
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+public class IdentificationDTO {
 
     /**
      * 姓名
@@ -34,12 +23,13 @@ public class Identification implements Serializable {
     @TableField("name")
     private String name;
 
+
     /**
      * 性别
      */
-    @Excel(name = "性别", width = 8, replace = { "男_1", "女_0" })
+    @Excel(name = "性别", width = 8)
     @TableField("gender")
-    private Integer gender;
+    private String gender;
 
     /**
      * 专业类别
@@ -47,6 +37,7 @@ public class Identification implements Serializable {
     @Excel(name = "专业类别", width = 8)
     @TableField("major_type")
     private String majorType;
+
 
     /**
      * 毕业院校
@@ -77,11 +68,11 @@ public class Identification implements Serializable {
     private String qualificationType;
 
     /**
-     * 证件号码
+     * 证件类型（身份证、台湾）
      */
     @Excel(name = "证件号码", width = 25)
-    @TableField("identification_id")
-    private String identificationId;
+    @TableField("identification_type")
+    private String identificationType;
 
     /**
      * 最高学位
@@ -145,5 +136,6 @@ public class Identification implements Serializable {
     @Excel(name = "市", width = 15)
     @TableField("city")
     private String city;
+
 
 }

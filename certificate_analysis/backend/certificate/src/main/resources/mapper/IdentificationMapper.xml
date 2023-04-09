@@ -14,7 +14,7 @@
         <result column="graduation_school" property="graduationSchool" />
         <result column="affirm_institution" property="affirmInstitution" />
         <result column="exam_type" property="examType" />
-        <result column="orgnization_type" property="orgnizationType" />
+        <result column="organization_type" property="orgnizationType" />
         <result column="subject" property="subject" />
         <result column="certification_id" property="certificationId" />
         <result column="major" property="major" />

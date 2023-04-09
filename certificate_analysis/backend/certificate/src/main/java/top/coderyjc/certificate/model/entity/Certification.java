@@ -74,7 +74,7 @@ public class Certification implements Serializable {
     /**
      * 性别
      */
-    @Excel(name = "性别", width = 8)
+    @Excel(name = "性别", width = 8, replace = { "男_1", "女_0" })
     @TableField("gender")
     private Integer gender;
 
