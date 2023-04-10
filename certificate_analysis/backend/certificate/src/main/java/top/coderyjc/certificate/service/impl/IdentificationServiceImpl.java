@@ -103,27 +103,28 @@ public class IdentificationServiceImpl extends ServiceImpl<IdentificationMapper,
 
         if(exportColumn.contains("姓名")){
             ExcelExportEntity nameEntity = new ExcelExportEntity("姓名", "name");
-            nameEntity.setWidth(10);
+            nameEntity.setWidth(8);
             exportEntityList.add(nameEntity);
         }
         if(exportColumn.contains("性别")){
             ExcelExportEntity genderEntity = new ExcelExportEntity("性别", "gender");
-            genderEntity.setWidth(10);
+            genderEntity.setWidth(8);
+            genderEntity.setReplace(new String[]{ "男_1", "女_0" });
             exportEntityList.add(genderEntity);
         }
         if(exportColumn.contains("专业类别")){
             ExcelExportEntity majorTypeEntity = new ExcelExportEntity("专业类别", "majorType");
-            majorTypeEntity.setWidth(10);
+            majorTypeEntity.setWidth(8);
             exportEntityList.add(majorTypeEntity);
         }
         if(exportColumn.contains("毕业学校")){
             ExcelExportEntity graduationSchoolEntity = new ExcelExportEntity("毕业学校", "graduationSchool");
-            graduationSchoolEntity.setWidth(10);
+            graduationSchoolEntity.setWidth(25);
             exportEntityList.add(graduationSchoolEntity);
         }
         if(exportColumn.contains("所学专业")){
             ExcelExportEntity majorEntity = new ExcelExportEntity("所学专业", "major");
-            majorEntity.setWidth(10);
+            majorEntity.setWidth(35);
             exportEntityList.add(majorEntity);
         }
         if(exportColumn.contains("最高学历")){
@@ -138,7 +139,7 @@ public class IdentificationServiceImpl extends ServiceImpl<IdentificationMapper,
         }
         if(exportColumn.contains("证件号码")){
             ExcelExportEntity identificationIdEntity = new ExcelExportEntity("证件号码", "identificationId");
-            identificationIdEntity.setWidth(10);
+            identificationIdEntity.setWidth(25);
             exportEntityList.add(identificationIdEntity);
         }
         if(exportColumn.contains("最高学位")){
@@ -148,17 +149,17 @@ public class IdentificationServiceImpl extends ServiceImpl<IdentificationMapper,
         }
         if(exportColumn.contains("认定批次")){
             ExcelExportEntity affirmBatchEntity = new ExcelExportEntity("认定批次", "affirmBatch");
-            affirmBatchEntity.setWidth(10);
+            affirmBatchEntity.setWidth(12);
             exportEntityList.add(affirmBatchEntity);
         }
         if(exportColumn.contains("确认点")){
             ExcelExportEntity confirmAddressEntity = new ExcelExportEntity("确认点", "confirmAddress");
-            confirmAddressEntity.setWidth(10);
+            confirmAddressEntity.setWidth(35);
             exportEntityList.add(confirmAddressEntity);
         }
         if(exportColumn.contains("认定机构")){
             ExcelExportEntity affirmInstitutionEntity = new ExcelExportEntity("认定机构", "affirmInstitution");
-            affirmInstitutionEntity.setWidth(10);
+            affirmInstitutionEntity.setWidth(15);
             exportEntityList.add(affirmInstitutionEntity);
         }
         if(exportColumn.contains("考试类型")){
@@ -173,17 +174,17 @@ public class IdentificationServiceImpl extends ServiceImpl<IdentificationMapper,
         }
         if(exportColumn.contains("任教学科")){
             ExcelExportEntity subjectEntity = new ExcelExportEntity("任教学科", "subject");
-            subjectEntity.setWidth(10);
+            subjectEntity.setWidth(20);
             exportEntityList.add(subjectEntity);
         }
         if(exportColumn.contains("教师资格证书号码")){
             ExcelExportEntity certificationIdEntity = new ExcelExportEntity("教师资格证书号码", "certificationId");
-            certificationIdEntity.setWidth(10);
+            certificationIdEntity.setWidth(20);
             exportEntityList.add(certificationIdEntity);
         }
         if(exportColumn.contains("市")){
             ExcelExportEntity cityEntity = new ExcelExportEntity("市", "city");
-            cityEntity.setWidth(10);
+            cityEntity.setWidth(15);
             exportEntityList.add(cityEntity);
         }
 

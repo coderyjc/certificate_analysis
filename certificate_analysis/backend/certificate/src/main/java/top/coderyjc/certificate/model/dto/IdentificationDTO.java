@@ -23,13 +23,12 @@ public class IdentificationDTO {
     @TableField("name")
     private String name;
 
-
     /**
      * 性别
      */
-    @Excel(name = "性别", width = 8)
+    @Excel(name = "性别", width = 8, replace = { "男_1", "女_0" })
     @TableField("gender")
-    private String gender;
+    private Integer gender;
 
     /**
      * 专业类别
@@ -37,7 +36,6 @@ public class IdentificationDTO {
     @Excel(name = "专业类别", width = 8)
     @TableField("major_type")
     private String majorType;
-
 
     /**
      * 毕业院校
@@ -68,11 +66,11 @@ public class IdentificationDTO {
     private String qualificationType;
 
     /**
-     * 证件类型（身份证、台湾）
+     * 证件号码
      */
     @Excel(name = "证件号码", width = 25)
-    @TableField("identification_type")
-    private String identificationType;
+    @TableField("identification_id")
+    private String identificationId;
 
     /**
      * 最高学位
