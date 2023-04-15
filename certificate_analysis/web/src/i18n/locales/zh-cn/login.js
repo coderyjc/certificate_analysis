@@ -1,6 +1,7 @@
 export default {
   username: '用户名',
   password: '密码',
+  createDate: '创建时间',
   login: '登录',
   logining: '登录中...',
   loginsuccess: '登录成功',

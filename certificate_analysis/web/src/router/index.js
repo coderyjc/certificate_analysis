@@ -7,10 +7,11 @@ import home from './modules/home'
 
 import query from './modules/query'
 import analysis from './modules/analysis'
+import user from './modules/user'
+
 
 /* 菜单栏的路由 */
-// 只有固定菜单
-export const fixedRoutes = [...home, ...query, ...analysis]
+export const fixedRoutes = [...home, ...query, ...analysis, ...user]
 
 const router = createRouter({
   history: createWebHashHistory(),

@@ -1,7 +1,9 @@
 package top.coderyjc.certificate.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import top.coderyjc.certificate.model.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import top.coderyjc.certificate.model.vo.UserListVO;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserMapper extends BaseMapper<User> {
 
+    IPage<UserListVO> listAll(IPage<UserListVO> page);
 }
