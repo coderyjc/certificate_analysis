@@ -3,6 +3,8 @@ package top.coderyjc.certificate.mapper;
 import top.coderyjc.certificate.model.entity.InterviewScore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 面试成绩 Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface InterviewScoreMapper extends BaseMapper<InterviewScore> {
 
+    List<String> listExamDate();
 }

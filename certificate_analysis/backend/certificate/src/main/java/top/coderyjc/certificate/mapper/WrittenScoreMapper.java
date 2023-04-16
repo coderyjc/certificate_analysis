@@ -19,5 +19,5 @@ import java.util.List;
 public interface WrittenScoreMapper extends BaseMapper<WrittenScore> {
     List<String> listWorkAddress();
 
-    List<String> listExamYear();
+    List<String> listExamDate();
 }

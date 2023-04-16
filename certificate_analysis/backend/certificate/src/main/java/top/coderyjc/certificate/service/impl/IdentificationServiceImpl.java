@@ -215,4 +215,9 @@ public class IdentificationServiceImpl extends ServiceImpl<IdentificationMapper,
         saveBatch(resultData);
         return "导入成功";
     }
+
+    @Override
+    public List<String> listAffirmBatch() {
+        return baseMapper.listAffirmBatch();
+    }
 }

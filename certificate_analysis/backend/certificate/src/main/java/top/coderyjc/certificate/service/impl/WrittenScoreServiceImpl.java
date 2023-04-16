@@ -223,8 +223,8 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
 //        return baseMapper.listWorkAddress();
 //    }
 //
-//    @Override
-//    public List<String> listExamYear() {
-//        return baseMapper.listExamYear();
-//    }
+    @Override
+    public List<String> listExamDate() {
+        return baseMapper.listExamDate();
+    }
 }

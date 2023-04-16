@@ -26,4 +26,6 @@ public interface IInterviewScoreService extends IService<InterviewScore> {
     void exportExcel(HttpServletResponse response, List<String> exportId, List<String> exportColumn, JSONObject condition);
 
     String importExcel(MultipartFile file) throws Exception;
+
+    List<String> listExamDate();
 }

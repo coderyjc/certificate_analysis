@@ -142,4 +142,9 @@ public class CertificationServiceImpl extends ServiceImpl<CertificationMapper, C
         saveBatch(resultData);
         return "导入成功";
     }
+
+    @Override
+    public List<String> listInterviewYear() {
+        return baseMapper.getInterviewYearList();
+    }
 }

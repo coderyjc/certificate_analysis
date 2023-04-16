@@ -18,5 +18,8 @@
     <sql id="Base_Column_List">
         id, exam_address, name, identification_id, work_address, apply_major, level, exam_time
     </sql>
+    <select id="listExamDate" resultType="java.lang.String">
+        select exam_date from tbl_interview_score group by exam_date order by exam_date desc limit 5
+    </select>
 
 </mapper>

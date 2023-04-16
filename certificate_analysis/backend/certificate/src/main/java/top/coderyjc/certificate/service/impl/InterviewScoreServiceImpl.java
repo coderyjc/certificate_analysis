@@ -147,4 +147,9 @@ public class InterviewScoreServiceImpl extends ServiceImpl<InterviewScoreMapper,
         saveBatch(resultData);
         return "导入成功";
     }
+
+    @Override
+    public List<String> listExamDate() {
+        return baseMapper.listExamDate();
+    }
 }

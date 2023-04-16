@@ -4,11 +4,10 @@
 
 <script>
 
+import { getInterviewScoreData } from '@/api/dashboard';
+
 export default {
   props: {
-    type: {
-      type: String
-    },
     title: {
       type: String,
       default: ""
@@ -16,29 +15,24 @@ export default {
     id:{
       type: String
     },
-    XData:{
-      type: Array,
-      default: () => {
-        return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-      }
-    },
-    YData:{
-      type: Array,
-      default: () =>{
-        return [150, 230, 224, 218, 135, 147, 260]
-      }
-    }
-  },
-  mounted() {
-    this.render()
   },
   data() {
     return {
       style:{
         width: "500px",
         height: "250px"
-      }
+      },
+      XData: [],
+      YData: []
     }
+  },
+  mounted() {
+    getInterviewScoreData().then(result => {
+      const interview_trend = result.data.data.interview_trend
+      this.XData = interview_trend.category
+      this.YData = interview_trend.data
+      this.render()
+    })
   },
   methods: {
     render() {

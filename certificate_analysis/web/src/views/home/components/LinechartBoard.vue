@@ -1,31 +1,26 @@
 <template>
   <div class="board-item-container">
-    <LinechartBoardItem id="identification-trend" :name="'identification'" :title="'参加认定人数变化趋势'"></LinechartBoardItem>
-    <LinechartBoardItem id="written-trend" :name="'written'" :title="'笔试人数变化趋势'"></LinechartBoardItem>
-    <LinechartBoardItem id="interview-trend" :name="'interview'" :title="'面试人数变化趋势'"></LinechartBoardItem>
-    <LinechartBoardItem id="certification-trend" :name="'certification'" :title="'获得证书人数变化趋势'"></LinechartBoardItem>
+    <LinechartBoardItemIdentification id="identification-trend" :title="'参加认定人数变化趋势'"></LinechartBoardItemIdentification>
+    <LinechartBoardItemWrittenScore id="written-trend" :title="'笔试人数变化趋势'"></LinechartBoardItemWrittenScore>
+    <LinechartBoardItemInterviewScore id="interview-trend" :title="'面试人数变化趋势'"></LinechartBoardItemInterviewScore>
+    <LinechartBoardItemCertification id="certification-trend" :title="'获得证书人数变化趋势'"></LinechartBoardItemCertification>
   </div>
 </template>
 
 <script>
 
-import LinechartBoardItem from './LinechartBoardItem.vue'
+import LinechartBoardItemCertification from './LinechartBoardItem/LinechartBoardItemCertification.vue';
+import LinechartBoardItemIdentification from './LinechartBoardItem/LinechartBoardItemIdentification.vue';
+import LinechartBoardItemInterviewScore from './LinechartBoardItem/LinechartBoardItemInterviewScore.vue';
+import LinechartBoardItemWrittenScore from './LinechartBoardItem/LinechartBoardItemWrittenScore.vue';
 
 export default {
   components: {
-    LinechartBoardItem
+    LinechartBoardItemCertification,
+    LinechartBoardItemIdentification,
+    LinechartBoardItemInterviewScore,
+    LinechartBoardItemWrittenScore,
   },
-  data(){
-    return {
-
-    }
-  },
-  mounted(){
-
-  },
-  methods:{
-
-  }
 }
 
 </script>

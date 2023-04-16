@@ -18,4 +18,8 @@
         id, idenfication_id, name, interview_year, qualification_id, major, validate_time
     </sql>
 
+    <select id="getInterviewYearList" resultType="java.lang.String">
+        select interview_year from tbl_certification group by interview_year order by interview_year desc limit 5
+    </select>
+
 </mapper>

@@ -9,7 +9,7 @@
         <NumberBoard></NumberBoard>
       </div>
       <div class="container-bottom-chart">
-        <LinechartBoard></LinechartBoard>
+        <LinechartBoard ></LinechartBoard>
       </div>
     </div>
 
@@ -27,14 +27,6 @@ export default {
     WelcomeBoard,
     NumberBoard,
     LinechartBoard,
-  },
-  data() {
-    return {
-      option: {},
-    };
-  },
-  mounted() {
-    
   }
 };
 </script>

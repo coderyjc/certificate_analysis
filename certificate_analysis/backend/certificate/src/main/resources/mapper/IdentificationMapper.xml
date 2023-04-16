@@ -28,5 +28,8 @@
     <sql id="Base_Column_List">
         id, qualification_type, identification_type, highest_degree, affirm_batch, confirm_address, identification_id, graduation_school, affirm_institution, exam_type, orgnization_type, subject, certification_id, major, city, name, highest_education_background, major_type
     </sql>
+    <select id="listAffirmBatch" resultType="java.lang.String">
+        select affirm_batch from tbl_identification group by affirm_batch order by affirm_batch desc limit 5
+    </select>
 
 </mapper>

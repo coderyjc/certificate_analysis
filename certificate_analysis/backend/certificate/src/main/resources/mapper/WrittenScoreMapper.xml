@@ -26,8 +26,8 @@
     <select id="listWorkAddress" resultType="java.lang.String">
         select distinct work_address from tbl_written_score
     </select>
-    <select id="listExamYear" resultType="java.lang.String">
-        select distinct exam_date from tbl_written_score
+    <select id="listExamDate" resultType="java.lang.String">
+        select exam_date from tbl_written_score group by exam_date order by exam_date desc limit 5
     </select>
 
 

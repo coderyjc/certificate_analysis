@@ -7,7 +7,6 @@ import top.coderyjc.certificate.model.entity.Certification;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,4 +24,7 @@ public interface ICertificationService extends IService<Certification> {
     void exportExcel(HttpServletResponse response, List<String> exportId, List<String> exportColumn, JSONObject condition);
 
     String importExcel(MultipartFile file) throws Exception;
+
+    List<String> listInterviewYear();
+
 }

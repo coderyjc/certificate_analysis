@@ -32,6 +32,6 @@ public interface IWrittenScoreService extends IService<WrittenScore> {
 
 //    List<String> listWorkAddress();
 //
-//    List<String> listExamYear();
+    List<String> listExamDate();
 
 }
