@@ -1,18 +1,15 @@
 <template>
 
   <div class="container">
-    certification
+    written score
   </div>
 
 </template>
 
 <script>
 
-
 </script>
 
 <style lang="scss" scoped>
-
-
 
 </style>

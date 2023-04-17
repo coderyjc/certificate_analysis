@@ -71,3 +71,34 @@ export const exportInterviewScore = (exportColumn, exportId, searchCondition) =>
   
   return result
 }
+
+// 获取所有的面试年份
+export const listInterviewYear = data => {
+  return request({
+    url: '/interviewScore/years',
+    method: 'get',
+  })
+}
+
+// 获取统计数据
+export const statisticInterviewScore = data => {
+  return request({
+    url: '/interviewScore/statistic',
+    method: 'get',
+    params:{
+      condition: data
+    }
+  })
+}
+
+// 导出统计数据
+export const exportStatisticInterviewScore = data => {
+  return request({
+    url: '/interviewScore/statistic/export',
+    method: 'get',
+    params:{
+      condition: data
+    }
+  })
+}
+

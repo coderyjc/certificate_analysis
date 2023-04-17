@@ -35,8 +35,6 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    
-
 
     const iconStyle = ref("width: 60px; height: 60px; margin-right: 8px")
 
@@ -55,7 +53,7 @@ export default defineComponent({
   margin-bottom: 10px;
   height: 100px;
   width: 300px;
-
+  box-shadow: $globalShadow;
   display: flex;
 
   .img{

@@ -12,15 +12,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
 import top.coderyjc.certificate.model.dto.InterviewScoreImportDTO;
+import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
 import top.coderyjc.certificate.model.entity.InterviewScore;
 import top.coderyjc.certificate.mapper.InterviewScoreMapper;
+import top.coderyjc.certificate.model.vo.ColumnCountVO;
 import top.coderyjc.certificate.service.IInterviewScoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.coderyjc.certificate.util.DownloadUtil;
+import top.coderyjc.certificate.util.LineHumpUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -151,5 +155,72 @@ public class InterviewScoreServiceImpl extends ServiceImpl<InterviewScoreMapper,
     @Override
     public List<String> listExamDate() {
         return baseMapper.listExamDate();
+    }
+
+    @Override
+    public List<Integer> listAllYears(Integer limit) {
+        return baseMapper.listAllYears(limit);
+    }
+
+    @Override
+    public List<InterviewScoreStatisticDTO> statisticInterviewScore(String year, String startYear, String endYear, List<String> statisticItemList){
+        List<InterviewScoreStatisticDTO> list = null;
+        for (int i = 0; i < statisticItemList.size(); i++){
+            statisticItemList.set(i, LineHumpUtil.humpToLine(statisticItemList.get(i)));
+        }
+        if(!year.equals("")){
+            if(statisticItemList.size() == 1) list = baseMapper.countOneColumnByYear(year, statisticItemList.get(0));
+            else list = baseMapper.countTwoColumnsByYear(year, statisticItemList.get(0), statisticItemList.get(1));
+        } else {
+            String column = statisticItemList.get(0).equals("exam_date") ? statisticItemList.get(1) : statisticItemList.get(0);
+            list = baseMapper.countColumnByYears(startYear, endYear, column);
+        }
+        return list;
+    }
+
+    @Override
+    public void exportStatisticExcel(HttpServletResponse response, String year, String startYear, String endYear, List<String> statisticItemList) {
+//      直接复用拿到数据
+        List<InterviewScoreStatisticDTO> list = statisticInterviewScore(year, startYear, endYear, statisticItemList);
+
+//      导出数据
+        List<ExcelExportEntity> exportEntityList = new ArrayList<>();
+
+        if(statisticItemList.contains("exam_date")){
+            ExcelExportEntity examDateEntity = new ExcelExportEntity("考试时间", "examDate");
+            examDateEntity.setWidth(10);
+            exportEntityList.add(examDateEntity);
+        }
+        if(statisticItemList.contains("gender")){
+            ExcelExportEntity genderEntity = new ExcelExportEntity("性别", "gender");
+            genderEntity.setWidth(8);
+            genderEntity.setReplace(new String[]{ "男_1", "女_0" });
+            exportEntityList.add(genderEntity);
+        }
+        if(statisticItemList.contains("exam_address")){
+            ExcelExportEntity examAddressEntity = new ExcelExportEntity("测试点", "examAddress");
+            examAddressEntity.setWidth(9);
+            exportEntityList.add(examAddressEntity);
+        }
+        if(statisticItemList.contains("work_address")){
+            ExcelExportEntity workAddressEntity = new ExcelExportEntity("工作单位", "workAddress");
+            workAddressEntity.setWidth(35);
+            exportEntityList.add(workAddressEntity);
+        }
+        if(statisticItemList.contains("apply_major")){
+            ExcelExportEntity applyMajorEntity = new ExcelExportEntity("申请专业", "applyMajor");
+            applyMajorEntity.setWidth(20);
+            exportEntityList.add(applyMajorEntity);
+        }
+        if(statisticItemList.contains("level")){
+            ExcelExportEntity levelEntity = new ExcelExportEntity("等级", "level");
+            levelEntity.setWidth(10);
+            exportEntityList.add(levelEntity);
+        }
+//        数量
+        ExcelExportEntity countEntity = new ExcelExportEntity("数量", "count");
+        exportEntityList.add(countEntity);
+
+        DownloadUtil.downloadExcel(response, new ExportParams(), exportEntityList, InterviewScoreStatisticDTO.class, list);
     }
 }

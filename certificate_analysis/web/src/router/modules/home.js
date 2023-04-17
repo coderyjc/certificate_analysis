@@ -6,7 +6,7 @@ export default [
   {
     path: '/home',
     component: Layout,
-    name: 'Dashboard',
+    name: 'home',
     meta: {
       title: 'menu.dashboard',
     },

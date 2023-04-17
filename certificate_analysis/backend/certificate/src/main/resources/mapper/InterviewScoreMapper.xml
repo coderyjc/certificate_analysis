@@ -21,5 +21,50 @@
     <select id="listExamDate" resultType="java.lang.String">
         select exam_date from tbl_interview_score group by exam_date order by exam_date desc limit 5
     </select>
+    <select id="listAllYears" resultType="java.lang.Integer">
+        select exam_date, count(exam_date) as count
+        from tbl_interview_score
+        group by exam_date
+        order by exam_date desc limit ${limit}
+    </select>
+
+    <select id="countOneColumnCountByYear" resultType="top.coderyjc.certificate.model.vo.ColumnCountVO">
+        select ${column} as column1, count(${column}) count
+        from tbl_interview_score
+        where exam_date=${year}
+        group by ${column}
+        order by ${column};
+    </select>
+    <select id="countTwoColumnsCountByYear" resultType="top.coderyjc.certificate.model.vo.ColumnCountVO">
+        select ${column1} as column1, ${column2} as column2, count(${column1}) as count
+        from tbl_interview_score
+        where exam_date=${year}
+        group by ${column1}, ${column2}
+        order by ${column1}, ${column2};
+    </select>
+
+
+    <select id="countColumnByYears" resultType="top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO">
+        select exam_date, ${column} , count(exam_date) as count
+        from tbl_interview_score
+        where exam_date between ${startYear} and ${endYear}
+        group by exam_date, ${column}
+        order by exam_date
+    </select>
+    <select id="countOneColumnByYear" resultType="top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO">
+        select ${column}, count(${column}) as count
+        from tbl_interview_score
+        where exam_date=${year}
+        group by ${column}
+        order by ${column};
+    </select>
+    <select id="countTwoColumnsByYear"
+            resultType="top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO">
+        select ${column1}, ${column2}, count(${column1}) as count
+        from tbl_interview_score
+        where exam_date=${year}
+        group by ${column1}, ${column2}
+        order by ${column1}, ${column2};
+    </select>
 
 </mapper>

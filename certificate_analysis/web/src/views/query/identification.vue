@@ -321,7 +321,7 @@ export default defineComponent({
       ElMessage({
         message: data.data,
         type: 'success',
-      })-
+      })
       refresh()
     }
 

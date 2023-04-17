@@ -3,9 +3,11 @@ package top.coderyjc.certificate.service;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.web.multipart.MultipartFile;
+import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
 import top.coderyjc.certificate.model.entity.InterviewScore;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.coderyjc.certificate.model.entity.WrittenScore;
+import top.coderyjc.certificate.model.vo.ColumnCountVO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,4 +30,10 @@ public interface IInterviewScoreService extends IService<InterviewScore> {
     String importExcel(MultipartFile file) throws Exception;
 
     List<String> listExamDate();
+
+    List<Integer> listAllYears(Integer limit);
+
+    List<InterviewScoreStatisticDTO> statisticInterviewScore(String year, String startYear, String endYear, List<String> statisticItemList);
+
+    void exportStatisticExcel(HttpServletResponse response, String year, String startYear, String endYear, List<String> statisticItemList);
 }

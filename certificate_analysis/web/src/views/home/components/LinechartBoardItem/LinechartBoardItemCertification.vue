@@ -74,6 +74,7 @@ export default {
   padding-left: 10px;
   margin-left: 20px;
   margin-bottom: 20px;
+  box-shadow: $globalShadow;
 }
 
 </style>

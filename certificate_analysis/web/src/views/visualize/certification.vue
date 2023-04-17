@@ -1,9 +1,7 @@
 <template>
-
   <div class="container">
-    score    
+    certification
   </div>
-
 </template>
 
 <script>
