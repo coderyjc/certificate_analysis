@@ -184,6 +184,11 @@ public class InterviewScoreController {
     }
 
 
+    /**
+     * 数据统计表格导出
+     * @param response
+     * @param searchCondition
+     */
     @RequestMapping(value = "/statistic/export", method = RequestMethod.GET)
     public void  exportStatisticExcel(
             HttpServletResponse response,

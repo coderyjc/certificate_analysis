@@ -1,5 +1,6 @@
 package top.coderyjc.certificate.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
 import top.coderyjc.certificate.model.entity.Certification;
 import top.coderyjc.certificate.service.ICertificationService;
 import top.coderyjc.certificate.util.DateUtil;
@@ -143,6 +145,5 @@ public class CertificationController {
 
         return Msg.success().add("msg", msg);
     }
-
 
 }
