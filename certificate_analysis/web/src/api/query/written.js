@@ -70,8 +70,6 @@ export const exportWrittenScore = (exportColumn, exportId, searchCondition) => {
 }
 
 
-// --------------Deprecated--------------------------------------------------------
-
 // 获取所有工作地点
 export const listWorkAddress = () => {
   return request({
@@ -83,7 +81,24 @@ export const listWorkAddress = () => {
 // 获取所有年份
 export const listExamYear = () => {
   return request({
-    url: '/writtenScore/exam_year',
+    url: '/writtenScore/years',
     method: 'get',
   })
 }
+
+// 获取统计数据
+export const statisticWrittenScore = data => {
+  return request({
+    url: '/writtenScore/statistic',
+    method: 'get',
+    params:{
+      condition: data
+    }
+  })
+}
+
+// 导出统计数据
+export const exportStatisticWrittenScore = data => {
+  return 'http://localhost:8080/writtenScore/statistic/export?condition=' + JSON.stringify(data)
+}
+

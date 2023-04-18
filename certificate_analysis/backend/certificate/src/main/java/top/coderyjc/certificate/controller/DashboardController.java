@@ -139,12 +139,12 @@ public class DashboardController {
     public Msg getWrittenScoreData(){
         JSONObject data = new JSONObject();
 //      --笔试数据
-        List<String> writtenExamDate = writtenScoreService.listExamDate();
+        List<Integer> writtenExamDate = writtenScoreService.listExamDate(10);
         List<Integer> writtenScoreList = new ArrayList<>();
         Collections.sort(writtenExamDate);
         JSONObject writtenScoreJson = new JSONObject();
         writtenScoreJson.put("category", writtenExamDate);
-        for (String date: writtenExamDate){
+        for (Integer date: writtenExamDate){
             QueryWrapper<WrittenScore> writtenScoreQueryWrapper = new QueryWrapper<>();
             writtenScoreQueryWrapper.eq("exam_date", date);
             writtenScoreList.add((int) writtenScoreService.count(writtenScoreQueryWrapper));

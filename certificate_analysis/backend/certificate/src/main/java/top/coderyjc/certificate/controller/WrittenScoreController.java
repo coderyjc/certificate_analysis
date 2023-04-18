@@ -3,6 +3,7 @@ package top.coderyjc.certificate.controller;
 import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
+import top.coderyjc.certificate.model.dto.WrittenScoreStatisticDTO;
 import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.service.IWrittenScoreService;
 import top.coderyjc.certificate.util.DownloadUtil;
@@ -277,4 +280,55 @@ public class WrittenScoreController {
 
         return Msg.success().add("msg", msg);
     }
+
+    /**
+     * 获取所有的年份
+     * @return
+     */
+    @RequestMapping(value = "/years", method = RequestMethod.GET)
+    public Msg listAllYears(){
+        List<Integer> yearList = service.listExamDate(10);
+        return Msg.success().add("data", yearList);
+    }
+
+    /**
+     * 数据统计查询
+     * @param searchCondition
+     * @return
+     */
+    @RequestMapping(value = "/statistic", method = RequestMethod.GET)
+    public Msg statisticInterviewScore(@RequestParam(value = "condition", defaultValue = "{}") String searchCondition){
+        JSONObject condition = JSONObject.parseObject(searchCondition);
+        String year = condition.getString("year");
+        String startYear = condition.getString("startYear");
+        String endYear = condition.getString("endYear");
+        JSONArray statisticsList = condition.getJSONArray("statisticItem");
+
+        List<WrittenScoreStatisticDTO> list = service.statisticWrittenScore(year, startYear, endYear, statisticsList.toJavaList(String.class));
+
+        return Msg.success().add("data", list);
+    }
+
+
+    /**
+     * 数据统计表格导出
+     * @param response
+     * @param searchCondition
+     */
+    @RequestMapping(value = "/statistic/export", method = RequestMethod.GET)
+    public void  exportStatisticExcel(
+            HttpServletResponse response,
+            @RequestParam(value = "condition", defaultValue = "{}") String searchCondition
+    ){
+        JSONObject condition = JSONObject.parseObject(searchCondition);
+        String year = condition.getString("year");
+        String startYear = condition.getString("startYear");
+        String endYear = condition.getString("endYear");
+        JSONArray statisticsList = condition.getJSONArray("statisticItem");
+
+        service.exportStatisticExcel(response, year, startYear, endYear, statisticsList.toJavaList(String.class));
+    }
+
+
+
 }

@@ -3,6 +3,7 @@ package top.coderyjc.certificate.service;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.web.multipart.MultipartFile;
+import top.coderyjc.certificate.model.dto.WrittenScoreStatisticDTO;
 import top.coderyjc.certificate.model.entity.WrittenScore;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -32,6 +33,9 @@ public interface IWrittenScoreService extends IService<WrittenScore> {
 
 //    List<String> listWorkAddress();
 //
-    List<String> listExamDate();
+    List<Integer> listExamDate(Integer limit);
 
+    List<WrittenScoreStatisticDTO> statisticWrittenScore(String year, String startYear, String endYear, List<String> statisticItemList);
+
+    void exportStatisticExcel(HttpServletResponse response, String year, String startYear, String endYear, List<String> statisticItemList);
 }

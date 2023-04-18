@@ -11,13 +11,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
+import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
 import top.coderyjc.certificate.model.dto.WrittenScoreImportDTO;
+import top.coderyjc.certificate.model.dto.WrittenScoreStatisticDTO;
 import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.mapper.WrittenScoreMapper;
 import top.coderyjc.certificate.service.IWrittenScoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.coderyjc.certificate.util.DownloadUtil;
+import top.coderyjc.certificate.util.LineHumpUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -224,7 +227,91 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
 //    }
 //
     @Override
-    public List<String> listExamDate() {
-        return baseMapper.listExamDate();
+    public List<Integer> listExamDate(Integer limit) {
+        return baseMapper.listExamDate(limit);
     }
+
+    @Override
+    public List<WrittenScoreStatisticDTO> statisticWrittenScore(String year, String startYear, String endYear, List<String> statisticItemList) {
+        List<WrittenScoreStatisticDTO> list = null;
+        for (int i = 0; i < statisticItemList.size(); i++){
+            statisticItemList.set(i, LineHumpUtil.humpToLine(statisticItemList.get(i)));
+        }
+        if(!year.equals("")){
+            if(statisticItemList.size() == 1) list = baseMapper.countOneColumnByYear(year, statisticItemList.get(0));
+            else list = baseMapper.countTwoColumnsByYear(year, statisticItemList.get(0), statisticItemList.get(1));
+        } else {
+            String column = statisticItemList.get(0).equals("exam_date") ? statisticItemList.get(1) : statisticItemList.get(0);
+            list = baseMapper.countColumnByYears(startYear, endYear, column);
+        }
+        return list;
+    }
+
+    @Override
+    public void exportStatisticExcel(HttpServletResponse response, String year, String startYear, String endYear, List<String> statisticItemList) {
+
+        //      直接复用拿到数据
+        List<WrittenScoreStatisticDTO> list = statisticWrittenScore(year, startYear, endYear, statisticItemList);
+
+//      导出数据
+        List<ExcelExportEntity> exportEntityList = new ArrayList<>();
+
+        if(statisticItemList.contains("exam_date")){
+            ExcelExportEntity examDateEntity = new ExcelExportEntity("考试时间", "examDate");
+            examDateEntity.setWidth(10);
+            exportEntityList.add(examDateEntity);
+        }
+        if(statisticItemList.contains("gender")){
+            ExcelExportEntity genderEntity = new ExcelExportEntity("性别", "gender");
+            genderEntity.setWidth(8);
+            genderEntity.setReplace(new String[]{ "男_1", "女_0" });
+            exportEntityList.add(genderEntity);
+        }
+        if(statisticItemList.contains("education_score")) {
+            ExcelExportEntity educationScoreEntity = new ExcelExportEntity("教育学成绩", "educationScore");
+            educationScoreEntity.setWidth(12);
+            educationScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            exportEntityList.add(educationScoreEntity);
+        }
+        if(statisticItemList.contains("education_psychology_score")) {
+            ExcelExportEntity educationPsychologyScoreEntity = new ExcelExportEntity("教育心理学成绩", "educationPsychologyScore");
+            educationPsychologyScoreEntity.setWidth(15);
+            educationPsychologyScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            exportEntityList.add(educationPsychologyScoreEntity);
+        }
+        if(statisticItemList.contains("professional_ethic_score")) {
+            ExcelExportEntity professionalEthicScoreEntity = new ExcelExportEntity("职业道德修养和高等教育法规成绩", "professionalEthicScore");
+            professionalEthicScoreEntity.setWidth(30);
+            professionalEthicScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            exportEntityList.add(professionalEthicScoreEntity);
+        }
+        if(statisticItemList.contains("education_status")) {
+            ExcelExportEntity educationStatusEntity = new ExcelExportEntity("教育学考试状态", "educationStatus");
+            educationStatusEntity.setWidth(15);
+            exportEntityList.add(educationStatusEntity);
+        }
+        if(statisticItemList.contains("education_psychology_status")) {
+            ExcelExportEntity educationPsychologyStatusEntity = new ExcelExportEntity("教育心理学考试状态", "educationPsychologyStatus");
+            educationPsychologyStatusEntity.setWidth(20);
+            exportEntityList.add(educationPsychologyStatusEntity);
+        }
+        if(statisticItemList.contains("professional_ethic_status")) {
+            ExcelExportEntity professionalEthicStatusEntity = new ExcelExportEntity("职业道德修养和高等教育法规状态", "professionalEthicStatus");
+            professionalEthicStatusEntity.setWidth(30);
+            exportEntityList.add(professionalEthicStatusEntity);
+        }
+        if(statisticItemList.contains("work_address")) {
+            ExcelExportEntity workAddressEntity = new ExcelExportEntity("工作单位", "workAddress");
+            workAddressEntity.setWidth(20);
+            exportEntityList.add(workAddressEntity);
+        }
+
+//        数量
+        ExcelExportEntity countEntity = new ExcelExportEntity("数量", "count");
+        exportEntityList.add(countEntity);
+
+        DownloadUtil.downloadExcel(response, new ExportParams(), exportEntityList, InterviewScoreStatisticDTO.class, list);
+
+    }
+
 }
