@@ -21,5 +21,42 @@
     <select id="getInterviewYearList" resultType="java.lang.String">
         select interview_year from tbl_certification group by interview_year order by interview_year desc limit 5
     </select>
+    <select id="listAllInterviewYears" resultType="java.lang.Integer">
+        select interview_year
+        from tbl_certification
+        group by  interview_year
+        order by  interview_year desc
+        limit ${limit}
+    </select>
+    <select id="listAllValidateYears" resultType="java.lang.String">
+        select validate_date
+        from tbl_certification
+        group by  validate_date
+        order by  validate_date desc
+        limit ${limit};
+    </select>
+    <select id="countOneColumnByYear"
+            resultType="top.coderyjc.certificate.model.dto.CertificationStatisticDTO">
+        select ${column}, count(${column}) as count
+        from tbl_certification
+        where interview_year=${interviewYear}
+        group by ${column}
+        order by ${column};
+    </select>
+    <select id="countTwoColumnsByYear"
+            resultType="top.coderyjc.certificate.model.dto.CertificationStatisticDTO">
+        select ${column1}, ${column2}, count(${column1}) as count
+        from tbl_certification
+        where interview_year=${interviewYear}
+        group by ${column1}, ${column2}
+        order by ${column1}, ${column2};
+    </select>
+    <select id="countColumnByYears" resultType="top.coderyjc.certificate.model.dto.CertificationStatisticDTO">
+        select interview_year, ${column} , count(interview_year) as count
+        from tbl_certification
+        where interview_year between ${interviewStartYear} and ${interviewEndYear}
+        group by interview_year, ${column}
+        order by interview_year
+    </select>
 
 </mapper>

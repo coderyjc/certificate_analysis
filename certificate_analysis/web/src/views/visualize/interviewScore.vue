@@ -126,7 +126,7 @@ export default {
       // 没有统计多个年份对比
       if(form.year == '' && !form.statisticItem.some(e => e == '年份')){
         ElMessage({
-          message: '请先填写表单',
+          message: '请先填写完整表单',
           type: 'error'
         })
         return false

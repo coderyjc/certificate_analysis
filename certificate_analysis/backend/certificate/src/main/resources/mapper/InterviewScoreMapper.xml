@@ -43,14 +43,6 @@
         order by ${column1}, ${column2};
     </select>
 
-
-    <select id="countColumnByYears" resultType="top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO">
-        select exam_date, ${column} , count(exam_date) as count
-        from tbl_interview_score
-        where exam_date between ${startYear} and ${endYear}
-        group by exam_date, ${column}
-        order by exam_date
-    </select>
     <select id="countOneColumnByYear" resultType="top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO">
         select ${column}, count(${column}) as count
         from tbl_interview_score
@@ -67,4 +59,11 @@
         order by ${column1}, ${column2};
     </select>
 
+    <select id="countColumnByYears" resultType="top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO">
+        select exam_date, ${column} , count(exam_date) as count
+        from tbl_interview_score
+        where exam_date between ${startYear} and ${endYear}
+        group by exam_date, ${column}
+        order by exam_date
+    </select>
 </mapper>

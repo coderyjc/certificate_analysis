@@ -3,6 +3,7 @@ package top.coderyjc.certificate.service;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.web.multipart.MultipartFile;
+import top.coderyjc.certificate.model.dto.CertificationStatisticDTO;
 import top.coderyjc.certificate.model.entity.Certification;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -27,4 +28,11 @@ public interface ICertificationService extends IService<Certification> {
 
     List<String> listInterviewYear();
 
+    List<Integer> listAllInterviewYears(int limit);
+
+    List<String> listAllValidateYears(int limit);
+
+    List<CertificationStatisticDTO> statisticCertification(String interviewYear, String interviewStartYear, String interviewEndYear, List<String> statisticItemList);
+
+    void exportStatisticExcel(HttpServletResponse response, String interviewYear, String interviewStartYear, String interviewEndYear, List<String> statisticItemList);
 }

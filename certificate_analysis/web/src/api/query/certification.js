@@ -71,3 +71,36 @@ export const exportCertification = (exportColumn, exportId, searchCondition) => 
   
   return result
 }
+
+// 获取所有的面试年份
+export const listInterviewYear = data => {
+  return request({
+    url: '/certification/years',
+    method: 'get',
+  })
+}
+
+// 获取所有的有效期数据
+export const listValidateYear = data => {
+  return request({
+    url: '/certification/validate_years',
+    method: 'get',
+  })
+}
+
+// 获取统计数据
+export const statisticCertification = data => {
+  return request({
+    url: '/certification/statistic',
+    method: 'get',
+    params:{
+      condition: data
+    }
+  })
+}
+
+// 导出统计数据
+export const exportStatisticCertification = data => {
+  return 'http://localhost:8080/certification/statistic/export?condition=' + JSON.stringify(data)
+}
+
