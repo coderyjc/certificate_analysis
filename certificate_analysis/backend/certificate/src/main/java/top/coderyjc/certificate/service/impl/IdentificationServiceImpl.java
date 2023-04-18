@@ -12,7 +12,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
 import top.coderyjc.certificate.model.dto.CertificationImportDTO;
+import top.coderyjc.certificate.model.dto.CertificationStatisticDTO;
 import top.coderyjc.certificate.model.dto.IdentificationDTO;
+import top.coderyjc.certificate.model.dto.IdentificationStatisticDTO;
 import top.coderyjc.certificate.model.entity.Certification;
 import top.coderyjc.certificate.model.entity.Identification;
 import top.coderyjc.certificate.mapper.IdentificationMapper;
@@ -20,6 +22,7 @@ import top.coderyjc.certificate.service.IIdentificationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.coderyjc.certificate.util.DownloadUtil;
+import top.coderyjc.certificate.util.LineHumpUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -217,7 +220,114 @@ public class IdentificationServiceImpl extends ServiceImpl<IdentificationMapper,
     }
 
     @Override
-    public List<String> listAffirmBatch() {
-        return baseMapper.listAffirmBatch();
+    public List<String> listAffirmBatch(Integer limit) {
+        return baseMapper.listAffirmBatch(limit);
     }
+
+    @Override
+    public List<IdentificationStatisticDTO> statisticIdentification(String affirmBatch, String affirmBatchStart, String affirmBatchEnd, List<String> statisticItemList) {
+        List<IdentificationStatisticDTO> list = null;
+        for (int i = 0; i < statisticItemList.size(); i++){
+            statisticItemList.set(i, LineHumpUtil.humpToLine(statisticItemList.get(i)));
+        }
+
+        if(!affirmBatch.equals("")){
+            if(statisticItemList.size() == 1) list = baseMapper.countOneColumnByYear(affirmBatch, statisticItemList.get(0));
+            else list = baseMapper.countTwoColumnsByYear(affirmBatch, statisticItemList.get(0), statisticItemList.get(1));
+        } else {
+            String column = statisticItemList.get(0).equals("affirm_batch") ? statisticItemList.get(1) : statisticItemList.get(0);
+            list = baseMapper.countColumnByYears(affirmBatchStart, affirmBatchEnd, column);
+        }
+
+        return list;
+    }
+
+    @Override
+    public void exportStatisticExcel(HttpServletResponse response, String affirmBatch, String affirmBatchStart, String affirmBatchEnd, List<String> statisticItemList) {
+        //      直接复用拿到数据
+        List<IdentificationStatisticDTO> list = statisticIdentification(affirmBatch, affirmBatchStart, affirmBatchEnd,statisticItemList);
+
+//      导出数据
+        List<ExcelExportEntity> exportEntityList = new ArrayList<>();
+
+        if(statisticItemList.contains("gender")){
+            ExcelExportEntity genderEntity = new ExcelExportEntity("性别", "gender");
+            genderEntity.setWidth(8);
+            genderEntity.setReplace(new String[]{ "男_1", "女_0" });
+            exportEntityList.add(genderEntity);
+        }
+        if(statisticItemList.contains("major_type")){
+            ExcelExportEntity majorTypeEntity = new ExcelExportEntity("专业类别", "majorType");
+            majorTypeEntity.setWidth(8);
+            exportEntityList.add(majorTypeEntity);
+        }
+        if(statisticItemList.contains("graduation_school")){
+            ExcelExportEntity graduationSchoolEntity = new ExcelExportEntity("毕业学校", "graduationSchool");
+            graduationSchoolEntity.setWidth(25);
+            exportEntityList.add(graduationSchoolEntity);
+        }
+        if(statisticItemList.contains("major")){
+            ExcelExportEntity majorEntity = new ExcelExportEntity("所学专业", "major");
+            majorEntity.setWidth(35);
+            exportEntityList.add(majorEntity);
+        }
+        if(statisticItemList.contains("highest_education_background")){
+            ExcelExportEntity highestEducationBackgroundEntity = new ExcelExportEntity("最高学历", "highestEducationBackground");
+            highestEducationBackgroundEntity.setWidth(10);
+            exportEntityList.add(highestEducationBackgroundEntity);
+        }
+        if(statisticItemList.contains("qualification_type")){
+            ExcelExportEntity qualificationTypeEntity = new ExcelExportEntity("资格种类", "qualificationType");
+            qualificationTypeEntity.setWidth(10);
+            exportEntityList.add(qualificationTypeEntity);
+        }
+        if(statisticItemList.contains("highest_degree")){
+            ExcelExportEntity highestDegreeEntity = new ExcelExportEntity("最高学位", "highestDegree");
+            highestDegreeEntity.setWidth(10);
+            exportEntityList.add(highestDegreeEntity);
+        }
+        if(statisticItemList.contains("affirm_batch")){
+            ExcelExportEntity affirmBatchEntity = new ExcelExportEntity("认定批次", "affirmBatch");
+            affirmBatchEntity.setWidth(12);
+            exportEntityList.add(affirmBatchEntity);
+        }
+        if(statisticItemList.contains("confirm_address")){
+            ExcelExportEntity confirmAddressEntity = new ExcelExportEntity("确认点", "confirmAddress");
+            confirmAddressEntity.setWidth(35);
+            exportEntityList.add(confirmAddressEntity);
+        }
+        if(statisticItemList.contains("affirm_institution")){
+            ExcelExportEntity affirmInstitutionEntity = new ExcelExportEntity("认定机构", "affirmInstitution");
+            affirmInstitutionEntity.setWidth(15);
+            exportEntityList.add(affirmInstitutionEntity);
+        }
+        if(statisticItemList.contains("exam_type")){
+            ExcelExportEntity examTypeEntity = new ExcelExportEntity("考试类型", "examType");
+            examTypeEntity.setWidth(10);
+            exportEntityList.add(examTypeEntity);
+        }
+        if(statisticItemList.contains("organization_type")){
+            ExcelExportEntity organizationTypeEntity = new ExcelExportEntity("机构类型", "organizationType");
+            organizationTypeEntity.setWidth(10);
+            exportEntityList.add(organizationTypeEntity);
+        }
+        if(statisticItemList.contains("subject")){
+            ExcelExportEntity subjectEntity = new ExcelExportEntity("任教学科", "subject");
+            subjectEntity.setWidth(20);
+            exportEntityList.add(subjectEntity);
+        }
+        if(statisticItemList.contains("city")){
+            ExcelExportEntity cityEntity = new ExcelExportEntity("市", "city");
+            cityEntity.setWidth(15);
+            exportEntityList.add(cityEntity);
+        }
+
+//        数量
+        ExcelExportEntity countEntity = new ExcelExportEntity("数量", "count");
+        exportEntityList.add(countEntity);
+
+        DownloadUtil.downloadExcel(response, new ExportParams(), exportEntityList, IdentificationStatisticDTO.class, list);
+
+    }
+
 }

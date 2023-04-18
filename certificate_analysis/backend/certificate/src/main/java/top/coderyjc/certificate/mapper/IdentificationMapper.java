@@ -1,5 +1,7 @@
 package top.coderyjc.certificate.mapper;
 
+import top.coderyjc.certificate.model.dto.IdentificationDTO;
+import top.coderyjc.certificate.model.dto.IdentificationStatisticDTO;
 import top.coderyjc.certificate.model.entity.Identification;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -16,5 +18,11 @@ import java.util.List;
 
 public interface IdentificationMapper extends BaseMapper<Identification> {
 
-    List<String> listAffirmBatch();
+    List<String> listAffirmBatch(Integer limit);
+
+    List<IdentificationStatisticDTO> countOneColumnByYear(String affirmBatch, String column);
+
+    List<IdentificationStatisticDTO> countTwoColumnsByYear(String affirmBatch, String column1, String column2);
+
+    List<IdentificationStatisticDTO> countColumnByYears(String affirmBatchStart, String affirmBatchEnd, String column);
 }

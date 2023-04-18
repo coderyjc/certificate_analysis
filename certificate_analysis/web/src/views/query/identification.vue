@@ -112,6 +112,11 @@ export default defineComponent({
           width: 100,
         },
         {
+          label: 'query/identification.highestEducationBackground',
+          prop: 'highestEducationBackground',
+          width: 100,
+        },
+        {
           label: 'query/identification.affirmBatch',
           prop: 'affirmBatch',
           width: 120,

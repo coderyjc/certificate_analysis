@@ -72,3 +72,30 @@ export const exportIdentification = (exportColumn, exportId, searchCondition) =>
   
   return result
 }
+
+
+
+// 获取所有的认定批次
+export const listAffirmBatch = data => {
+  return request({
+    url: '/identification/batchs',
+    method: 'get',
+  })
+}
+
+// 获取统计数据
+export const statisticIdentification = data => {
+  return request({
+    url: '/identification/statistic',
+    method: 'get',
+    params:{
+      condition: data
+    }
+  })
+}
+
+// 导出统计数据
+export const exportStatisticIdentification = data => {
+  return 'http://localhost:8080/identification/statistic/export?condition=' + JSON.stringify(data)
+}
+

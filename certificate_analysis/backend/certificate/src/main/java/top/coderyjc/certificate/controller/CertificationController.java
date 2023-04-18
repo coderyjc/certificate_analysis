@@ -148,22 +148,22 @@ public class CertificationController {
     }
 
     /**
-     * 获取所有的年份
-     * @return
-     */
-    @RequestMapping(value = "/years", method = RequestMethod.GET)
-    public Msg listAllYears(){
-        List<Integer> yearList = service.listAllInterviewYears(10);
-        return Msg.success().add("data", yearList);
-    }
-
-    /**
      * 获取所有有效期
      * @return
      */
     @RequestMapping(value = "/validate_years", method = RequestMethod.GET)
     public Msg listAllValidateYears(){
         List<String> yearList = service.listAllValidateYears(10);
+        return Msg.success().add("data", yearList);
+    }
+
+    /**
+     * 获取所有的年份
+     * @return
+     */
+    @RequestMapping(value = "/years", method = RequestMethod.GET)
+    public Msg listAllYears(){
+        List<Integer> yearList = service.listAllInterviewYears(10);
         return Msg.success().add("data", yearList);
     }
 

@@ -6,7 +6,6 @@
     <resultMap id="BaseResultMap" type="top.coderyjc.certificate.model.entity.Identification">
         <id column="id" property="id" />
         <result column="qualification_type" property="qualificationType" />
-        <result column="identification_type" property="identificationType" />
         <result column="highest_degree" property="highestDegree" />
         <result column="affirm_batch" property="affirmBatch" />
         <result column="confirm_address" property="confirmAddress" />
@@ -14,7 +13,7 @@
         <result column="graduation_school" property="graduationSchool" />
         <result column="affirm_institution" property="affirmInstitution" />
         <result column="exam_type" property="examType" />
-        <result column="organization_type" property="orgnizationType" />
+        <result column="organization_type" property="organizationType" />
         <result column="subject" property="subject" />
         <result column="certification_id" property="certificationId" />
         <result column="major" property="major" />
@@ -29,7 +28,31 @@
         id, qualification_type, identification_type, highest_degree, affirm_batch, confirm_address, identification_id, graduation_school, affirm_institution, exam_type, orgnization_type, subject, certification_id, major, city, name, highest_education_background, major_type
     </sql>
     <select id="listAffirmBatch" resultType="java.lang.String">
-        select affirm_batch from tbl_identification group by affirm_batch order by affirm_batch desc limit 5
+        select affirm_batch
+        from tbl_identification
+        group by affirm_batch
+        order by affirm_batch desc
+        limit ${limit}
     </select>
-
+    <select id="countOneColumnByYear" resultType="top.coderyjc.certificate.model.dto.IdentificationStatisticDTO">
+        select ${column}, count(${column}) as count
+        from tbl_identification
+        where affirm_batch='${affirmBatch}'
+        group by ${column}
+        order by ${column};
+    </select>
+    <select id="countTwoColumnsByYear" resultType="top.coderyjc.certificate.model.dto.IdentificationStatisticDTO">
+        select ${column1}, ${column2}, count(${column1}) as count
+        from tbl_identification
+        where affirm_batch='${affirmBatch}'
+        group by ${column1}, ${column2}
+        order by ${column1}, ${column2};
+    </select>
+    <select id="countColumnByYears" resultType="top.coderyjc.certificate.model.dto.IdentificationStatisticDTO">
+        select affirm_batch, ${column} , count(affirm_batch) as count
+        from tbl_identification
+        where affirm_batch between '${affirmBatchStart}' and '${affirmBatchEnd}'
+        group by affirm_batch, ${column}
+        order by affirm_batch
+    </select>
 </mapper>

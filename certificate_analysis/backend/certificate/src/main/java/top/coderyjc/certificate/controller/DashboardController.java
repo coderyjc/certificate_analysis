@@ -93,7 +93,7 @@ public class DashboardController {
     public Msg getIdentificationData(){
         JSONObject data = new JSONObject();
         //      --认定数据
-        List<String> affirmBatch = identificationService.listAffirmBatch();
+        List<String> affirmBatch = identificationService.listAffirmBatch(5);
         List<Integer> identificationList = new ArrayList<>();
         Collections.sort(affirmBatch);
         JSONObject identificationJson = new JSONObject();

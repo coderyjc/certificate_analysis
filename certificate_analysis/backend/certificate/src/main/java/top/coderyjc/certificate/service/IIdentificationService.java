@@ -3,6 +3,8 @@ package top.coderyjc.certificate.service;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.web.multipart.MultipartFile;
+import top.coderyjc.certificate.model.dto.IdentificationDTO;
+import top.coderyjc.certificate.model.dto.IdentificationStatisticDTO;
 import top.coderyjc.certificate.model.entity.Identification;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -26,5 +28,9 @@ public interface IIdentificationService extends IService<Identification> {
 
     String importExcel(MultipartFile file) throws Exception;
 
-    List<String> listAffirmBatch();
+    List<String> listAffirmBatch(Integer limit);
+
+    List<IdentificationStatisticDTO> statisticIdentification(String affirmBatch, String affirmBatchStart, String affirmBatchEnd, List<String> statisticItemList);
+
+    void exportStatisticExcel(HttpServletResponse response, String affirmBatch, String affirmBatchStart, String affirmBatchEnd, List<String> statisticItemList);
 }

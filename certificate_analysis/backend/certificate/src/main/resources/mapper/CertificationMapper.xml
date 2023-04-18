@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="top.coderyjc.certificate.model.entity.Certification">
         <id column="id" property="id" />
-        <result column="idenfication_id" property="idenficationId" />
+        <result column="identification_id" property="identificationId" />
         <result column="name" property="name" />
         <result column="interview_year" property="interviewYear" />
         <result column="qualification_id" property="qualificationId" />
