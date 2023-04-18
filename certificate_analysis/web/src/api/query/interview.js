@@ -93,12 +93,6 @@ export const statisticInterviewScore = data => {
 
 // 导出统计数据
 export const exportStatisticInterviewScore = data => {
-  return request({
-    url: '/interviewScore/statistic/export',
-    method: 'get',
-    params:{
-      condition: data
-    }
-  })
+  return 'http://localhost:8080/interviewScore/statistic/export?condition=' + JSON.stringify(data)
 }
 

@@ -3,6 +3,7 @@
     :data="tableData"
     stripe
     :border="border"
+    height="550"
   >
     <el-table-column
       v-for="item in columns"

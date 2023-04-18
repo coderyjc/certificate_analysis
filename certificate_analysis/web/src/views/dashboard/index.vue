@@ -1,5 +1,5 @@
 <template>
-  这是数据大屏
+dashboard
 </template>
 
 <script>
