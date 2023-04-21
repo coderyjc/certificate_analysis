@@ -131,10 +131,6 @@ a:hover{
 .map2{ width:5.66rem; top:.85rem; left:1.2rem; z-index: 3; opacity: 0.2; animation: myfirst 10s infinite linear;}
 .map3{ width:5.18rem; top:1.07rem; left: 1.4rem; z-index: 1;}
 
-
-
-
-
 .tabs { text-align: center; padding: .1rem 0 0 0;}
 .tabs a {
     position: relative;
