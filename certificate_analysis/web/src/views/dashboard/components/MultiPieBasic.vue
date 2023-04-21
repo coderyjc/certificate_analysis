@@ -7,8 +7,8 @@ export default {
   data() {
     return {
       style: {
-        width: "700px",
-        height: "220px"
+        width: "500px",
+        height: "250px"
       }
     }
   },
