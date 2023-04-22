@@ -5,19 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import top.coderyjc.certificate.model.dto.CertificationStatisticDTO;
-import top.coderyjc.certificate.model.dto.IdentificationDTO;
 import top.coderyjc.certificate.model.dto.IdentificationStatisticDTO;
-import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
-import top.coderyjc.certificate.model.entity.Certification;
 import top.coderyjc.certificate.model.entity.Identification;
+import top.coderyjc.certificate.model.vo.ProvinceCountVO;
 import top.coderyjc.certificate.service.IIdentificationService;
-import top.coderyjc.certificate.util.DateUtil;
 import top.coderyjc.certificate.util.Msg;
 
 import javax.servlet.http.HttpServletResponse;
@@ -207,4 +202,27 @@ public class IdentificationController {
 
         service.exportStatisticExcel(response, affirmBatch, affirmBatchStart, affirmBatchEnd, statisticsList.toJavaList(String.class));
     }
+
+
+    /**
+     * 获取认定表中的所有的省份的统计
+     * @return
+     */
+//    @RequestMapping(value = "/count_province", method = RequestMethod.GET)
+//    public Msg listProvinceCount(){
+//        List<ProvinceCountVO> list = service.listProvinceCount();
+//        return Msg.success().add("data", list);
+//    }
+//
+    /**
+     * 获取认定表中的所有的省份的统计
+     * @return
+     */
+    @RequestMapping(value = "/count_hebei", method = RequestMethod.GET)
+    public Msg listHebeiCount(){
+        List<ProvinceCountVO> list = service.listCityCount();
+        return Msg.success().add("data", list);
+    }
+
+
 }

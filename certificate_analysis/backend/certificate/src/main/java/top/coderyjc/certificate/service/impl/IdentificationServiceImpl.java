@@ -11,13 +11,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
-import top.coderyjc.certificate.model.dto.CertificationImportDTO;
-import top.coderyjc.certificate.model.dto.CertificationStatisticDTO;
 import top.coderyjc.certificate.model.dto.IdentificationDTO;
 import top.coderyjc.certificate.model.dto.IdentificationStatisticDTO;
 import top.coderyjc.certificate.model.entity.Certification;
 import top.coderyjc.certificate.model.entity.Identification;
 import top.coderyjc.certificate.mapper.IdentificationMapper;
+import top.coderyjc.certificate.model.vo.ProvinceCountVO;
 import top.coderyjc.certificate.service.IIdentificationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import top.coderyjc.certificate.util.DownloadUtil;
 import top.coderyjc.certificate.util.LineHumpUtil;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -328,6 +326,11 @@ public class IdentificationServiceImpl extends ServiceImpl<IdentificationMapper,
 
         DownloadUtil.downloadExcel(response, new ExportParams(), exportEntityList, IdentificationStatisticDTO.class, list);
 
+    }
+
+    @Override
+    public List<ProvinceCountVO> listCityCount() {
+        return baseMapper.listCityCount();
     }
 
 }

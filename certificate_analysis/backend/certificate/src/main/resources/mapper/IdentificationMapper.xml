@@ -55,4 +55,12 @@
         group by affirm_batch, ${column}
         order by affirm_batch
     </select>
+    <select id="listCityCount" resultType="top.coderyjc.certificate.model.vo.ProvinceCountVO">
+        select province as name, count as value from (
+            select substr(identification_id, 3, 2) as province_id, count(*) count
+            from tbl_identification
+            where substr(identification_id, 1, 2) = '13'
+            group by substr(identification_id, 3, 2)
+        ) t join tbl_province_id tpi where t.province_id = tpi.id
+    </select>
 </mapper>

@@ -73,6 +73,13 @@ export const exportIdentification = (exportColumn, exportId, searchCondition) =>
   return result
 }
 
+export const listProvinceCount = () => {
+  return request({
+    url: '/identification/count_hebei',
+    method: 'get'
+  })
+}
+
 
 
 // 获取所有的认定批次
