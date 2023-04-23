@@ -37,7 +37,7 @@ public class BaseGeneratorTest {
                 .enableBaseColumnList()
                 .enableBaseResultMap();
 //        指定生成名
-        strategyConfig.addInclude("tbl_backup");
+        strategyConfig.addInclude("tbl_written_statistic");
 
         return strategyConfig;
     }

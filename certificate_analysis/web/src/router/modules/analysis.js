@@ -39,6 +39,15 @@ export default [
         },
       },
       {
+        path: 'writtenCalculate',
+        name: 'writtenCalculate',
+        component: () => import('@/views/visualize/writtenCalculate.vue'),
+        meta: {
+          title: '笔试成绩计算分析',
+          affix: true,
+        },
+      },
+      {
         path: 'interviewScore',
         name: 'interviewScore',
         component: () => import('@/views/visualize/interviewScore.vue'),

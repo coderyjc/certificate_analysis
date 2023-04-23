@@ -21,17 +21,4 @@ import top.coderyjc.certificate.service.IWrittenScoreService;
 @RestController
 @RequestMapping(value = "/visual")
 public class VisualizeController {
-
-    @Autowired
-    IIdentificationService identificationService;
-
-    @Autowired
-    ICertificationService certificationService;
-
-    @Autowired
-    IInterviewScoreService interviewScoreService;
-
-    @Autowired
-    IWrittenScoreService writtenScoreService;
-
 }

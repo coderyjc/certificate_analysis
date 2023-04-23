@@ -3,7 +3,8 @@
     :data="tableData"
     stripe
     :border="border"
-    height="550"
+    :height="height"
+    :key="key"
   >
     <el-table-column
       v-for="item in columns"
@@ -18,6 +19,10 @@
 <script>  
 export default {
   props:{
+    height:{
+      type: Number,
+      default: 550
+    },
     columns: {
       type: Array,
       default: () => {
