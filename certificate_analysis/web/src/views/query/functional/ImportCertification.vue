@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="visible" title="导入数据" :close-on-click-modal="false">
-    <el-upload class="upload-demo" drag action="http://localhost:8080/certification/importExcel" multiple>
+    <el-upload class="upload-demo" drag :action="action_url" multiple>
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">
         拖动文件到此处或者 <em>点击以上传</em>
@@ -20,7 +20,7 @@
   </el-dialog>
 </template>
 <script>
-import { toRefs, reactive, defineComponent, computed } from 'vue';
+import { toRefs, reactive, ref, defineComponent, computed } from 'vue';
 
 export default defineComponent({
   // 属性
@@ -44,8 +44,11 @@ export default defineComponent({
       }
     })
 
+    const action_url = ref(import.meta.env.VITE_BASE_URL + 'certification/importExcel')
+
     return {
       ...toRefs(state),
+      action_url,
       visible,
     }
   }

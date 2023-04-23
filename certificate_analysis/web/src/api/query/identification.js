@@ -40,7 +40,7 @@ export const deleteIdentification = data => {
 // 选择性导出面试成绩
 export const exportIdentification = (exportColumn, exportId, searchCondition) => {
 
-  let baseStr = 'http://localhost:8080/identification/export?'
+  let baseStr = import.meta.env.VITE_BASE_URL + '/identification/export?'
 
   let exportStr = ''
   if(exportColumn && exportColumn.length > 0){
@@ -103,6 +103,6 @@ export const statisticIdentification = data => {
 
 // 导出统计数据
 export const exportStatisticIdentification = data => {
-  return 'http://localhost:8080/identification/statistic/export?condition=' + JSON.stringify(data)
+  return import.meta.env.VITE_BASE_URL + 'identification/statistic/export?condition=' + JSON.stringify(data)
 }
 

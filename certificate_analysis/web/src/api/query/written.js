@@ -36,7 +36,7 @@ export const deleteWrittenScore = data => {
 // 选择性导出笔试成绩
 export const exportWrittenScore = (exportColumn, exportId, searchCondition) => {
 
-  let baseStr = 'http://localhost:8080/writtenScore/export?'
+  let baseStr = import.meta.env.VITE_BASE_URL + 'writtenScore/export?'
 
   let exportStr = ''
   if(exportColumn && exportColumn.length > 0){
@@ -99,6 +99,6 @@ export const statisticWrittenScore = data => {
 
 // 导出统计数据
 export const exportStatisticWrittenScore = data => {
-  return 'http://localhost:8080/writtenScore/statistic/export?condition=' + JSON.stringify(data)
+  return import.meta.env.VITE_BASE_URL + 'writtenScore/statistic/export?condition=' + JSON.stringify(data)
 }
 
