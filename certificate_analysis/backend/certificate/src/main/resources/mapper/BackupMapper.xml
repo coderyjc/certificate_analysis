@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.coderyjc.certificate.mapper.BackupMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="top.coderyjc.certificate.model.entity.Backup">
+        <id column="id" property="id" />
+        <result column="table_name" property="tableName" />
+        <result column="filename" property="filename" />
+        <result column="backup_date" property="backupDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, table_name, filename, backup_date
+    </sql>
+
+</mapper>

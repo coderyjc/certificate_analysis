@@ -10,10 +10,12 @@ import home from './modules/home'
 import query from './modules/query'
 import analysis from './modules/analysis'
 import user from './modules/user'
+import backup from './modules/backup'
+
 
 /* 菜单栏的路由 */
 // export const fixedRoutes = [...outlink, ...home, ...query, ...analysis, ...user]
-export const fixedRoutes = [...home, ...query, ...analysis, ...user]
+export const fixedRoutes = [...home, ...query, ...analysis, ...user, ...backup]
 
 const router = createRouter({
   history: createWebHashHistory(),

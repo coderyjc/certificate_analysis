@@ -9,7 +9,7 @@ export default [
     meta: {
       title: '数据管理',
     },
-    icon: 'CircleCheck',
+    icon: 'Search',
     children: [
       {
         path: 'writtenManagement',

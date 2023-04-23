@@ -8,7 +8,7 @@ export default [
     meta: {
       title: '用户管理',
     },
-    icon: 'CircleCheck',
+    icon: 'User',
     children: [
       {
         path: '',

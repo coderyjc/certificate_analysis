@@ -9,7 +9,7 @@ export default [
     meta: {
       title: '数据可视化分析',
     },
-    icon: 'CircleCheck',
+    icon: 'PieChart',
     children: [
       {
         path: 'identification',

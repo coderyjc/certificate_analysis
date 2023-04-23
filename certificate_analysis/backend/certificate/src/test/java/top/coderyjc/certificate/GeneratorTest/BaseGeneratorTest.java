@@ -37,8 +37,7 @@ public class BaseGeneratorTest {
                 .enableBaseColumnList()
                 .enableBaseResultMap();
 //        指定生成名
-        strategyConfig.addInclude("tbl_user")
-                .addInclude("tbl_route");
+        strategyConfig.addInclude("tbl_backup");
 
         return strategyConfig;
     }

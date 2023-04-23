@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import top.coderyjc.certificate.model.dto.CertificationStatisticDTO;
-import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
 import top.coderyjc.certificate.model.entity.Certification;
 import top.coderyjc.certificate.service.ICertificationService;
 import top.coderyjc.certificate.util.DateUtil;
