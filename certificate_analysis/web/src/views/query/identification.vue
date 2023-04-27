@@ -1,14 +1,23 @@
 <template>
   <div class="container">
-    <AddIdentification :dialogFormVisible="addIdentificationDialogVisibility" @visibilityChange="changeAddIdentificationDialogVisibility">
+    <AddIdentification :dialogFormVisible="addIdentificationDialogVisibility"
+      @visibilityChange="changeAddIdentificationDialogVisibility">
     </AddIdentification>
-    <ExportIdentification :dialogVisible="exportIdentificationDialogVisibility" @visibilityChange="changeExportIdentificationDialogVisibility"
-    :selectedItems="selectedItems" :searchModel="searchModal">
+    <ExportIdentification :dialogVisible="exportIdentificationDialogVisibility"
+      @visibilityChange="changeExportIdentificationDialogVisibility" :selectedItems="selectedItems"
+      :searchModel="searchModal">
     </ExportIdentification>
-    <ImportIdentification :dialogVisible="importIdentificationDialogVisibility" @visibilityChange="changeImportIdentificationDialogVisibility">
+    <ImportIdentification :dialogVisible="importIdentificationDialogVisibility"
+      @visibilityChange="changeImportIdentificationDialogVisibility">
     </ImportIdentification>
-    <pro-table ref="table" :title="$t('query/identification.title')" :request="getList" :columns="columns" :search="searchConfig"
-      @selectionChange="handleSelectionChange" :pagination="paginationConfig" @getModel="getSearchModal">
+    <UpdateIdentification :formVisible="updateIdentificationDialogVisibility"
+      @visibilityChange="changeUpdateIdentificationDialogVisibility" :formData="updateFormData">
+    </UpdateIdentification>
+
+
+    <pro-table ref="table" :title="$t('query/identification.title')" :request="getList" :columns="columns"
+      :search="searchConfig" @selectionChange="handleSelectionChange" :pagination="paginationConfig"
+      @getModel="getSearchModal">
       <!-- 工具栏 -->
       <template #toolbar>
         <el-popconfirm title="确定删除选中数据吗?" @confirm="batchDelete">
@@ -33,7 +42,7 @@
       </template>
 
       <template #gender="{ row }">
-          {{ row.gender == 1 ? "男" : "女" }}
+        {{ row.gender == 1 ? "男" : "女" }}
       </template>
 
       <template #operate="{ row }">
@@ -44,6 +53,9 @@
             </el-button>
           </template>
         </el-popconfirm>
+        <el-button size="small" type="primary" @click="updateScore(row)">
+          {{ $t('public.edit') }}
+        </el-button>
       </template>
     </pro-table>
   </div>
@@ -57,6 +69,7 @@ import { listIdentification, deleteIdentification } from '@/api/query/identifica
 import AddIdentification from './functional/AddIdentification.vue'
 import ExportIdentification from './functional/ExportIdentification.vue'
 import ImportIdentification from './functional/ImportIdentification.vue'
+import UpdateIdentification from './functional/UpdateIdentification.vue'
 
 export default defineComponent({
   name: 'IdentificationManagement',
@@ -64,6 +77,7 @@ export default defineComponent({
     AddIdentification,
     ExportIdentification,
     ImportIdentification,
+    UpdateIdentification,
   },
   setup() {
     const state = reactive({
@@ -312,6 +326,7 @@ export default defineComponent({
       getSearchModal: (model) => {
         state.searchModal = model
       },
+      updateFormData: {}
     })
 
     const table = ref(null)
@@ -360,17 +375,25 @@ export default defineComponent({
       importIdentificationDialogVisibility.value = !importIdentificationDialogVisibility.value
     }
 
+    // 修改成绩
+    const updateIdentificationDialogVisibility = ref(false)
+    const changeUpdateIdentificationDialogVisibility = () => {
+      updateIdentificationDialogVisibility.value = !updateIdentificationDialogVisibility.value
+    }
+    const updateScore = data => {
+      state.updateFormData = data
+      changeUpdateIdentificationDialogVisibility()
+    }
+
     return {
       ...toRefs(state),
       refresh,
       deleteIdentificationButton,
       batchDelete,
-      addIdentificationDialogVisibility, 
-      changeAddIdentificationDialogVisibility,
-      exportIdentificationDialogVisibility, 
-      changeExportIdentificationDialogVisibility,
-      importIdentificationDialogVisibility,
-      changeImportIdentificationDialogVisibility,
+      addIdentificationDialogVisibility, changeAddIdentificationDialogVisibility,
+      exportIdentificationDialogVisibility, changeExportIdentificationDialogVisibility,
+      importIdentificationDialogVisibility, changeImportIdentificationDialogVisibility,
+      updateScore, updateIdentificationDialogVisibility, changeUpdateIdentificationDialogVisibility,
       table,
     }
   },

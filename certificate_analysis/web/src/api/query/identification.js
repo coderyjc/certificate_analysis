@@ -26,6 +26,17 @@ export const addIdentification = data => {
   })
 }
 
+// 添加面试成绩
+export const updateIdentification = data => {
+  return request({
+    url: '/identification/update',
+    method: 'post',
+    params: {
+      param: JSON.stringify(data),
+    },
+  })
+}
+
 // 删除面试成绩
 export const deleteIdentification = data => {
   return request({

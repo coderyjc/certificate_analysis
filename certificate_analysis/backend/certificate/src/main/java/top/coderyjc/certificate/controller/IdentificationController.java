@@ -84,6 +84,42 @@ public class IdentificationController {
         return Msg.success().add("data", result ? "添加成功" : "添加失败");
     }
 
+
+
+    /**
+     * 修改认定数据
+     * @param data
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Msg updateCertification(@RequestParam(value = "param", defaultValue = "{}") String data){
+//        插入
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        Identification identification = service.getById(jsonObject.getString("id"));
+//        赋值
+        identification.setName(jsonObject.getString("name"));
+        identification.setMajorType(jsonObject.getString("majorType"));
+        identification.setGraduationSchool(jsonObject.getString("graduationSchool"));
+        identification.setMajor(jsonObject.getString("major"));
+        identification.setHighestEducationBackground(jsonObject.getString("highestEducationBackground"));
+        identification.setQualificationType(jsonObject.getString("qualificationType"));
+        identification.setIdentificationId(jsonObject.getString("identificationId"));
+        identification.setHighestDegree(jsonObject.getString("highestDegree"));
+        identification.setAffirmBatch(jsonObject.getString("affirmBatch"));
+        identification.setConfirmAddress(jsonObject.getString("confirmAddress"));
+        identification.setAffirmInstitution(jsonObject.getString("affirmInstitution"));
+        identification.setExamType(jsonObject.getString("examType"));
+        identification.setOrganizationType(jsonObject.getString("organizationType"));
+        identification.setSubject(jsonObject.getString("subject"));
+        identification.setCertificationId(jsonObject.getString("certificationId"));
+        identification.setCity(jsonObject.getString("city"));
+        identification.setGender(Integer.parseInt(String.valueOf(jsonObject.getString("identificationId").charAt(16))) % 2);
+
+        boolean result = service.updateById(identification);
+        return Msg.success().add("data", result ? "添加成功" : "添加失败");
+    }
+
+
     /**
      * 删除单个的数据
      * @param id
