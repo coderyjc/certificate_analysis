@@ -22,6 +22,17 @@ export const addWrittenScore = data => {
   })
 }
 
+// 修改笔试成绩
+export const updateWrittenScore = data => {
+  return request({
+    url: '/writtenScore/update',
+    method: 'post',
+    params: {
+      param: JSON.stringify(data),
+    },
+  })
+}
+
 // 删除笔试成绩
 export const deleteWrittenScore = data => {
   return request({
@@ -35,40 +46,34 @@ export const deleteWrittenScore = data => {
 
 // 选择性导出笔试成绩
 export const exportWrittenScore = (exportColumn, exportId, searchCondition) => {
-
   let baseStr = import.meta.env.VITE_BASE_URL + 'writtenScore/export?'
 
   let exportStr = ''
-  if(exportColumn && exportColumn.length > 0){
-    let i = 0;
+  if (exportColumn && exportColumn.length > 0) {
+    let i = 0
     exportColumn.forEach(element => {
-      if(i == 0) 
-        exportStr = 'exportColumn[]=' + element
-      else 
-        exportStr += '&exportColumn[]=' + element
+      if (i == 0) exportStr = 'exportColumn[]=' + element
+      else exportStr += '&exportColumn[]=' + element
       i += 1
-    });
+    })
   }
 
   let columnStr = ''
-  if(exportId && exportId.length > 0){
-    let i = 0;
+  if (exportId && exportId.length > 0) {
+    let i = 0
     exportId.forEach(element => {
-      if(i == 0) 
-        columnStr = 'exportId[]=' + element
-      else 
-        columnStr += '&exportId[]=' + element
+      if (i == 0) columnStr = 'exportId[]=' + element
+      else columnStr += '&exportId[]=' + element
       i += 1
-    });
+    })
   }
 
   let conditionStr = 'searchCondition=' + searchCondition
 
   let result = baseStr + exportStr + '&' + columnStr + '&' + conditionStr
-  
+
   return result
 }
-
 
 // 获取所有工作地点
 export const listWorkAddress = () => {
@@ -91,14 +96,17 @@ export const statisticWrittenScore = data => {
   return request({
     url: '/writtenScore/statistic',
     method: 'get',
-    params:{
-      condition: data
-    }
+    params: {
+      condition: data,
+    },
   })
 }
 
 // 导出统计数据
 export const exportStatisticWrittenScore = data => {
-  return import.meta.env.VITE_BASE_URL + 'writtenScore/statistic/export?condition=' + JSON.stringify(data)
+  return (
+    import.meta.env.VITE_BASE_URL +
+    'writtenScore/statistic/export?condition=' +
+    JSON.stringify(data)
+  )
 }
-

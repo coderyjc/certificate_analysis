@@ -94,9 +94,6 @@ export default defineComponent({
       },
       async submit() {
         
-        console.log("props.username",   props.username)
-        console.log("form", state.form)
-
         if(state.form.oldPassword == "" || state.form.password == "" || state.form.confirmPassword == "") return
         const { code, data } = await changePwd(state.form)
         if (code == 200) {

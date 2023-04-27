@@ -117,7 +117,7 @@ export default defineComponent({
         },
         {
           label: 'public.operate',
-          width: 100,
+          width: 150,
           align: 'center',
           fixed: 'right',
           tdSlot: 'operate', // 自定义单元格内容的插槽名称

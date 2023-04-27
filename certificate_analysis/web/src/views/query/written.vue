@@ -1,12 +1,18 @@
 <template>
   <div class="container">
-    <AddWrittenScore :dialogFormVisible="addWrittenScoreDialogVisibility" @visibilityChange="changeAddWrittenScoreDialogVisibility">
+    <AddWrittenScore :dialogFormVisible="addWrittenScoreDialogVisibility"
+      @visibilityChange="changeAddWrittenScoreDialogVisibility">
     </AddWrittenScore>
-    <ExportWrittenScore :dialogVisible="exportWrittenScoreDialogVisibility" @visibilityChange="changeExportWrittenScoreDialogVisibility"
-    :selectedItems="selectedItems" :searchModel="searchModal">
+    <ExportWrittenScore :dialogVisible="exportWrittenScoreDialogVisibility"
+      @visibilityChange="changeExportWrittenScoreDialogVisibility" 
+      :selectedItems="selectedItems"
+      :searchModel="searchModal">
     </ExportWrittenScore>
-    <ImportWrittenScore :dialogVisible="importWrittenScoreDialogVisibility" @visibilityChange="changeImportWrittenScoreDialogVisibility">
+    <ImportWrittenScore :dialogVisible="importWrittenScoreDialogVisibility"
+      @visibilityChange="changeImportWrittenScoreDialogVisibility">
     </ImportWrittenScore>
+    <UpdateWrittenScore :formVisible="updateWrittenScoreDialogVisibility" @visibilityChange="changeUpdateWrittenScoreDialogVisibility" :formData="updateFormData">
+    </UpdateWrittenScore>
     <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
       @selectionChange="handleSelectionChange" :pagination="paginationConfig" @getModel="getSearchModal">
       <!-- 工具栏 -->
@@ -58,6 +64,9 @@
             </el-button>
           </template>
         </el-popconfirm>
+        <el-button size="small" type="primary" @click="updateScore(row)">
+          {{ $t('public.edit') }}
+        </el-button>
       </template>
     </pro-table>
   </div>
@@ -71,13 +80,15 @@ import { listWrittenScore, deleteWrittenScore } from '@/api/query/written'
 import AddWrittenScore from './functional/AddWrittenScore.vue'
 import ExportWrittenScore from './functional/ExportWrittenScore.vue'
 import ImportWrittenScore from './functional/ImportWrittenScore.vue'
+import UpdateWrittenScore from './functional/UpdateWrittenScore.vue'
 
 export default defineComponent({
   name: 'writtenScoreManagement',
   components: {
     AddWrittenScore,
     ExportWrittenScore,
-    ImportWrittenScore
+    ImportWrittenScore,
+    UpdateWrittenScore
   },
   setup() {
 
@@ -147,7 +158,7 @@ export default defineComponent({
         },
         {
           label: 'public.operate',
-          width: 100,
+          width: 150,
           align: 'center',
           fixed: 'right',
           tdSlot: 'operate', // 自定义单元格内容的插槽名称
@@ -329,7 +340,6 @@ export default defineComponent({
       },
       // 请求函数
       async getList(params) {
-
         // params是从组件接收的，包含分页和搜索字段。
         const { data } = await listWrittenScore(params)
 
@@ -343,6 +353,8 @@ export default defineComponent({
       getSearchModal: (model) => {
         state.searchModal = model
       },
+      // 更新表格需要的数据
+      updateFormData: {}
     })
 
     const table = ref(null)
@@ -391,17 +403,25 @@ export default defineComponent({
       importWrittenScoreDialogVisibility.value = !importWrittenScoreDialogVisibility.value
     }
 
+    // 修改成绩
+    const updateWrittenScoreDialogVisibility = ref(false)
+    const changeUpdateWrittenScoreDialogVisibility = () => {
+      updateWrittenScoreDialogVisibility.value = !updateWrittenScoreDialogVisibility.value
+    }
+    const updateScore = data => {
+      state.updateFormData = data
+      changeUpdateWrittenScoreDialogVisibility()
+    }
+
     return {
       ...toRefs(state),
       refresh,
       deleteScore,
       batchDelete,
-      addWrittenScoreDialogVisibility, 
-      changeAddWrittenScoreDialogVisibility,
-      exportWrittenScoreDialogVisibility, 
-      changeExportWrittenScoreDialogVisibility,
-      importWrittenScoreDialogVisibility,
-      changeImportWrittenScoreDialogVisibility,
+      addWrittenScoreDialogVisibility, changeAddWrittenScoreDialogVisibility,
+      exportWrittenScoreDialogVisibility, changeExportWrittenScoreDialogVisibility,
+      updateWrittenScoreDialogVisibility, changeUpdateWrittenScoreDialogVisibility, updateScore,
+      importWrittenScoreDialogVisibility, changeImportWrittenScoreDialogVisibility,
       table,
     }
   },

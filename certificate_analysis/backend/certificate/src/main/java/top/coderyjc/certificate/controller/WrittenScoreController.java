@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
 import top.coderyjc.certificate.model.dto.WrittenScoreStatisticDTO;
+import top.coderyjc.certificate.model.entity.InterviewScore;
 import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.service.IWrittenScoreService;
 import top.coderyjc.certificate.util.DownloadUtil;
@@ -194,6 +195,35 @@ public class WrittenScoreController {
         boolean result = service.save(writtenScore);
 
         return Msg.success().add("data", result ? "添加成功" : "添加失败");
+    }
+
+    /**
+     * 修改笔试成绩
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Msg updateWrittenScore(@RequestParam(value = "param", defaultValue = "{}") String param){
+        System.out.println(param);
+//      插入
+        JSONObject jsonObject = JSONObject.parseObject(param);
+        WrittenScore writtenScore = service.getById(Integer.parseInt(jsonObject.getString("id")));
+//      赋值
+        writtenScore.setName(jsonObject.getString("name"));
+        writtenScore.setExamId(jsonObject.getString("examId"));
+        writtenScore.setIdentificationId(jsonObject.getString("identificationId"));
+        writtenScore.setEducationScore(jsonObject.getString("educationScore"));
+        writtenScore.setEducationPsychologyScore(jsonObject.getString("educationPsychologyScore"));
+        writtenScore.setProfessionalEthicScore(jsonObject.getString("professionalEthicScore"));
+        writtenScore.setEducationStatus(jsonObject.getString("educationStatus"));
+        writtenScore.setEducationPsychologyStatus(jsonObject.getString("educationPsychologyStatus"));
+        writtenScore.setProfessionalEthicStatus(jsonObject.getString("professionalEthicStatus"));
+        writtenScore.setWorkAddress(jsonObject.getString("workAddress"));
+        writtenScore.setExamDate(jsonObject.getString("examDate"));
+        writtenScore.setGender(Integer.parseInt(((String) jsonObject.get("identificationId")).substring(17, 18)) % 2);
+//      插入
+        service.updateById(writtenScore);
+        return Msg.success().add("data", true ? "修改成功" : "修改失败");
     }
 
     /**
