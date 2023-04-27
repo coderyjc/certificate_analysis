@@ -1,0 +1,23 @@
+@startuml written_delete
+
+participant 用户
+participant 笔试成绩管理页面
+participant 笔试成绩管理控制器
+
+
+activate 用户
+用户 -> 笔试成绩管理页面: 删除用户成绩数据
+activate 笔试成绩管理页面
+
+笔试成绩管理页面 -> 笔试成绩管理控制器: 携带id发送删除请求
+activate 笔试成绩管理控制器
+
+笔试成绩管理控制器 -> 笔试成绩管理控制器: 根据id删除数据
+
+笔试成绩管理控制器 -> 笔试成绩管理页面: 返回删除结果
+deactivate 笔试成绩管理控制器
+
+笔试成绩管理页面 -> 用户: 显示删除结果
+deactivate 用户
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml user_add
+
+participant 用户
+participant 用户管理页面
+participant 用户管理控制器
+
+
+activate 用户
+用户 -> 用户管理页面: 填写添加用户表单
+activate 用户管理页面
+
+用户管理页面 -> 用户管理控制器: 提交用户信息
+activate 用户管理控制器
+
+用户管理控制器 -> 用户管理控制器: 填充用户实体类并插入数据库
+
+用户管理控制器 -> 用户管理页面: 返回添加结果
+deactivate 用户管理控制器
+
+用户管理页面 -> 用户: 显示添加结果
+deactivate 用户
+
+@enduml

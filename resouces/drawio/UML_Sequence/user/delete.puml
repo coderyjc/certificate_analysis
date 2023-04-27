@@ -1,0 +1,23 @@
+@startuml written_delete
+
+participant 用户
+participant 用户管理页面
+participant 用户管理控制器
+
+
+activate 用户
+用户 -> 用户管理页面: 删除用户数据
+activate 用户管理页面
+
+用户管理页面 -> 用户管理控制器: 携带id发送删除请求
+activate 用户管理控制器
+
+用户管理控制器 -> 用户管理控制器: 根据id删除数据
+
+用户管理控制器 -> 用户管理页面: 返回删除结果
+deactivate 用户管理控制器
+
+用户管理页面 -> 用户: 显示删除结果
+deactivate 用户
+
+@enduml

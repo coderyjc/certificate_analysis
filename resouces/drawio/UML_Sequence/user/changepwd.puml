@@ -1,0 +1,23 @@
+@startuml user_changepwd
+
+participant 用户
+participant 用户管理页面
+participant 用户管理控制器
+
+
+activate 用户
+用户 -> 用户管理页面: 填写修改密码表单
+activate 用户管理页面
+
+用户管理页面 -> 用户管理控制器: 提交密码信息
+activate 用户管理控制器
+
+用户管理控制器 -> 用户管理控制器: 查询并更新用户实体类
+
+用户管理控制器 -> 用户管理页面: 返回修改结果
+deactivate 用户管理控制器
+
+用户管理页面 -> 用户: 显示修改结果
+deactivate 用户
+
+@enduml
