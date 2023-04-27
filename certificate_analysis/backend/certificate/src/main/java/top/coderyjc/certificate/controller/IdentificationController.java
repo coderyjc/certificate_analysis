@@ -167,44 +167,6 @@ public class IdentificationController {
     }
 
     /**
-     * 数据统计查询
-     * @param searchCondition
-     * @return
-     */
-    @RequestMapping(value = "/statistic", method = RequestMethod.GET)
-    public Msg statisticIdentification(@RequestParam(value = "condition", defaultValue = "{}") String searchCondition){
-        JSONObject condition = JSONObject.parseObject(searchCondition);
-        String affirmBatch = condition.getString("affirmBatch");
-        String affirmBatchStart = condition.getString("affirmBatchStart");
-        String affirmBatchEnd = condition.getString("affirmBatchEnd");
-        JSONArray statisticsList = condition.getJSONArray("statisticItem");
-
-        List<IdentificationStatisticDTO> list = service.statisticIdentification(affirmBatch, affirmBatchStart, affirmBatchEnd,statisticsList.toJavaList(String.class));
-
-        return Msg.success().add("data", list);
-    }
-
-    /**
-     * 数据统计表格导出
-     * @param response
-     * @param searchCondition
-     */
-    @RequestMapping(value = "/statistic/export", method = RequestMethod.GET)
-    public void  exportStatisticExcel(
-            HttpServletResponse response,
-            @RequestParam(value = "condition", defaultValue = "{}") String searchCondition
-    ){
-        JSONObject condition = JSONObject.parseObject(searchCondition);
-        String affirmBatch = condition.getString("affirmBatch");
-        String affirmBatchStart = condition.getString("affirmBatchStart");
-        String affirmBatchEnd = condition.getString("affirmBatchEnd");
-        JSONArray statisticsList = condition.getJSONArray("statisticItem");
-
-        service.exportStatisticExcel(response, affirmBatch, affirmBatchStart, affirmBatchEnd, statisticsList.toJavaList(String.class));
-    }
-
-
-    /**
      * 获取认定表中的所有的省份的统计
      * @return
      */

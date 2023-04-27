@@ -7,29 +7,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import top.coderyjc.certificate.model.dto.WrittenScoreStatisticDTO;
-import top.coderyjc.certificate.service.IWrittenScoreService;
+import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
+import top.coderyjc.certificate.service.IInterviewScoreService;
 import top.coderyjc.certificate.util.Msg;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * ClassName: WrittenVisualizeController
+ * ClassName: InterviewVisualizeController
  * Package: top.coderyjc.certificate.controller
  * Description:
  *
  * @Author Yan Jingcun
- * @Create 4/27/2023 8:35 AM
+ * @Create 4/27/2023 8:41 AM
  * @Version 1.0
  */
-
 @RestController
-@RequestMapping("/writtenScore/statistic")
-public class WrittenVisualizeController {
+@RequestMapping("/interviewScore/statistic")
+public class InterviewVisualizeController {
 
     @Autowired
-    private IWrittenScoreService service;
+    private IInterviewScoreService service;
+
 
 
     /**
@@ -45,10 +45,11 @@ public class WrittenVisualizeController {
         String endYear = condition.getString("endYear");
         JSONArray statisticsList = condition.getJSONArray("statisticItem");
 
-        List<WrittenScoreStatisticDTO> list = service.statisticWrittenScore(year, startYear, endYear, statisticsList.toJavaList(String.class));
+        List<InterviewScoreStatisticDTO> list = service.statisticInterviewScore(year, startYear, endYear, statisticsList.toJavaList(String.class));
 
         return Msg.success().add("data", list);
     }
+
 
     /**
      * 数据统计表格导出
@@ -68,5 +69,7 @@ public class WrittenVisualizeController {
 
         service.exportStatisticExcel(response, year, startYear, endYear, statisticsList.toJavaList(String.class));
     }
+
+
 
 }

@@ -12,13 +12,13 @@ export default {
       type: String,
       default: ""
     },
-    id:{
+    id: {
       type: String
     },
   },
   data() {
     return {
-      style:{
+      style: {
         width: "500px",
         height: "250px"
       },
@@ -67,8 +67,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.chart{
+.chart {
   background-color: #fff;
   padding-top: 10px;
   padding-left: 10px;
@@ -76,5 +75,4 @@ export default {
   margin-bottom: 20px;
   box-shadow: $globalShadow;
 }
-
 </style>

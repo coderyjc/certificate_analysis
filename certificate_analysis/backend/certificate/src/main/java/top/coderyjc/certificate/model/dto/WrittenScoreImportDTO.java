@@ -90,7 +90,7 @@ public class WrittenScoreImportDTO {
     /**
      * 性别
      */
-//    @Excel(name = "性别", replace = { "男_1", "女_0" }, width = 8)
-//    private Integer gender;
+    @Excel(name = "性别", replace = { "男_1", "女_0" }, width = 8)
+    private Integer gender;
 
 }

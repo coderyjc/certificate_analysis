@@ -166,41 +166,4 @@ public class CertificationController {
         return Msg.success().add("data", yearList);
     }
 
-    /**
-     * 数据统计查询
-     * @param searchCondition
-     * @return
-     */
-    @RequestMapping(value = "/statistic", method = RequestMethod.GET)
-    public Msg statisticInterviewScore(@RequestParam(value = "condition", defaultValue = "{}") String searchCondition){
-        JSONObject condition = JSONObject.parseObject(searchCondition);
-        String interviewYear = condition.getString("interviewYear");
-        String interviewStartYear = condition.getString("interviewStartYear");
-        String interviewEndYear = condition.getString("interviewEndYear");
-        JSONArray statisticsList = condition.getJSONArray("statisticItem");
-
-        List<CertificationStatisticDTO> list = service.statisticCertification(interviewYear, interviewStartYear, interviewEndYear,statisticsList.toJavaList(String.class));
-
-        return Msg.success().add("data", list);
-    }
-
-    /**
-     * 数据统计表格导出
-     * @param response
-     * @param searchCondition
-     */
-    @RequestMapping(value = "/statistic/export", method = RequestMethod.GET)
-    public void  exportStatisticExcel(
-            HttpServletResponse response,
-            @RequestParam(value = "condition", defaultValue = "{}") String searchCondition
-    ){
-        JSONObject condition = JSONObject.parseObject(searchCondition);
-        String interviewYear = condition.getString("interviewYear");
-        String interviewStartYear = condition.getString("interviewStartYear");
-        String interviewEndYear = condition.getString("interviewEndYear");
-        JSONArray statisticsList = condition.getJSONArray("statisticItem");
-
-        service.exportStatisticExcel(response,interviewYear, interviewStartYear, interviewEndYear, statisticsList.toJavaList(String.class));
-    }
-
 }

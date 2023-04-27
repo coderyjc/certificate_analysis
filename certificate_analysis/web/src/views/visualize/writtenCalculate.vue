@@ -263,7 +263,13 @@ export default {
             }
           }
         },
-        xAxis: { type: 'category' },
+        xAxis: {
+          type: 'category',
+          axisLabel: {
+            interval: 0,
+            rotate: 10
+          },
+        },
         yAxis: {},
         series: this.chartData.series
       };

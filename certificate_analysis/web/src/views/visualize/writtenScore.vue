@@ -52,7 +52,7 @@
       </div>
     </div>
 
-  
+
   </div>
 </template>
 
@@ -351,7 +351,14 @@ export default {
                 shadowOffsetX: 0,
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
               }
-            }
+            },
+            label: {
+              show: true,
+              formatter(param) {
+                // correct the percentage
+                return param.name + ' : ' + param.value + ' (' + param.percent + '%)';
+              }
+            },
           }
         ]
       };
@@ -399,7 +406,11 @@ export default {
         series: [
           {
             data: YData,
-            type: 'bar'
+            type: 'bar',
+            label: {
+              show: true,
+              position: 'top'
+            },
           }
         ]
       };
@@ -438,7 +449,13 @@ export default {
       rawData.map(ele => {
         if (!column1.some(x => x == ele.column1)) {
           column1.push(ele.column1)
-          series.push({ type: 'bar' })
+          series.push({
+            type: 'bar',
+            label: {
+              show: true,
+              position: 'top'
+            },
+          })
         }
         if (!column2.some(x => x.some(y => y == ele.column2)))
           column2.push([ele.column2, ele.count])
@@ -456,7 +473,9 @@ export default {
         title: {
           text: this.chartTitle,
         },
-        legend: {},
+        legend: {
+          top: '20px'
+        },
         tooltip: {},
         dataset: {
           source: dataset
@@ -468,7 +487,13 @@ export default {
             }
           }
         },
-        xAxis: { type: 'category' },
+        xAxis: {
+          type: 'category',
+          axisLabel: {
+            interval: 0,
+            rotate: -30
+          }
+        },
         yAxis: {},
         series: series
       };

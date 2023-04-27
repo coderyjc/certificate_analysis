@@ -7,29 +7,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import top.coderyjc.certificate.model.dto.WrittenScoreStatisticDTO;
-import top.coderyjc.certificate.service.IWrittenScoreService;
+import top.coderyjc.certificate.model.dto.IdentificationStatisticDTO;
+import top.coderyjc.certificate.service.IIdentificationService;
 import top.coderyjc.certificate.util.Msg;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * ClassName: WrittenVisualizeController
+ * ClassName: IdentificationVisualize
  * Package: top.coderyjc.certificate.controller
  * Description:
  *
  * @Author Yan Jingcun
- * @Create 4/27/2023 8:35 AM
+ * @Create 4/27/2023 8:44 AM
  * @Version 1.0
  */
 
 @RestController
-@RequestMapping("/writtenScore/statistic")
-public class WrittenVisualizeController {
+@RequestMapping("/identification/statistic")
+public class IdentificationVisualizeController {
 
     @Autowired
-    private IWrittenScoreService service;
+    private IIdentificationService service;
 
 
     /**
@@ -38,14 +38,14 @@ public class WrittenVisualizeController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Msg statisticInterviewScore(@RequestParam(value = "condition", defaultValue = "{}") String searchCondition){
+    public Msg statisticIdentification(@RequestParam(value = "condition", defaultValue = "{}") String searchCondition){
         JSONObject condition = JSONObject.parseObject(searchCondition);
-        String year = condition.getString("year");
-        String startYear = condition.getString("startYear");
-        String endYear = condition.getString("endYear");
+        String affirmBatch = condition.getString("affirmBatch");
+        String affirmBatchStart = condition.getString("affirmBatchStart");
+        String affirmBatchEnd = condition.getString("affirmBatchEnd");
         JSONArray statisticsList = condition.getJSONArray("statisticItem");
 
-        List<WrittenScoreStatisticDTO> list = service.statisticWrittenScore(year, startYear, endYear, statisticsList.toJavaList(String.class));
+        List<IdentificationStatisticDTO> list = service.statisticIdentification(affirmBatch, affirmBatchStart, affirmBatchEnd,statisticsList.toJavaList(String.class));
 
         return Msg.success().add("data", list);
     }
@@ -61,12 +61,13 @@ public class WrittenVisualizeController {
             @RequestParam(value = "condition", defaultValue = "{}") String searchCondition
     ){
         JSONObject condition = JSONObject.parseObject(searchCondition);
-        String year = condition.getString("year");
-        String startYear = condition.getString("startYear");
-        String endYear = condition.getString("endYear");
+        String affirmBatch = condition.getString("affirmBatch");
+        String affirmBatchStart = condition.getString("affirmBatchStart");
+        String affirmBatchEnd = condition.getString("affirmBatchEnd");
         JSONArray statisticsList = condition.getJSONArray("statisticItem");
 
-        service.exportStatisticExcel(response, year, startYear, endYear, statisticsList.toJavaList(String.class));
+        service.exportStatisticExcel(response, affirmBatch, affirmBatchStart, affirmBatchEnd, statisticsList.toJavaList(String.class));
     }
+
 
 }

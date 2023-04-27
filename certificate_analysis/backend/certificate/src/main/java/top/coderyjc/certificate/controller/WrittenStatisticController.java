@@ -51,7 +51,10 @@ public class WrittenStatisticController {
 
     /**
      * 修改数据项
-     * @param params
+     * @param year
+     * @param educationPassScore
+     * @param psychologyPassScore
+     * @param ethicPassScore
      * @return
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)

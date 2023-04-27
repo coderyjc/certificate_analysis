@@ -4,15 +4,15 @@
       <el-form :inline="true" :model="form">
         <el-form-item label="认定批次" v-if="!form.statisticItem.some(e => e == '认定批次')">
           <el-select v-model="form.affirmBatch" placeholder="选择年份">
-            <el-option v-for="(item, index) in formItem.affirmBatchs" :label="item" :value="item" :key="index"/>
+            <el-option v-for="(item, index) in formItem.affirmBatchs" :label="item" :value="item" :key="index" />
           </el-select>
         </el-form-item>
         <el-form-item label="认定批次区间" v-if="form.statisticItem.some(e => e == '认定批次')">
           <el-select v-model="form.affirmBatchStart" placeholder="选择起始时间(包含)">
-            <el-option v-for="(item, index) in formItem.affirmBatchs" :label="item" :value="item" :key="index"/>
+            <el-option v-for="(item, index) in formItem.affirmBatchs" :label="item" :value="item" :key="index" />
           </el-select>
           <el-select v-model="form.affirmBatchEnd" placeholder="选择截止时间(包含)">
-            <el-option v-for="(item, index) in formItem.affirmBatchs" :label="item" :value="item" :key="index"/>
+            <el-option v-for="(item, index) in formItem.affirmBatchs" :label="item" :value="item" :key="index" />
           </el-select>
         </el-form-item>
         <el-form-item label="统计项(有序)">
@@ -45,12 +45,13 @@
           <el-button type="primary" @click="exportResult">导出表格到Excel</el-button>
         </el-form-item>
       </el-form>
-    </div> 
+    </div>
     <div class="left">
       <DataTable :columns="columns" :tableData="tableData"></DataTable>
     </div>
     <div class="right">
-      <div ref="echarts" v-if="tableData.length < 30 || tableData == null" id="test-chart" class="id" :style="style"></div>
+      <div ref="echarts" v-if="tableData.length < 30 || tableData == null" id="test-chart" class="id" :style="style">
+      </div>
       <div v-if="tableData.length >= 30" class="cannot-display" :style="style">数据过多，图片无法显示</div>
     </div>
   </div>
@@ -64,7 +65,7 @@ import { listAffirmBatch, statisticIdentification, exportStatisticIdentification
 import DataTable from './components/DataTable.vue'
 
 export default {
-  components:{
+  components: {
     DataTable,
   },
   data() {
@@ -81,22 +82,22 @@ export default {
         chartType: 'bar',
       },
       // 转换后的项目
-      statisticItem:[],
+      statisticItem: [],
       // 统计图的标题
       chartTitle: '',
       // 请求得到的原始数据，需要先处理然后进行渲染
-      rawData: [], 
+      rawData: [],
       // 列名
       columns: [],
       // 表格中的数据，一般来说只需要渲染一次
       tableData: [],
       style: {
         width: "850px",
-        height: "550px"
+        height: "600px"
       },
     }
   },
-  created(){
+  created() {
     listAffirmBatch().then(res => {
       this.formItem.affirmBatchs = res.data.data
     })
@@ -113,9 +114,9 @@ export default {
       this.form.affirmBatchEnd = ''
       this.form.statisticItem = []
     },
-    validateForm(form){
+    validateForm(form) {
       // 没有选择元素的时候
-      if(form.statisticItem.length == 0) {
+      if (form.statisticItem.length == 0) {
         ElMessage({
           message: '请先选择项目',
           type: 'error'
@@ -123,7 +124,7 @@ export default {
         return false
       }
       // 有2个以上的元素的时候
-      if(form.statisticItem.length > 2) {
+      if (form.statisticItem.length > 2) {
         ElMessage({
           message: '筛选项目过多',
           type: 'error'
@@ -131,7 +132,7 @@ export default {
         return false
       }
       // 没有统计多个年份对比
-      if(form.affirmBatch == '' && !form.statisticItem.some(e => e == '认定批次')){
+      if (form.affirmBatch == '' && !form.statisticItem.some(e => e == '认定批次')) {
         ElMessage({
           message: '请先填写完整表单',
           type: 'error'
@@ -139,9 +140,9 @@ export default {
         return false
       }
       // 统计了多个年份对比
-      if(form.statisticItem.some(e => e == '认定批次')) {
+      if (form.statisticItem.some(e => e == '认定批次')) {
         // 起始和终止的年份不能为空，且开始的年份不能小于结束的年份
-        if(form.affirmBatchStart == '' || form.affirmBatchEnd == '' || form.affirmBatchStart > form.affirmBatchEnd){
+        if (form.affirmBatchStart == '' || form.affirmBatchEnd == '' || form.affirmBatchStart > form.affirmBatchEnd) {
           ElMessage({
             message: '认定批次填写有误',
             type: 'error'
@@ -149,7 +150,7 @@ export default {
           return false
         }
         // 年份不能作为单独的统计项
-        if(form.statisticItem.length != 2){
+        if (form.statisticItem.length != 2) {
           ElMessage({
             message: '年份不能作为单独的统计项',
             type: 'error'
@@ -163,7 +164,7 @@ export default {
     onSubmit() {
 
       // 表格校验
-      if(!this.validateForm(this.form)) return
+      if (!this.validateForm(this.form)) return
 
       // 生成本次的标题
       this.chartTitle = this.generateTitle()
@@ -204,7 +205,7 @@ export default {
 
       // 将选择的字段变化为数据库中的字段
       this.statisticItem = this.form.statisticItem.map(ele => map[ele])
-      
+
       statisticIdentification({
         affirmBatch: this.form.affirmBatch,
         affirmBatchStart: this.form.affirmBatchStart,
@@ -214,52 +215,52 @@ export default {
 
         // 保存原始数据
         this.rawData = res.data.data
-        
+
         // 把01转换成男和女
-        if(this.rawData[0].gender == 0 || this.rawData[0].gender == 1){
+        if (this.rawData[0].gender == 0 || this.rawData[0].gender == 1) {
           // 筛选了性别这一列
           this.rawData.forEach(ele => {
             ele.gender = ele.gender ? "男" : "女"
           })
         }
-        
+
         // 生成表格数据
         this.tableData = []
         this.rawData.forEach(e => {
           const temp = {}
-          if(e.affirmBatch != null) temp['affirmBatch'] = e.affirmBatch
-          if(e.gender != null) temp['gender'] = e.gender
-          if(e.majorType != null) temp['majorType'] = e.majorType
-          if(e.graduationSchool != null) temp['graduationSchool'] = e.graduationSchool
-          if(e.major != null) temp['major'] = e.major
-          if(e.highestEducationBackground != null) temp['highestEducationBackground'] = e.highestEducationBackground
-          if(e.qualificationType != null) temp['qualificationType'] = e.qualificationType
-          if(e.highestDegree != null) temp['highestDegree'] = e.highestDegree
-          if(e.confirmAddress != null) temp['confirmAddress'] = e.confirmAddress
-          if(e.affirmInstitution != null) temp['affirmInstitution'] = e.affirmInstitution
-          if(e.examType != null) temp['examType'] = e.examType
-          if(e.organizationType != null) temp['organizationType'] = e.organizationType
-          if(e.subject != null) temp['subject'] = e.subject
-          if(e.city != null) temp['city'] = e.city
+          if (e.affirmBatch != null) temp['affirmBatch'] = e.affirmBatch
+          if (e.gender != null) temp['gender'] = e.gender
+          if (e.majorType != null) temp['majorType'] = e.majorType
+          if (e.graduationSchool != null) temp['graduationSchool'] = e.graduationSchool
+          if (e.major != null) temp['major'] = e.major
+          if (e.highestEducationBackground != null) temp['highestEducationBackground'] = e.highestEducationBackground
+          if (e.qualificationType != null) temp['qualificationType'] = e.qualificationType
+          if (e.highestDegree != null) temp['highestDegree'] = e.highestDegree
+          if (e.confirmAddress != null) temp['confirmAddress'] = e.confirmAddress
+          if (e.affirmInstitution != null) temp['affirmInstitution'] = e.affirmInstitution
+          if (e.examType != null) temp['examType'] = e.examType
+          if (e.organizationType != null) temp['organizationType'] = e.organizationType
+          if (e.subject != null) temp['subject'] = e.subject
+          if (e.city != null) temp['city'] = e.city
           temp['count'] = e.count
           this.tableData.push(temp)
         })
 
         // 单个柱状图 -- 选择了某一年份的一项统计
-        if(this.form.chartType == 'bar' && this.form.affirmBatch != ''){
+        if (this.form.chartType == 'bar' && this.form.affirmBatch != '') {
           this.renderBar()
         }
         // 多个柱状图
-        if((this.form.chartType == 'bar' && this.form.affirmBatch == '') || this.form.statisticItem.length == 2){
+        if ((this.form.chartType == 'bar' && this.form.affirmBatch == '') || this.form.statisticItem.length == 2) {
           this.renderMultiBar()
         }
         // 饼图
-        if(this.form.chartType == 'pie' && this.form.affirmBatch != ''){
+        if (this.form.chartType == 'pie' && this.form.affirmBatch != '') {
           this.renderPie()
         }
 
         // 多个饼图
-        if(this.form.chartType == 'pie' && this.form.affirmBatch == ''){
+        if (this.form.chartType == 'pie' && this.form.affirmBatch == '') {
           ElMessage({
             message: "暂不支持",
             type: "warning"
@@ -269,21 +270,21 @@ export default {
       })
 
     },
-    generateTitle(){
+    generateTitle() {
       let title = ''
       // 时间
       this.form.affirmBatch != '' ? title += this.form.affirmBatch : title += this.form.affirmBatchStart + '-' + this.form.affirmBatchEnd
       title += '-'
       // 选项
       this.form.statisticItem.forEach(e => {
-        title +=  e + '-'
+        title += e + '-'
       })
       // 图标类型
       this.form.chartType == 'pie' ? title += '饼图' : title += '柱状图'
       return title
     },
     exportResult() {
-      if(!this.validateForm(this.form)) return
+      if (!this.validateForm(this.form)) return
 
       const url = exportStatisticIdentification({
         affirmBatch: this.form.affirmBatch,
@@ -296,9 +297,9 @@ export default {
         type: 'success'
       })
 
-      window.open(url,"_blank")
+      window.open(url, "_blank")
     },
-    handleCheckboxGoupChange(){
+    handleCheckboxGoupChange() {
       // 删除所有英文和未定义的
       var pattern = new RegExp("[a-zA-Z]+")
       this.form.statisticItem = this.form.statisticItem.filter(e => {
@@ -306,14 +307,14 @@ export default {
         return !rst
       })
     },
-    renderPie(){
+    renderPie() {
       // 整合数据
       const data = []
       this.tableData.map(ele => {
         let _name;
         let _value;
-        for(const [key, value] of Object.entries(ele)){
-          if(key == 'count') _value = value;
+        for (const [key, value] of Object.entries(ele)) {
+          if (key == 'count') _value = value;
           else _name = value
         }
 
@@ -347,7 +348,6 @@ export default {
         },
         series: [
           {
-            name: 'Access From',
             type: 'pie',
             radius: '50%',
             data: data,
@@ -357,7 +357,14 @@ export default {
                 shadowOffsetX: 0,
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
               }
-            }
+            },
+            label: {
+              show: true,
+              formatter(param) {
+                // correct the percentage
+                return param.name + ' : ' + param.value + ' (' + param.percent + '%)';
+              }
+            },
           }
         ]
       };
@@ -365,13 +372,13 @@ export default {
         notMerge: true
       })
     },
-    renderBar(){
+    renderBar() {
       // 整合数据
       const XData = []
       const YData = []
       this.tableData.map(ele => {
-        for(const [key, value] of Object.entries(ele)){
-          if(key == 'count') YData.push(value);
+        for (const [key, value] of Object.entries(ele)) {
+          if (key == 'count') YData.push(value);
           else XData.push(value)
         }
       })
@@ -384,6 +391,10 @@ export default {
         },
         xAxis: {
           type: 'category',
+          axisLabel: {
+            interval: 0,
+            rotate: 30
+          },
           data: XData
         },
         yAxis: {
@@ -405,7 +416,11 @@ export default {
         series: [
           {
             data: YData,
-            type: 'bar'
+            type: 'bar',
+            label: {
+              show: true,
+              position: 'top'
+            },
           }
         ]
       };
@@ -413,13 +428,13 @@ export default {
         notMerge: true
       })
     },
-    renderMultiBar(){
+    renderMultiBar() {
       // 渲染多层柱状图
       // 直接把tableData整理rawData
       let rawData = []
       let hasDate = this.statisticItem.some(e => e == 'examDate')
       let column2_name = Object.keys(this.tableData[0]).filter(e => e != 'examDate' && e != 'count')
-      if(hasDate) {
+      if (hasDate) {
         this.tableData.forEach(e => {
           rawData.push({
             column1: e['examDate'],
@@ -442,15 +457,21 @@ export default {
       const column1 = ['item']
       const column2 = []
       rawData.map(ele => {
-        if(!column1.some(x => x == ele.column1)) {
+        if (!column1.some(x => x == ele.column1)) {
           column1.push(ele.column1)
-          series.push({type: 'bar'})
+          series.push({
+            type: 'bar',
+            label: {
+              show: true,
+              position: 'top'
+            },
+          })
         }
-        if(!column2.some(x => x.some(y => y == ele.column2)))
+        if (!column2.some(x => x.some(y => y == ele.column2)))
           column2.push([ele.column2, ele.count])
-        else{
+        else {
           column2.forEach(e => {
-            if(e.some(x => x == ele.column2)) e.push(ele.count)
+            if (e.some(x => x == ele.column2)) e.push(ele.count)
           })
         }
       })
@@ -477,7 +498,13 @@ export default {
             }
           }
         },
-        xAxis: { type: 'category' },
+        xAxis: {
+          type: 'category',
+          axisLabel: {
+            interval: 0,
+            rotate: -30
+          }
+        },
         yAxis: {},
         series: series
       };
@@ -486,7 +513,7 @@ export default {
       })
     },
     // 将vue的对象转化为json对象输出
-    log(message){
+    log(message) {
       console.log(JSON.parse(JSON.stringify(message)))
     }
   }
@@ -531,7 +558,7 @@ export default {
 
   }
 
-  .cannot-display{
+  .cannot-display {
     text-align: center;
     font-size: 20px;
   }
