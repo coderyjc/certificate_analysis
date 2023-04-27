@@ -53,7 +53,7 @@ public class CertificationController {
     }
 
     /**
-     * 添加面试成绩
+     * 添加证书成绩
      * @param data
      * @return
      */
@@ -73,6 +73,29 @@ public class CertificationController {
         boolean result = service.save(certification);
         return Msg.success().add("data", result ? "添加成功" : "添加失败");
     }
+
+    /**
+     * 修改证书成绩
+     * @param data
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Msg updateCertification(@RequestParam(value = "param", defaultValue = "{}") String data){
+//        插入
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        Certification certification = service.getById(jsonObject.getString("id"));
+//        赋值
+        certification.setName((String) jsonObject.get("name"));
+        certification.setIdentificationId((String) jsonObject.get("identificationId"));
+        certification.setInterviewYear((String) jsonObject.get("interviewYear"));
+        certification.setQualificationId((String) jsonObject.get("qualificationId"));
+        certification.setMajor((String) jsonObject.get("major"));
+        certification.setValidateDate(DateUtil.toDate(jsonObject.getString("validateDate")));
+        certification.setGender(Integer.parseInt(String.valueOf(jsonObject.getString("identificationId").charAt(16))) % 2);
+        boolean result = service.updateById(certification);
+        return Msg.success().add("data", result ? "添加成功" : "添加失败");
+    }
+
 
     /**
      * 删除单个的数据

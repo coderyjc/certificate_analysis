@@ -1,14 +1,22 @@
 <template>
   <div class="container">
-    <AddCertification :dialogFormVisible="addCertificationDialogVisibility" @visibilityChange="changeaddCertificationDialogVisibility">
+    <AddCertification :dialogFormVisible="addCertificationDialogVisibility"
+      @visibilityChange="changeaddCertificationDialogVisibility">
     </AddCertification>
-    <ExportCertification :dialogVisible="exportCertificationDialogVisibility" @visibilityChange="changeexportCertificationDialogVisibility"
-    :selectedItems="selectedItems" :searchModel="searchModal">
+    <ExportCertification :dialogVisible="exportCertificationDialogVisibility"
+      @visibilityChange="changeexportCertificationDialogVisibility" :selectedItems="selectedItems"
+      :searchModel="searchModal">
     </ExportCertification>
-    <ImportCertification :dialogVisible="importCertificationDialogVisibility" @visibilityChange="changeimportCertificationDialogVisibility">
+    <ImportCertification :dialogVisible="importCertificationDialogVisibility"
+      @visibilityChange="changeimportCertificationDialogVisibility">
     </ImportCertification>
-    <pro-table ref="table" :title="$t('query/certification.title')" :request="getList" :columns="columns" :search="searchConfig"
-      @selectionChange="handleSelectionChange" :pagination="paginationConfig" @getModel="getSearchModal">
+    <UpdateCertification :formVisible="updateCertificationDialogVisibility"
+      @visibilityChange="changeUpdateCertificationDialogVisibility" :formData="updateFormData">
+    </UpdateCertification>
+
+    <pro-table ref="table" :title="$t('query/certification.title')" :request="getList" :columns="columns"
+      :search="searchConfig" @selectionChange="handleSelectionChange" :pagination="paginationConfig"
+      @getModel="getSearchModal">
       <!-- 工具栏 -->
       <template #toolbar>
         <el-popconfirm title="确定删除选中数据吗?" @confirm="batchDelete">
@@ -33,11 +41,11 @@
       </template>
 
       <template #gender="{ row }">
-          {{ row.gender == 1 ? "男" : "女" }}
+        {{ row.gender == 1 ? "男" : "女" }}
       </template>
 
       <template #validateDate="{ row }">
-          {{ dateFormat(row.validateDate) }}
+        {{ dateFormat(row.validateDate) }}
       </template>
 
       <template #operate="{ row }">
@@ -48,6 +56,9 @@
             </el-button>
           </template>
         </el-popconfirm>
+        <el-button size="small" type="primary" @click="updateScore(row)">
+          {{ $t('public.edit') }}
+        </el-button>
       </template>
     </pro-table>
   </div>
@@ -63,7 +74,7 @@ import { dateFormatYMD } from '@/utils/timeUtil'
 import AddCertification from './functional/AddCertification.vue'
 import ExportCertification from './functional/ExportCertification.vue'
 import ImportCertification from './functional/ImportCertification.vue'
-
+import UpdateCertification from './functional/UpdateCertification.vue'
 
 export default defineComponent({
   name: 'CertificationManagement',
@@ -71,7 +82,8 @@ export default defineComponent({
     AddCertification,
     ExportCertification,
     ImportCertification,
-},
+    UpdateCertification
+  },
   setup() {
     const state = reactive({
       // 字段配置
@@ -213,7 +225,8 @@ export default defineComponent({
       },
       dateFormat: (date) => {
         return dateFormatYMD(date)
-      }
+      },
+      updateFormData: {}
     })
 
     const table = ref(null)
@@ -262,17 +275,25 @@ export default defineComponent({
       importCertificationDialogVisibility.value = !importCertificationDialogVisibility.value
     }
 
+    // 修改成绩
+    const updateCertificationDialogVisibility = ref(false)
+    const changeUpdateCertificationDialogVisibility = () => {
+      updateCertificationDialogVisibility.value = !updateCertificationDialogVisibility.value
+    }
+    const updateScore = data => {
+      state.updateFormData = data
+      changeUpdateCertificationDialogVisibility()
+    }
+
     return {
       ...toRefs(state),
       refresh,
       deleteCertificationButton,
       batchDelete,
-      addCertificationDialogVisibility, 
-      changeaddCertificationDialogVisibility,
-      exportCertificationDialogVisibility, 
-      changeexportCertificationDialogVisibility,
-      importCertificationDialogVisibility,
-      changeimportCertificationDialogVisibility,
+      addCertificationDialogVisibility, changeaddCertificationDialogVisibility,
+      exportCertificationDialogVisibility, changeexportCertificationDialogVisibility,
+      importCertificationDialogVisibility, changeimportCertificationDialogVisibility,
+      updateScore, updateCertificationDialogVisibility, changeUpdateCertificationDialogVisibility,
       table,
     }
   },

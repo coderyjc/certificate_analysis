@@ -25,6 +25,17 @@ export const addCertification = data => {
   })
 }
 
+// 添加面试成绩
+export const updateCertification = data => {
+  return request({
+    url: '/certification/update',
+    method: 'post',
+    params: {
+      param: JSON.stringify(data),
+    },
+  })
+}
+
 // 删除面试成绩
 export const deleteCertification = data => {
   return request({
