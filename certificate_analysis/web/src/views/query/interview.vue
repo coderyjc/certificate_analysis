@@ -1,14 +1,22 @@
 <template>
   <div class="container">
-    <AddInterviewScore :dialogFormVisible="addInterviewScoreDialogVisibility" @visibilityChange="changeaddInterviewScoreDialogVisibility">
+    <AddInterviewScore :dialogFormVisible="addInterviewScoreDialogVisibility"
+      @visibilityChange="changeaddInterviewScoreDialogVisibility">
     </AddInterviewScore>
-    <ExportInterviewScore :dialogVisible="exportInterviewScoreDialogVisibility" @visibilityChange="changeexportInterviewScoreDialogVisibility"
-    :selectedItems="selectedItems" :searchModel="searchModal">
+    <ExportInterviewScore :dialogVisible="exportInterviewScoreDialogVisibility"
+      @visibilityChange="changeexportInterviewScoreDialogVisibility" :selectedItems="selectedItems"
+      :searchModel="searchModal">
     </ExportInterviewScore>
-    <ImportInterviewScore :dialogVisible="importInterviewScoreDialogVisibility" @visibilityChange="changeimportInterviewScoreDialogVisibility">
+    <ImportInterviewScore :dialogVisible="importInterviewScoreDialogVisibility"
+      @visibilityChange="changeimportInterviewScoreDialogVisibility">
     </ImportInterviewScore>
-    <pro-table ref="table" :title="$t('query/interview.title')" :request="getList" :columns="columns" :search="searchConfig"
-      @selectionChange="handleSelectionChange" :pagination="paginationConfig" @getModel="getSearchModal">
+    <UpdateInterviewScore :formVisible="updateInterviewScoreDialogVisibility"
+      @visibilityChange="changeUpdateInterviewScoreDialogVisibility" :formData="updateFormData">
+    </UpdateInterviewScore>
+
+    <pro-table ref="table" :title="$t('query/interview.title')" :request="getList" :columns="columns"
+      :search="searchConfig" @selectionChange="handleSelectionChange" :pagination="paginationConfig"
+      @getModel="getSearchModal">
       <!-- 工具栏 -->
       <template #toolbar>
         <el-popconfirm title="确定删除选中数据吗?" @confirm="batchDelete">
@@ -33,7 +41,7 @@
       </template>
 
       <template #gender="{ row }">
-          {{ row.gender == 1 ? "男" : "女" }}
+        {{ row.gender == 1 ? "男" : "女" }}
       </template>
 
       <template #operate="{ row }">
@@ -44,6 +52,9 @@
             </el-button>
           </template>
         </el-popconfirm>
+        <el-button size="small" type="primary" @click="updateScore(row)">
+          {{ $t('public.edit') }}
+        </el-button>
       </template>
     </pro-table>
   </div>
@@ -57,7 +68,7 @@ import { listInterviewScore, deleteInterviewScore } from '@/api/query/interview'
 import AddInterviewScore from './functional/AddInterviewScore.vue'
 import ExportInterviewScore from './functional/ExportInterviewScore.vue'
 import ImportInterviewScore from './functional/ImportInterviewScore.vue'
-
+import UpdateInterviewScore from './functional/UpdateInterviewScore.vue'
 
 export default defineComponent({
   name: 'interviewScoreManagement',
@@ -65,7 +76,8 @@ export default defineComponent({
     AddInterviewScore,
     ExportInterviewScore,
     ImportInterviewScore,
-},
+    UpdateInterviewScore
+  },
   setup() {
     const state = reactive({
       // 字段配置
@@ -101,6 +113,12 @@ export default defineComponent({
           label: 'query/interview.applyMajor',
           prop: 'applyMajor',
           minWidth: 270,
+        },
+        {
+          label: 'query/interview.level',
+          prop: 'level',
+          sortable: true,
+          width: 100,
         },
         {
           label: 'query/interview.examDate',
@@ -210,6 +228,7 @@ export default defineComponent({
       getSearchModal: (model) => {
         state.searchModal = model
       },
+      updateFormData: {}
     })
 
     const table = ref(null)
@@ -258,17 +277,25 @@ export default defineComponent({
       importInterviewScoreDialogVisibility.value = !importInterviewScoreDialogVisibility.value
     }
 
+    // 修改成绩
+    const updateInterviewScoreDialogVisibility = ref(false)
+    const changeUpdateInterviewScoreDialogVisibility = () => {
+      updateInterviewScoreDialogVisibility.value = !updateInterviewScoreDialogVisibility.value
+    }
+    const updateScore = data => {
+      state.updateFormData = data
+      changeUpdateInterviewScoreDialogVisibility()
+    }
+
     return {
       ...toRefs(state),
       refresh,
       deleteScore,
       batchDelete,
-      addInterviewScoreDialogVisibility, 
-      changeaddInterviewScoreDialogVisibility,
-      exportInterviewScoreDialogVisibility, 
-      changeexportInterviewScoreDialogVisibility,
-      importInterviewScoreDialogVisibility,
-      changeimportInterviewScoreDialogVisibility,
+      addInterviewScoreDialogVisibility, changeaddInterviewScoreDialogVisibility,
+      exportInterviewScoreDialogVisibility, changeexportInterviewScoreDialogVisibility,
+      importInterviewScoreDialogVisibility, changeimportInterviewScoreDialogVisibility,
+      updateScore, updateInterviewScoreDialogVisibility, changeUpdateInterviewScoreDialogVisibility,
       table,
     }
   },

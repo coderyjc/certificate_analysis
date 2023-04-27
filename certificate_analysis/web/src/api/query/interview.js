@@ -25,6 +25,17 @@ export const addInterviewScore = data => {
   })
 }
 
+// 修改面试成绩
+export const updateInterviewScore = data => {
+  return request({
+    url: '/interviewScore/update',
+    method: 'post',
+    params: {
+      param: JSON.stringify(data),
+    },
+  })
+}
+
 // 删除面试成绩
 export const deleteInterviewScore = data => {
   return request({

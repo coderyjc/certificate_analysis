@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="dialogFormVisible" title="修改考生信息" :close-on-click-modal="false" center>
-    <el-form :model="form">
+    <el-form :rules="rules" :model="form">
       <el-form-item label="姓名" prop="name" :label-width="formShape.labelWidth">
         <el-input v-model="form.name" autocomplete="off" />
       </el-form-item>
@@ -84,6 +84,89 @@ export default {
       },
       form: {},
       id: null,
+      rules: {
+        name: [
+          { required: true, message: '请输入姓名', trigger: 'blur', },
+        ],
+        examId: [
+          { required: true, pattern: /\d{10}/, message: '请输入正确的准考证号（10位数字）', trigger: 'blur', },
+        ],
+        identificationId: [
+          { required: true, message: '请输入身份证号', trigger: 'blur', },
+          { pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/, message: '请输入正确的身份证号', trigger: 'blur', },
+        ],
+        educationScore: [
+          {
+            validator: (rule, value, callback) => {
+              if (this.form.educationStatus == '正常') {
+                if (!value) {
+                  // 没有输入成绩
+                  callback(new Error('请输入教育学成绩'))
+                } else if (value < 0 || value > 100) {
+                  // 成绩不在范围内
+                  callback(new Error('教育学成绩为0-100'))
+                }
+              } else {
+                // 如果没输入成绩就按照0分，下同
+                this.form.educationScore = 0
+                callback()
+              }
+            },
+            trigger: 'blur'
+          }
+        ],
+        educationPsychologyScore: [
+          {
+            validator: (rule, value, callback) => {
+              if (this.form.educationPsychologyStatus == '正常') {
+                if (!value) {
+                  callback(new Error('请输入教育心理学成绩'))
+                } else if (value < 0 || value > 100) {
+                  // 成绩不在范围内
+                  callback(new Error('教育心理学成绩为0-100'))
+                }
+              } else {
+                this.form.educationPsychologyScore = 0
+                callback()
+              }
+            },
+            trigger: 'blur'
+          }
+        ],
+        professionalEthicScore: [
+          {
+            validator: (rule, value, callback) => {
+              if (this.form.professionalEthicStatus == '正常') {
+                if (!value) {
+                  callback(new Error('请输入职业道德修养和高等教育法规成绩'))
+                } else if (value < 0 || value > 60) {
+                  // 成绩不在范围内
+                  callback(new Error('职业道德修养和高等教育法规成绩成绩为0-60'))
+                }
+              } else {
+                this.form.professionalEthicScore = 0
+                callback()
+              }
+            },
+            trigger: 'blur'
+          }
+        ],
+        educationStatus: [
+          { required: true, message: '请输入教育学考试状态', trigger: 'blur', },
+        ],
+        educationPsychologyStatus: [
+          { required: true, message: '请输入教育心理学考试状态', trigger: 'blur', },
+        ],
+        professionalEthicStatus: [
+          { required: true, message: '选择职业道德修养和高等教育法规状态', trigger: 'blur', },
+        ],
+        workAddress: [
+          { required: true, message: '工作单位', trigger: 'blur', },
+        ],
+        examDate: [
+          { required: true, message: '请输入考试时间', trigger: 'blur', },
+        ]
+      }
     }
   },
   computed: {

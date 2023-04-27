@@ -11,7 +11,9 @@
     <ImportWrittenScore :dialogVisible="importWrittenScoreDialogVisibility"
       @visibilityChange="changeImportWrittenScoreDialogVisibility">
     </ImportWrittenScore>
-    <UpdateWrittenScore :formVisible="updateWrittenScoreDialogVisibility" @visibilityChange="changeUpdateWrittenScoreDialogVisibility" :formData="updateFormData">
+    <UpdateWrittenScore :formVisible="updateWrittenScoreDialogVisibility" 
+    @visibilityChange="changeUpdateWrittenScoreDialogVisibility" 
+    :formData="updateFormData">
     </UpdateWrittenScore>
     <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
       @selectionChange="handleSelectionChange" :pagination="paginationConfig" @getModel="getSearchModal">

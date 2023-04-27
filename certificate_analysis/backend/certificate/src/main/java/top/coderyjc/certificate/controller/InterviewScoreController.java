@@ -1,25 +1,18 @@
 package top.coderyjc.certificate.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import top.coderyjc.certificate.model.dto.InterviewScoreStatisticDTO;
 import top.coderyjc.certificate.model.entity.InterviewScore;
-import top.coderyjc.certificate.model.vo.ColumnCountVO;
 import top.coderyjc.certificate.service.IInterviewScoreService;
 import top.coderyjc.certificate.util.Msg;
 
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Array;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -80,6 +73,30 @@ public class InterviewScoreController {
         }
         return Msg.success().add("data", result ? "添加成功" : "添加失败");
     }
+
+    /**
+     * 修改面试成绩
+     * @param data
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Msg updateInterviewScore(@RequestParam(value = "param", defaultValue = "{}") String data){
+//        插入
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        InterviewScore interviewScore = service.getById(jsonObject.getString("id"));
+//        赋值
+        interviewScore.setName((String) jsonObject.get("name"));
+        interviewScore.setExamAddress((String) jsonObject.get("examAddress"));
+        interviewScore.setIdentificationId((String) jsonObject.get("identificationId"));
+        interviewScore.setWorkAddress((String) jsonObject.get("workAddress"));
+        interviewScore.setApplyMajor((String) jsonObject.get("applyMajor"));
+        interviewScore.setLevel((String) jsonObject.get("level"));
+        interviewScore.setExamDate((String) jsonObject.get("examDate"));
+        interviewScore.setGender(Integer.parseInt(((String) jsonObject.get("identificationId")).substring(17, 18)) % 2);
+        boolean result = service.updateById(interviewScore);
+        return Msg.success().add("data", result ? "修改成功" : "修改失败");
+    }
+
 
     /**
      * 删除单个的数据
