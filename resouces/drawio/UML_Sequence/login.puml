@@ -1,5 +1,11 @@
 @startuml login
 
+hide footbox
+skinparam sequence {
+  ParticipantBackgroundColor #ffffff
+  ParticipantFontColor #000000
+}
+
 participant 用户 order 0
 participant Pinia状态管理 order 1
 participant 登录页面 order 2
@@ -13,7 +19,7 @@ activate 登录页面
 登录页面 -> 用户控制器: 登录请求
 activate 用户控制器
 
-用户控制器 -> 用户服务: 调用Service查询用户是否存在
+用户控制器 -> 用户服务: 调用Service查询用户
 activate 用户服务
 用户服务 --> 用户控制器: 返回user或者null
 deactivate 用户服务
@@ -24,7 +30,7 @@ deactivate 用户控制器
 登录页面 -> 登录页面: 返回的是user
 
 activate 登录页面 #1
-登录页面 -> Pinia状态管理: 存储user信息
+登录页面 --> Pinia状态管理: 存储user信息
 deactivate 登录页面 #1
 
 登录页面 --> 用户: 返回结果，显示信息

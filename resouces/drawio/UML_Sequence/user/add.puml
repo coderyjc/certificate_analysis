@@ -1,23 +1,36 @@
 @startuml user_add
 
+hide footbox
+skinparam sequence {
+  ParticipantBackgroundColor #ffffff
+  ParticipantFontColor #000000
+}
+
 participant 用户
 participant 用户管理页面
 participant 用户管理控制器
 
-
 activate 用户
 用户 -> 用户管理页面: 填写添加用户表单
-activate 用户管理页面
 
-用户管理页面 -> 用户管理控制器: 提交用户信息
+activate 用户管理页面
+用户管理页面 -> 用户管理控制器: 查询用户名是否重复
+
 activate 用户管理控制器
+用户管理控制器 -> 用户管理控制器: 用户名重复
+
+activate 用户管理控制器 #1
+用户管理控制器 --> 用户管理页面: 告知用户名重复
+activate 用户管理页面 #1
+deactivate 用户管理控制器 #1
+用户管理页面 --> 用户: 告知用户名重复
+deactivate 用户管理页面 #1
 
 用户管理控制器 -> 用户管理控制器: 填充用户实体类并插入数据库
 
-用户管理控制器 -> 用户管理页面: 返回添加结果
+用户管理控制器 --> 用户管理页面: 返回添加结果
 deactivate 用户管理控制器
 
-用户管理页面 -> 用户: 显示添加结果
-deactivate 用户
+用户管理页面 --> 用户: 显示添加结果
 
 @enduml

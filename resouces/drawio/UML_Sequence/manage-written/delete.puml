@@ -1,5 +1,11 @@
 @startuml written_delete
 
+hide footbox
+skinparam sequence {
+  ParticipantBackgroundColor #ffffff
+  ParticipantFontColor #000000
+}
+
 participant 用户
 participant 笔试成绩管理页面
 participant 笔试成绩管理控制器
@@ -14,10 +20,9 @@ activate 笔试成绩管理控制器
 
 笔试成绩管理控制器 -> 笔试成绩管理控制器: 根据id删除数据
 
-笔试成绩管理控制器 -> 笔试成绩管理页面: 返回删除结果
+笔试成绩管理控制器 --> 笔试成绩管理页面: 返回删除结果
 deactivate 笔试成绩管理控制器
 
-笔试成绩管理页面 -> 用户: 显示删除结果
-deactivate 用户
+笔试成绩管理页面 --> 用户: 显示删除结果
 
 @enduml
