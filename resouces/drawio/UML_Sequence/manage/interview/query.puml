@@ -1,0 +1,33 @@
+@startuml written_query
+
+hide footbox
+skinparam sequence {
+  ParticipantBackgroundColor #ffffff
+  ParticipantFontColor #000000
+}
+
+participant 用户
+participant 面试成绩管理页面
+participant 面试成绩管理控制器
+participant 面试成绩管理服务
+
+
+用户 -> 面试成绩管理页面: 填写搜索表单
+activate 面试成绩管理页面
+
+面试成绩管理页面 -> 面试成绩管理控制器: 发送查询字段
+activate 面试成绩管理控制器
+
+面试成绩管理控制器 -> 面试成绩管理服务: 发送查询字段
+activate 面试成绩管理服务
+
+面试成绩管理服务 -> 面试成绩管理服务: 填充查询字段并进行数据查询
+面试成绩管理服务 --> 面试成绩管理控制器: 返回查询结果
+deactivate 面试成绩管理服务
+
+面试成绩管理控制器 --> 面试成绩管理页面: 返回查询结果
+deactivate 面试成绩管理控制器
+
+面试成绩管理页面 -> 面试成绩管理页面: 渲染查询结果
+
+@enduml

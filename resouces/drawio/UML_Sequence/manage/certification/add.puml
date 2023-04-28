@@ -1,0 +1,36 @@
+@startuml written_add
+
+hide footbox
+skinparam sequence {
+  ParticipantBackgroundColor #ffffff
+  ParticipantFontColor #000000
+}
+
+participant 用户
+participant 证书信息管理页面
+participant 证书信息管理控制器
+
+activate 用户
+用户 -> 证书信息管理页面: 填写添加成绩表单
+
+activate 证书信息管理页面
+证书信息管理页面 -> 证书信息管理页面: 表单校验失败
+
+activate 证书信息管理页面 #1
+证书信息管理页面 -> 用户: 重新填写表单
+deactivate 证书信息管理页面 #1
+
+证书信息管理页面 -> 证书信息管理控制器: 提交证书信息信息
+
+
+activate 证书信息管理控制器
+证书信息管理控制器 -> 证书信息管理控制器: 填充实体类并插入数据库
+
+证书信息管理控制器 --> 证书信息管理页面: 返回添加结果
+deactivate 证书信息管理控制器
+
+证书信息管理页面 --> 用户: 显示添加结果
+
+
+
+@enduml
