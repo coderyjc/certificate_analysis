@@ -36,5 +36,32 @@
         where ethic_pass_rate > ${ethicPassScore}
           and exam_date = ${year}) where year=${year}
     </update>
+    <update id="calculateEducationAverage">
+        update tbl_written_statistic ts, (
+            select exam_date, avg(education_score) as education_average_score
+            from tbl_written_score
+            where education_status = '正常'
+            group by exam_date) t
+        set ts.education_average_score=t.education_average_score
+        where t.exam_date=ts.year;
+    </update>
+    <update id="calculatePsychologyAverage">
+        update tbl_written_statistic ts, (
+            select exam_date, avg(education_psychology_score) as psychology_average_score
+            from tbl_written_score
+            where education_psychology_status = '正常'
+            group by exam_date) t
+        set ts.psychology_average_score=t.psychology_average_score
+        where t.exam_date=ts.year;
+    </update>
+    <update id="calculateEthicAverage">
+        update tbl_written_statistic ts, (
+            select exam_date, avg(professional_ethic_score) as ethic_average_score
+            from tbl_written_score
+            where professional_ethic_status = '正常'
+            group by exam_date) t
+        set ts.ethic_average_score=t.ethic_average_score
+        where t.exam_date=ts.year;
+    </update>
 
 </mapper>

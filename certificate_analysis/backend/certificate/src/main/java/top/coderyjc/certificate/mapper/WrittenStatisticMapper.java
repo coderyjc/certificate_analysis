@@ -18,4 +18,10 @@ public interface WrittenStatisticMapper extends BaseMapper<WrittenStatistic> {
     void updatePsychology(String year, String psychologyPassScore);
 
     void updateEthic(String year, String ethicPassScore);
+
+    void calculateEducationAverage();
+
+    void calculatePsychologyAverage();
+
+    void calculateEthicAverage();
 }

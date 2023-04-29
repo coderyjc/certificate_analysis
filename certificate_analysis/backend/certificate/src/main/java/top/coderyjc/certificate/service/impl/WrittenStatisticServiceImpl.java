@@ -75,4 +75,11 @@ public class WrittenStatisticServiceImpl extends ServiceImpl<WrittenStatisticMap
         if(!psychologyPassScore.equals("")) baseMapper.updatePsychology(year, psychologyPassScore);
         if(!ethicPassScore.equals("")) baseMapper.updateEthic(year, ethicPassScore);
     }
+
+    @Override
+    public void calculateAverage() {
+        baseMapper.calculateEducationAverage();
+        baseMapper.calculatePsychologyAverage();
+        baseMapper.calculateEthicAverage();
+    }
 }

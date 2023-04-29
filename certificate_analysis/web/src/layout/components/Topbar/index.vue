@@ -11,8 +11,8 @@
     </div>
     <div class="action">
       <error-log />
-      <userinfo />
-      <change-lang />
+      <!-- <userinfo /> -->
+      <!-- <change-lang /> -->
     </div>
   </div>
 </template>

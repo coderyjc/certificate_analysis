@@ -14,7 +14,6 @@
       @visibilityChange="changeUpdateIdentificationDialogVisibility" :formData="updateFormData">
     </UpdateIdentification>
 
-
     <pro-table ref="table" :title="$t('query/identification.title')" :request="getList" :columns="columns"
       :search="searchConfig" @selectionChange="handleSelectionChange" :pagination="paginationConfig"
       @getModel="getSearchModal">

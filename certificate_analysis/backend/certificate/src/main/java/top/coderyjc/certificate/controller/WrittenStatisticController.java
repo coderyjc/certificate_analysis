@@ -45,6 +45,8 @@ public class WrittenStatisticController {
         if(start.equals("") || end.equals("")) wrapper = null;
         else if(start.equals(end)) wrapper.eq("year", start);
         else wrapper.between("year", start, end);
+//        先计算一下平均分
+        service.calculateAverage();
         List<WrittenStatistic> list = service.list(wrapper);
         return Msg.success().add("data", list);
     }

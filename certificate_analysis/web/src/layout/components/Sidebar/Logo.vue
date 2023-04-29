@@ -1,6 +1,6 @@
 <template>
   <div class="brand">
-    <img class="logo" src="~@/assets/logo.svg" @click="goHome" />
+    <!-- <img class="logo" src="~@/assets/logo.svg" @click="goHome" /> -->
     <div class="title">教师资格证数据分析系统</div>
   </div>
 </template>
@@ -25,13 +25,14 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
+
   .logo {
     cursor: pointer;
     max-width: 32px;
     max-height: 32px;
   }
   .title {
-    color: #fff;
+    color: rgb(255, 255, 255);
     font-size: 14px;
     font-weight: 700;
     white-space: nowrap;

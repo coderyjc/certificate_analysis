@@ -2,11 +2,9 @@
   <el-card>
     <div class="container">
       <div class="avatar">
-        <el-avatar :size="100" src="http://blog.evilemperor.top/upload/2022/08/256.ico" />
       </div>
       <div class="text">
-        <p>早上好，admin</p>
-        <p>今天是2023年4月15日</p>
+        <p>今天是{{ nowTime }}</p>
       </div>
     </div>
   </el-card>
@@ -14,7 +12,16 @@
 
 <script>
 export default {
-
+  computed:{
+    nowTime(){
+      var date = new Date()
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const day = date.getDate()
+      const currStr = year + '年' + month + '月' + day + '日'
+      return currStr
+    }
+  }
 }
 </script>
 

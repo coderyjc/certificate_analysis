@@ -18,4 +18,6 @@ public interface IWrittenStatisticService extends IService<WrittenStatistic> {
     void export(String start, String end, HttpServletResponse response);
 
     void updateAll(String year, String educationPassScore, String psychologyPassScore, String ethicPassScore);
+
+    void calculateAverage();
 }

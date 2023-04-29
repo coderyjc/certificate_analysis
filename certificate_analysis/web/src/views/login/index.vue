@@ -130,7 +130,7 @@ export default defineComponent({
                 router.push('/')
               }
             } else {
-              ctx.$message.error(msg)
+              ctx.$message.error("登录失败")
             }
             state.loading = false
           }
