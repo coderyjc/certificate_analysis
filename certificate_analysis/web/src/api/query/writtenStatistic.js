@@ -25,6 +25,6 @@ export const updateWrittenStatistic = data => {
 
 // 导出统计数据
 export const exportStatisticWrittenScore = (start, end) => {
-  return import.meta.env.VITE_BASE_URL + 'writtenStatistic/export?start=' + start + '&end=' + end 
+  return import.meta.env.VITE_BASE_URL + '/writtenStatistic/export?start=' + start + '&end=' + end 
 }
 

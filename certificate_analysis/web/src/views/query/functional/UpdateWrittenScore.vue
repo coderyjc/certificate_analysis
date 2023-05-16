@@ -13,6 +13,7 @@
       <el-form-item label="教育学考试状态" prop="educationStatus" :label-width="formShape.labelWidth">
         <el-select v-model="form.educationStatus" placeholder="选择教育学考试状态">
           <el-option label="正常" value="正常" />
+          <el-option label="未参加考试" value="未参加考试" />
           <el-option label="缺考" value="缺考" />
           <el-option label="作弊" value="作弊" />
         </el-select>
@@ -24,6 +25,7 @@
       <el-form-item label="教育心理学考试状态" prop="educationPsychologyStatus" :label-width="formShape.labelWidth">
         <el-select v-model="form.educationPsychologyStatus" placeholder="选择教育心理学考试状态">
           <el-option label="正常" value="正常" />
+          <el-option label="未参加考试" value="未参加考试" />
           <el-option label="缺考" value="缺考" />
           <el-option label="作弊" value="作弊" />
         </el-select>
@@ -36,6 +38,7 @@
       <el-form-item label="职业道德修养和高等教育法规状态" prop="professionalEthicStatus" :label-width="formShape.labelWidth">
         <el-select v-model="form.professionalEthicStatus" placeholder="选择职业道德修养和高等教育法规状态">
           <el-option label="正常" value="正常" />
+          <el-option label="未参加考试" value="未参加考试" />
           <el-option label="缺考" value="缺考" />
           <el-option label="作弊" value="作弊" />
         </el-select>
@@ -200,6 +203,26 @@ export default {
       this.$emit('visibilityChange')
     },
     submit() {
+
+      // 考试状态为缺考或者作弊的时候分数为0,未参加考试分数为-1
+      if (this.form.educationStatus == '缺考' || this.form.educationStatus == '作弊') this.form.educationScore = 0
+      if (this.form.educationPsychologyStatus == '缺考' || this.form.educationPsychologyStatus == '作弊') this.form.educationPsychologyScore = 0
+      if (this.form.professionalEthicStatus == '缺考' || this.form.professionalEthicStatus == '作弊') this.form.professionalEthicScore = 0
+      if (this.form.educationStatus == '未参加考试') {
+        this.form.educationScore = -1
+        this.form.educationStatus = '正常'
+      }
+      if (this.form.educationPsychologyStatus == '未参加考试') {
+        this.form.educationPsychologyScore = -1
+        this.form.educationPsychologyStatus = '正常'
+      }
+      if (this.form.professionalEthicStatus == '未参加考试') {
+        this.form.professionalEthicScore = -1
+        this.form.professionalEthicStatus = '正常'
+      }
+
+
+
       updateWrittenScore({
         id: this.id,
         ...this.form,

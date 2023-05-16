@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import top.coderyjc.certificate.util.DateUtil;
 import top.coderyjc.certificate.util.MySQLDatabaseBackup;
 
+import java.io.File;
+
 /**
  * <p>
  * 数据库备份和恢复 服务实现类
@@ -47,18 +49,12 @@ public class BackupServiceImpl extends ServiceImpl<BackupMapper, Backup> impleme
     @Override
     public void recover(Integer id) {
         Backup backup = this.getById(id);
-        String currentPath = System.getProperty("user.dir");
-        String path = currentPath + "\\" + backup.getFilename();
-
+        String path = "./mysql_backup/" + File.separator + backup.getFilename();
         try {
-            MySQLDatabaseBackup.dbRestoreMysql(
-                    "root",
-                    "333",
-                    "localhost",
-                    path
-            );
+            MySQLDatabaseBackup.dbRestoreMysql("root", "333", path);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 }
+

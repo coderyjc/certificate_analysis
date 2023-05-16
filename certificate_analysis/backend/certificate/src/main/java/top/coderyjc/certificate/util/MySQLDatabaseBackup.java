@@ -1,6 +1,7 @@
 package top.coderyjc.certificate.util;
 
 import java.io.*;
+import java.util.Properties;
 
 /**
  * ClassName: MySQLDatabaseBackup
@@ -46,8 +47,9 @@ public class MySQLDatabaseBackup {
         BufferedReader bufferedReader = null;
         try {
             printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(savePath + fileName), "utf8"));
-            String command = "./bin/mysqldump -h" + hostIP + " --databases " + databaseName + " --tables " + tableName + " -u" + userName + " -p" + password + " --default-character-set=UTF8 ";
-            System.out.println(command);
+          String command = "./bin/mysqldump -h" + hostIP + " --databases " + databaseName + " --tables " + tableName + " -u" + userName + " -p" + password + " --default-character-set=UTF8 ";
+//            String command = "mysqldump -h" + hostIP + " --databases " + databaseName + " --tables " + tableName + " -u" + userName + " -p" + password + " --default-character-set=UTF8 > " + savePath + fileName;
+//            System.out.println(command);
             Process process = Runtime.getRuntime().exec(command);
             InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream(), "utf8");
             bufferedReader = new BufferedReader(inputStreamReader);
@@ -79,23 +81,45 @@ public class MySQLDatabaseBackup {
 
     /**
      * 数据库还原
-     *  mysql -ucertificate -p333 certificate < ./2023-04-22-21-49-45-tbl_certification.sql
-     * @param username 账号
-     * @param pwd 密码
-     * @param url 地址
-     * @param path 文件存放路径
+     * @param username
+     * @param pwd
+     * @param path
      */
-    public static void dbRestoreMysql(String username, String pwd, String url, String path) {
+    public static void dbRestoreMysql(String username, String pwd, String path) throws IOException {
 
-        String cmd = "mysql -h" + url + " -u" + username + " -p" + pwd + " certificate" + " < " + path;
+        Runtime runtime = Runtime.getRuntime();
+        //把所执行的命令将以字符串数组的形式出现
+        //根据属性文件的配置获取数据库导入所需的命令，组成一个数组
+        String cmdarray[] = getImportCommand(username, pwd, "localhost", "3306", "certificate_analysis", path, "F:\\db\\mysql-8.0.30-winx64\\bin\\");
+        System.out.println(cmdarray);
+        Process process = runtime.exec(cmdarray[0]);
+        //执行了第一条命令以后已经登录到mysql了，所以之后就是利用mysql的命令窗口
+        java.io.OutputStream os = process.getOutputStream();
+        OutputStreamWriter writer = new OutputStreamWriter(os);
+        //命令1和命令2要放在一起执行
+        // 这里会执行后面的代码， 将命令输出到mysql的命令窗口，进行执行
+        writer.write(cmdarray[1] + "\r\n" + cmdarray[2]);
+        writer.flush();
+        writer.close();
+        os.close();
 
-        System.out.println(cmd);
-
-        try {
-            Runtime.getRuntime().exec(cmd);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
+
+    private static String[] getImportCommand(String username, String password, String host, String port, String importDatabaseName, String importPath,
+                                             String MysqlPath) {
+
+        //第一步，获取登录命令语句
+        String loginCommand = MysqlPath + "mysql -h" + host + " -u" + username + " -p" + password +
+                " -P" + port;
+        //第二步，获取切换数据库到目标数据库的命令语句
+        String switchCommand = "use " + importDatabaseName;
+        //第三步，获取导入的命令语句
+        String importCommand = " source " + importPath;
+
+        //需要返回的命令语句数组
+        String[] strings = {loginCommand, switchCommand, importCommand};
+        return strings;
+    }
+
 
 }

@@ -14,7 +14,9 @@
         <el-input v-model="form.examAddress" autocomplete="off" />
       </el-form-item>
       <el-form-item label="等级" prop="level" :label-width="formShape.labelWidth">
-        <el-input v-model="form.level" autocomplete="off" />
+        <el-select v-model="form.level">
+          <el-option v-for="item in ['A', 'B', 'C', 'D', '缺考']" :key="item" :label="item" :value="item" />
+        </el-select>
       </el-form-item>
       <el-form-item label="申请专业" prop="applyMajor" :label-width="formShape.labelWidth">
         <el-input v-model="form.applyMajor" autocomplete="off" />

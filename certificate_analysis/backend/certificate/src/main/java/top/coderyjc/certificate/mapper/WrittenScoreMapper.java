@@ -1,11 +1,8 @@
 package top.coderyjc.certificate.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import top.coderyjc.certificate.model.dto.WrittenScoreStatisticDTO;
 import top.coderyjc.certificate.model.entity.WrittenScore;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;
 

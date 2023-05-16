@@ -2,7 +2,7 @@
   <el-dialog v-model="formVisible" title="修改密码" :close-on-click-modal="false" center>
     <el-form :model="form" :rules="rules">
       <el-form-item label="用户名" prop="username" :label-width="formShape.labelWidth">
-        <el-input v-model="form.username" :value="username" autocomplete="off" disabled/>
+        <el-input v-model="form.username" :value="username" autocomplete="off" disabled />
       </el-form-item>
       <el-form-item label="旧密码" prop="oldPassword" :label-width="formShape.labelWidth">
         <el-input type="password" v-model="form.oldPassword" autocomplete="off" />
@@ -47,8 +47,8 @@ export default defineComponent({
       password: [
         { required: true, message: '请输入新密码', trigger: 'blur', },
         {
-          validator:  (rule, value, callback) => {
-            if (state.form.password.length < 6 || state.form.password.length > 16){
+          validator: (rule, value, callback) => {
+            if (state.form.password.length < 6 || state.form.password.length > 16) {
               callback(new Error('密码为6到16位'))
             }
           },
@@ -57,14 +57,14 @@ export default defineComponent({
       ],
       confirmPassword: [
         { required: true, message: '请确认新密码', trigger: 'blur', },
-        { 
-          validator:  (rule, value, callback) => {
-            if (state.form.password.length <= 0){
+        {
+          validator: (rule, value, callback) => {
+            if (state.form.password.length <= 0) {
               callback(new Error('请输入新密码'))
             }
-            else if (value.length <= 0){
+            else if (value.length <= 0) {
               callback(new Error('请再次输入密码'))
-            } else if(value != state.form.password){
+            } else if (value != state.form.password) {
               callback(new Error('两次新密码输入不一致'))
             }
           },
@@ -93,8 +93,13 @@ export default defineComponent({
         emit('visibilityChange')
       },
       async submit() {
-        
-        if(state.form.oldPassword == "" || state.form.password == "" || state.form.confirmPassword == "") return
+        if (state.form.oldPassword == "" || state.form.password == "" || state.form.confirmPassword == "") {
+          ElMessage({
+            message: '请填写完整',
+            type: 'warning'
+          })
+          return
+        }
         const { code, data } = await changePwd(state.form)
         if (code == 200) {
           ElMessage({
@@ -111,13 +116,13 @@ export default defineComponent({
       },
     })
 
-    
+
     const formVisible = computed({
       get: () => {
         return props.dialogFormVisible
       }
     })
-    
+
     return {
       ...toRefs(state),
       formVisible

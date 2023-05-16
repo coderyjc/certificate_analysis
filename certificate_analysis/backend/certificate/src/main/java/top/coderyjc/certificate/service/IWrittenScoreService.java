@@ -21,18 +21,15 @@ import java.util.List;
  */
 public interface IWrittenScoreService extends IService<WrittenScore> {
 
-    IPage<WrittenScore> listAll(Integer pn, Integer limit, String gender, String name, String examId, String identificationId,
-                                String educationStatus, String educationPsychologyStatus, String professionalEthicStatus,
-                                Integer educationSort, Integer educationPsychologySort, Integer professionalEthicSort,
-                                String workAddress, String examDate);
+    IPage<WrittenScore> listAll(Integer pn, Integer limit, JSONObject condition);
 
 
     void exportExcel(HttpServletResponse response, List<String> exportId, List<String> exportColumn, JSONObject condition);
 
     String importExcel(MultipartFile file) throws Exception;
 
-//    List<String> listWorkAddress();
-//
+    List<String> listWorkAddress();
+
     List<Integer> listExamDate(Integer limit);
 
     List<WrittenScoreStatisticDTO> statisticWrittenScore(String year, String startYear, String endYear, List<String> statisticItemList);

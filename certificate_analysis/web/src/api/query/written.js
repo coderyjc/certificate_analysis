@@ -2,11 +2,14 @@ import request from '@/utils/request'
 
 // 获取笔试成绩
 export const listWrittenScore = data => {
+  const {current, size} = { ...data }
   return request({
     url: '/writtenScore/all',
     method: 'get',
     params: {
-      ...data,
+      current: current,
+      size: size,
+      searchCondition: data,
     },
   })
 }
@@ -17,7 +20,7 @@ export const addWrittenScore = data => {
     url: '/writtenScore/add',
     method: 'post',
     params: {
-      ...data,
+      param: JSON.stringify(data),
     },
   })
 }
@@ -46,7 +49,7 @@ export const deleteWrittenScore = data => {
 
 // 选择性导出笔试成绩
 export const exportWrittenScore = (exportColumn, exportId, searchCondition) => {
-  let baseStr = import.meta.env.VITE_BASE_URL + 'writtenScore/export?'
+  let baseStr = import.meta.env.VITE_BASE_URL + '/writtenScore/export?'
 
   let exportStr = ''
   if (exportColumn && exportColumn.length > 0) {
@@ -104,9 +107,5 @@ export const statisticWrittenScore = data => {
 
 // 导出统计数据
 export const exportStatisticWrittenScore = data => {
-  return (
-    import.meta.env.VITE_BASE_URL +
-    'writtenScore/statistic/export?condition=' +
-    JSON.stringify(data)
-  )
+  return import.meta.env.VITE_BASE_URL + '/writtenScore/statistic/export?condition=' + JSON.stringify(data)
 }

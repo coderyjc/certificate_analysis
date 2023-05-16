@@ -33,6 +33,14 @@
             :value="option.value"
           ></el-option>
         </el-select>
+        <el-autocomplete
+          v-else-if="item.type === 'autocomplete'"
+          v-model="searchModel[item.name]"
+          :fetch-suggestions="handleSelect(item.options)"
+          clearable
+          :style="{ width: search.inputWidth, ...item.style }"
+          :placeholder="item.placeholder"
+        />
         <el-radio-group
           v-model="searchModel[item.name]"
           v-else-if="item.type === 'radio'"
@@ -413,6 +421,9 @@ export default defineComponent({
       filterHandler(value, row, column) {
         const property = column['property']
         return row[property] === value
+      },
+      handleSelect(options){
+        return options
       },
       // 日期范围
       handleDateChange(date, item, format) {

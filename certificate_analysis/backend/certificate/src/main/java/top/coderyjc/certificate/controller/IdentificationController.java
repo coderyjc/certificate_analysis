@@ -193,7 +193,7 @@ public class IdentificationController {
     }
 
     /**
-     * 获取所有的年份
+     * 所有认定批次
      * @return
      */
     @RequestMapping(value = "/batchs", method = RequestMethod.GET)

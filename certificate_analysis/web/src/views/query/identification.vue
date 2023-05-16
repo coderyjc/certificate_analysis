@@ -194,21 +194,19 @@ export default defineComponent({
             type: 'radio',
             defaultValue: "",
             options: [
-              {
-                name: 'public.male',
-                value: 1,
-              },
-              {
-                name: 'public.female',
-                value: 0,
-              },
+              { name: 'public.male', value: 1, },
+              { name: 'public.female', value: 0, },
             ],
           },
           {
-            type: 'text',
+            type: 'radio',
             label: 'query/identification.majorType',
             name: 'majorType',
             defaultValue: "",
+            options: [
+              { name: '师范类', value: '师范类', },
+              { name: '非师范类', value: '非师范类', },
+            ],
           },
           {
             type: 'text',
@@ -223,16 +221,33 @@ export default defineComponent({
             defaultValue: "",
           },
           {
-            type: 'text',
+            type: 'select',
             label: 'query/identification.highestEducationBackground',
             name: 'highestEducationBackground',
             defaultValue: "",
+            options: [
+              { name: '大学本科', value: '大学本科' },
+              { name: '大学专科', value: '大学专科' },
+              { name: '研究生', value: '研究生' },
+              { name: '其他中专', value: '其他中专' },
+              { name: '幼师', value: '幼师' },
+              { name: '中师', value: '中师' },
+            ]
           },
           {
-            type: 'text',
+            type: 'select',
             label: 'query/identification.qualificationType',
             name: 'qualificationType',
             defaultValue: "",
+            options: [
+              { name: '高校', value: '高校' },
+              { name: '高中', value: '高中' },
+              { name: '幼儿园', value: '幼儿园' },
+              { name: '小学', value: '小学' },
+              { name: '中职', value: '中职' },
+              { name: '初中', value: '初中' },
+              { name: '中职实习', value: '中职实习' },
+            ]
           },
           {
             type: 'text',
@@ -241,10 +256,16 @@ export default defineComponent({
             defaultValue: "",
           },
           {
-            type: 'text',
+            type: 'select',
             label: 'query/identification.highestDegree',
             name: 'highestDegree',
             defaultValue: "",
+            options: [
+              { name: '硕士', value: '硕士' },
+              { name: '无学位', value: '无学位' },
+              { name: '学士', value: '学士' },
+              { name: '博士', value: '博士' },
+            ]
           },
           {
             type: 'text',
@@ -265,16 +286,24 @@ export default defineComponent({
             defaultValue: "",
           },
           {
-            type: 'text',
+            type: 'radio',
             label: 'query/identification.examType',
             name: 'examType',
             defaultValue: "",
+            options: [
+              { name: '国考', value: '国考' },
+              { name: '非国考', value: '非国考' },
+            ]
           },
           {
-            type: 'text',
+            type: 'radio',
             label: 'query/identification.organizationType',
             name: 'organizationType',
             defaultValue: "",
+            options: [
+              { name: '省级机构', value: '省级机构' },
+              { name: '市级机构', value: '市级机构' },
+            ]
           },
           {
             label: 'query/identification.subject',

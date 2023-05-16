@@ -50,7 +50,7 @@ export const deleteCertification = data => {
 // 选择性导出面试成绩
 export const exportCertification = (exportColumn, exportId, searchCondition) => {
 
-  let baseStr = import.meta.env.VITE_BASE_URL + 'certification/export?'
+  let baseStr = import.meta.env.VITE_BASE_URL + '/certification/export?'
 
   let exportStr = ''
   if(exportColumn && exportColumn.length > 0){
@@ -112,6 +112,6 @@ export const statisticCertification = data => {
 
 // 导出统计数据
 export const exportStatisticCertification = data => {
-  return import.meta.env.VITE_BASE_URL + 'certification/statistic/export?condition=' + JSON.stringify(data)
+  return import.meta.env.VITE_BASE_URL + '/certification/statistic/export?condition=' + JSON.stringify(data)
 }
 

@@ -63,7 +63,7 @@ export default {
       },
       style: {
         width: '1200px',
-        height: '500px',
+        height: '800px',
       },
       map: {
         '时间': 'year',
@@ -279,7 +279,8 @@ export default {
     },
     handleDialogVisible() {
       this.dialogVisible = !this.dialogVisible
-    }
+    },
+
   }
 
 

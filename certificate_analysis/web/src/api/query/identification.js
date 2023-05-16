@@ -114,6 +114,6 @@ export const statisticIdentification = data => {
 
 // 导出统计数据
 export const exportStatisticIdentification = data => {
-  return import.meta.env.VITE_BASE_URL + 'identification/statistic/export?condition=' + JSON.stringify(data)
+  return import.meta.env.VITE_BASE_URL + '/identification/statistic/export?condition=' + JSON.stringify(data)
 }
 

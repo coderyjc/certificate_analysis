@@ -119,7 +119,7 @@ public class UserController {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
         User user = service.getOne(wrapper);
-        if(!user.getPassword().equals(MD5Util.getMD5(oldPassword))){
+        if(user == null || !user.getPassword().equals(MD5Util.getMD5(oldPassword))){
             return Msg.fail().add("data", "旧密码错误");
         }
         if(user.getPassword().equals(MD5Util.getMD5(newPassword))){

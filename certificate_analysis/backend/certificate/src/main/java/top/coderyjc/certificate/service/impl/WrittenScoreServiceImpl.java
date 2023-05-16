@@ -40,39 +40,41 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
 
 
     @Override
-    public IPage<WrittenScore> listAll(Integer pn,Integer limit,String gender,String name,String examId,String identificationId,
-                                       String educationStatus,String educationPsychologyStatus,String professionalEthicStatus,
-                                       Integer educationSort,Integer educationPsychologySort,Integer professionalEthicSort,
-                                       String workAddress,String examDate) {
+    public IPage<WrittenScore> listAll(Integer pn,Integer limit, JSONObject condition) {
 
         IPage<WrittenScore> iPage = new Page<>(pn, limit);
         QueryWrapper<WrittenScore> wrapper = new QueryWrapper<>();
 
-        if(!gender.equals("")) wrapper.eq("gender", gender);
-        if(!name.equals("")) wrapper.eq("name", name);
-        if(!examId.equals("")) wrapper.eq("exam_id", examId);
-        if(!examDate.equals("")) wrapper.like("exam_date", examDate);
-        if(!identificationId.equals("")) wrapper.eq("identification_id", identificationId);
-        if(!workAddress.equals("")) wrapper.eq("work_address", workAddress);
+        if(!condition.get("gender").equals("")) wrapper.eq("gender", condition.get("gender"));
+        if(!condition.get("name").equals("")) wrapper.eq("name", condition.get("name"));
+        if(!condition.get("examId").equals("")) wrapper.eq("exam_id", condition.get("examId"));
+        if(!condition.get("examDate").equals("")) wrapper.like("exam_date", condition.get("examDate"));
+        if(!condition.get("identificationId").equals("")) wrapper.eq("identification_id", condition.get("identificationId"));
+        if(!condition.get("workAddress").equals("")) wrapper.eq("work_address", condition.get("workAddress"));
+        if(!condition.get("educationStatus").equals("")) wrapper.eq("education_status", condition.get("educationStatus"));
+        if(!condition.get("educationPsychologyStatus").equals("")) wrapper.eq("education_psychology_status", condition.get("educationPsychologyStatus"));
+        if(!condition.get("professionalEthicStatus").equals("")) wrapper.eq("professional_ethic_status", condition.get("professionalEthicStatus"));
 
-        if(!educationStatus.equals("")) wrapper.eq("education_status", educationStatus);
-        if(!educationPsychologyStatus.equals("")) wrapper.eq("education_psychology_status", educationPsychologyStatus);
-        if(!professionalEthicStatus.equals("")) wrapper.eq("professional_ethic_status", professionalEthicStatus);
 
-        if(null != educationSort){
-            if(educationSort == 1)
+        String eduSort = condition.getString("educationSort");
+        if(!eduSort.equals("")){
+            if(eduSort.equals("1"))
                 wrapper.orderByAsc("education_score");
             else
                 wrapper.orderByDesc("education_score");
         }
-        if(null != educationPsychologySort){
-            if(educationPsychologySort == 1)
+
+        String psySort = condition.getString("educationPsychologySort");
+        if(!psySort.equals("")){
+            if(psySort.equals("1"))
                 wrapper.orderByAsc("education_psychology_score");
             else
                 wrapper.orderByDesc("education_psychology_score");
         }
-        if(null != professionalEthicSort){
-            if(professionalEthicSort == 1)
+
+        String thiSort = condition.getString("professionalEthicSort");
+        if(!thiSort.equals("")){
+            if(thiSort.equals("1"))
                 wrapper.orderByAsc("professional_ethic_score");
             else
                 wrapper.orderByDesc("professional_ethic_score");
@@ -221,11 +223,11 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
         return "导入成功";
     }
 
-//    @Override
-//    public List<String> listWorkAddress() {
-//        return baseMapper.listWorkAddress();
-//    }
-//
+    @Override
+    public List<String> listWorkAddress() {
+        return baseMapper.listWorkAddress();
+    }
+
     @Override
     public List<Integer> listExamDate(Integer limit) {
         return baseMapper.listExamDate(limit);

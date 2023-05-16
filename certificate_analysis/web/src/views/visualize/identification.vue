@@ -486,6 +486,7 @@ export default {
         legend: {
           orient: 'horizontal',
           right: '30px',
+          top: '20px',
         },
         tooltip: {},
         dataset: {

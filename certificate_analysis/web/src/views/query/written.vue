@@ -4,16 +4,14 @@
       @visibilityChange="changeAddWrittenScoreDialogVisibility">
     </AddWrittenScore>
     <ExportWrittenScore :dialogVisible="exportWrittenScoreDialogVisibility"
-      @visibilityChange="changeExportWrittenScoreDialogVisibility" 
-      :selectedItems="selectedItems"
+      @visibilityChange="changeExportWrittenScoreDialogVisibility" :selectedItems="selectedItems"
       :searchModel="searchModal">
     </ExportWrittenScore>
     <ImportWrittenScore :dialogVisible="importWrittenScoreDialogVisibility"
       @visibilityChange="changeImportWrittenScoreDialogVisibility">
     </ImportWrittenScore>
-    <UpdateWrittenScore :formVisible="updateWrittenScoreDialogVisibility" 
-    @visibilityChange="changeUpdateWrittenScoreDialogVisibility" 
-    :formData="updateFormData">
+    <UpdateWrittenScore :formVisible="updateWrittenScoreDialogVisibility"
+      @visibilityChange="changeUpdateWrittenScoreDialogVisibility" :formData="updateFormData">
     </UpdateWrittenScore>
     <pro-table ref="table" :title="$t('query/written.title')" :request="getList" :columns="columns" :search="searchConfig"
       @selectionChange="handleSelectionChange" :pagination="paginationConfig" @getModel="getSearchModal">
@@ -38,6 +36,18 @@
         <el-button type="primary" icon="Download" @click="changeExportWrittenScoreDialogVisibility">
           {{ $t('table.export') }}
         </el-button>
+      </template>
+
+      <template #educationScore="{ row }">
+        {{ row.educationScore == -1 ? '未参加考试' : row.educationScore }}
+      </template>
+
+      <template #educationPsychologyScore="{ row }">
+        {{ row.educationPsychologyScore == -1 ? '未参加考试' : row.educationPsychologyScore }}
+      </template>
+
+      <template #professionalEthicScore="{ row }">
+        {{ row.professionalEthicScore == -1 ? '未参加考试' : row.professionalEthicScore }}
       </template>
 
       <template #educationStatus="{ row }">
@@ -77,7 +87,7 @@
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
-import { listWrittenScore, deleteWrittenScore } from '@/api/query/written'
+import { listWrittenScore, deleteWrittenScore, listExamYear, listWorkAddress } from '@/api/query/written'
 
 import AddWrittenScore from './functional/AddWrittenScore.vue'
 import ExportWrittenScore from './functional/ExportWrittenScore.vue'
@@ -94,6 +104,17 @@ export default defineComponent({
   },
   setup() {
 
+    // 获取数据
+    async function listYears(){ 
+      let years = []
+      await listExamYear().then(res => res.data.data.forEach(e => years.push({name: e, value: e})))
+      return years
+    }
+    const years = []
+    listYears().then(res => res.forEach(e => years.push(e)))
+
+
+    // 表格配置
     const state = reactive({
       // 字段配置
       columns: [
@@ -116,20 +137,20 @@ export default defineComponent({
         },
         {
           label: 'query/written.educationScore',
+          tdSlot: 'educationScore',
           prop: 'educationScore',
-          sortable: true,
           minWidth: 100,
         },
         {
           label: 'query/written.educationPsychologyScore',
+          tdSlot: 'educationPsychologyScore',
           prop: 'educationPsychologyScore',
-          sortable: true,
           minWidth: 130,
         },
         {
           label: 'query/written.professionalEthicScore',
+          tdSlot: 'professionalEthicScore',
           prop: 'professionalEthicScore',
-          sortable: true,
           minWidth: 120,
         },
         {
@@ -209,13 +230,14 @@ export default defineComponent({
             type: 'text',
             label: 'query/written.workAddress',
             name: 'workAddress',
-            defaultValue: "",
+            defaultValue: '',
           },
           {
             label: 'query/written.examDate',
             name: 'examDate',
-            type: 'text',
+            type: 'select',
             defaultValue: '',
+            options: years
           },
           {
             label: 'query/written.educationStatus',

@@ -67,7 +67,7 @@
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
-import { listCertification, deleteCertification } from '@/api/query/certification'
+import { listCertification, deleteCertification, listInterviewYear, listValidateYear } from '@/api/query/certification'
 
 import { dateFormatYMD } from '@/utils/timeUtil'
 
@@ -85,6 +85,26 @@ export default defineComponent({
     UpdateCertification
   },
   setup() {
+
+    // 获取数据
+    async function listInterviewYears() {
+      let years = []
+      await listInterviewYear().then(res => res.data.data.forEach(e => years.push({ name: e, value: e })))
+      return years
+    }
+    const interviewYears = []
+    listInterviewYears().then(res => res.forEach(e => interviewYears.push(e)))
+
+    // 获取数据
+    async function listYears() {
+      let years = []
+      await listValidateYear().then(res => res.data.data.forEach(e => years.push({ name: e, value: e })))
+      return years
+    }
+    const validateYear = []
+    listYears().then(res => res.forEach(e => validateYear.push(e)))
+
+
     const state = reactive({
       // 字段配置
       columns: [
@@ -169,9 +189,10 @@ export default defineComponent({
             defaultValue: "",
           },
           {
-            type: 'text',
+            type: 'select',
             label: 'query/certification.interviewYear',
             name: 'interviewYear',
+            options: interviewYears,
             defaultValue: "",
           },
           {
@@ -183,7 +204,8 @@ export default defineComponent({
           {
             label: 'query/certification.validateDate',
             name: 'validateDate',
-            type: 'text',
+            type: 'select',
+            options: validateYear,
             defaultValue: '',
           },
           {

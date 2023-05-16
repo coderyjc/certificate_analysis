@@ -4,7 +4,6 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -85,7 +84,7 @@ public class DownloadUtil {
 //      导出文件到指定位置
         FileOutputStream outputStream = null;
         try {
-            outputStream = new FileOutputStream(directory + '\\' + fileName);
+            outputStream = new FileOutputStream(directory + File.separator + fileName);
             workbook.write(outputStream);
             outputStream.close();
             workbook.close();

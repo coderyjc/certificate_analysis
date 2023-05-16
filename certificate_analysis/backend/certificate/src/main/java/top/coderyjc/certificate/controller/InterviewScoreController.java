@@ -59,14 +59,14 @@ public class InterviewScoreController {
         InterviewScore interviewScore = new InterviewScore();
         JSONObject jsonObject = JSONObject.parseObject(data);
 //        赋值
-        interviewScore.setName((String) jsonObject.get("name"));
-        interviewScore.setExamAddress((String) jsonObject.get("examAddress"));
-        interviewScore.setIdentificationId((String) jsonObject.get("identificationId"));
-        interviewScore.setWorkAddress((String) jsonObject.get("workAddress"));
-        interviewScore.setApplyMajor((String) jsonObject.get("applyMajor"));
-        interviewScore.setLevel((String) jsonObject.get("level"));
-        interviewScore.setExamDate((String) jsonObject.get("examDate"));
-        interviewScore.setGender(Integer.parseInt(((String) jsonObject.get("identificationId")).substring(17, 18)) % 2);
+        interviewScore.setName(jsonObject.getString("name"));
+        interviewScore.setExamAddress(jsonObject.getString("examAddress"));
+        interviewScore.setIdentificationId(jsonObject.getString("identificationId"));
+        interviewScore.setWorkAddress(jsonObject.getString("workAddress"));
+        interviewScore.setApplyMajor(jsonObject.getString("applyMajor"));
+        interviewScore.setLevel(jsonObject.getString("level"));
+        interviewScore.setExamDate(jsonObject.getString("examDate"));
+        interviewScore.setGender(Integer.parseInt(jsonObject.getString("identificationId").substring(17, 18)) % 2);
         boolean result = false;
         if(7 == jsonObject.size()){
             result = service.save(interviewScore);
@@ -180,8 +180,6 @@ public class InterviewScoreController {
         List<Integer> yearList = service.listAllYears(10);
         return Msg.success().add("data", yearList);
     }
-
-
 
 
 }

@@ -11,13 +11,13 @@
         <el-input v-model="form.qualificationId" autocomplete="off" />
       </el-form-item>
       <el-form-item label="面试年份" prop="interviewYear" :label-width="formShape.labelWidth">
-        <el-input v-model="form.interviewYear" autocomplete="off" />
+        <el-date-picker v-model="form.interviewYear" type="year" placeholder="选择面试年份" />
       </el-form-item>
       <el-form-item label="专业" prop="major" :label-width="formShape.labelWidth">
         <el-input v-model="form.major" autocomplete="off" />
       </el-form-item>
       <el-form-item label="有效期" prop="validateDate" :label-width="formShape.labelWidth">
-        <el-input v-model="form.validateDate" autocomplete="off" />
+        <el-date-picker v-model="form.validateDate" type="date" placeholder="有效期" />
       </el-form-item>
     </el-form>
     <template late #footer>
@@ -66,11 +66,11 @@ export default {
           { required: true, message: '请输入专业', trigger: 'blur', },
         ],
         validateDate: [
-          { required: true, message: '请输入等级', trigger: 'blur', },
+          { required: true, message: '请输入有效期', trigger: 'blur', },
         ],
         identificationId: [
           { required: true, message: '请输入身份证号', trigger: 'blur', },
-          { pattern: /\d{15}(\d\d[0-9xX])?/, message: '请输入正确的身份证号', trigger: 'blur', },
+          { pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/, message: '请输入正确的身份证号', trigger: 'blur', },
         ],
       }
     }
@@ -101,6 +101,11 @@ export default {
       this.$emit('visibilityChange')
     },
     submit() {
+      
+      // 变换格式
+      this.form.interviewYear = this.form.interviewYear.getFullYear()
+      this.form.validateDate = this.form.validateDate.getFullYear() + '-' + (this.form.validateDate.getMonth() + 1) + '-' + this.form.validateDate.getDate()
+
       updateCertification({
         id: this.id,
         ...this.form,

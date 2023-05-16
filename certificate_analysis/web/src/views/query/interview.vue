@@ -63,7 +63,7 @@
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
-import { listInterviewScore, deleteInterviewScore } from '@/api/query/interview'
+import { listInterviewScore, deleteInterviewScore, listInterviewYear } from '@/api/query/interview'
 
 import AddInterviewScore from './functional/AddInterviewScore.vue'
 import ExportInterviewScore from './functional/ExportInterviewScore.vue'
@@ -79,6 +79,18 @@ export default defineComponent({
     UpdateInterviewScore
   },
   setup() {
+
+    // 获取数据
+    async function listYears() {
+      let years = []
+      await listInterviewYear().then(res => res.data.data.forEach(e => years.push({ name: e, value: e })))
+      return years
+    }
+    const years = []
+    listYears().then(res => res.forEach(e => years.push(e)))
+
+
+
     const state = reactive({
       // 字段配置
       columns: [
@@ -151,14 +163,8 @@ export default defineComponent({
             type: 'radio',
             defaultValue: "",
             options: [
-              {
-                name: 'public.male',
-                value: 1,
-              },
-              {
-                name: 'public.female',
-                value: 0,
-              },
+              { name: 'public.male', value: 1, },
+              { name: 'public.female', value: 0, },
             ],
           },
           {
@@ -180,16 +186,24 @@ export default defineComponent({
             defaultValue: "",
           },
           {
-            type: 'text',
+            type: 'select',
             label: 'query/interview.level',
             name: 'level',
             defaultValue: "",
+            options: [
+              { name: 'A', value: 'A', },
+              { name: 'B', value: 'B', },
+              { name: 'C', value: 'C', },
+              { name: 'D', value: 'D', },
+              { name: '缺考', value: '缺考', },
+            ]
           },
           {
             label: 'query/interview.examDate',
             name: 'examDate',
-            type: 'text',
+            type: 'select',
             defaultValue: '',
+            options: years
           },
           {
             label: 'query/interview.applyMajor',

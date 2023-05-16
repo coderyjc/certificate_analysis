@@ -14,7 +14,9 @@
         <el-input v-model="form.examAddress" autocomplete="off" />
       </el-form-item>
       <el-form-item label="等级" prop="level" :label-width="formShape.labelWidth">
-        <el-input v-model="form.level" autocomplete="off" />
+        <el-select v-model="form.level">
+          <el-option v-for="item in ['A', 'B', 'C', 'D', '缺考']" :key="item" :label="item" :value="item" />
+        </el-select>
       </el-form-item>
       <el-form-item label="申请专业" prop="applyMajor" :label-width="formShape.labelWidth">
         <el-input v-model="form.applyMajor" autocomplete="off" />
@@ -46,6 +48,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+
     const getRules = () => ({
       name: [
         { required: true, message: '请输入姓名', trigger: 'blur', },
@@ -61,7 +64,7 @@ export default defineComponent({
       ],
       identificationId: [
         { required: true, message: '请输入身份证号', trigger: 'blur', },
-        { pattern: /\d{15}(\d\d[0-9xX])?/, message: '请输入正确的身份证号', trigger: 'blur',},
+        { pattern: /\d{15}(\d\d[0-9xX])?/, message: '请输入正确的身份证号', trigger: 'blur', },
       ],
       workAddress: [
         { required: true, message: '工作单位', trigger: 'blur', },
@@ -90,9 +93,9 @@ export default defineComponent({
         state.form.identificationId = ""
         state.form.workAddress = ""
         state.form.examDate = ""
-        state.form.examAddress = ""             
-        state.form.applyMajor = ""      
-        state.form.level = ""      
+        state.form.examAddress = ""
+        state.form.applyMajor = ""
+        state.form.level = ""
       },
       handleVisibilityChange() {
         emit('visibilityChange')
