@@ -1,7 +1,6 @@
 package top.coderyjc.certificate.util;
 
 import java.io.*;
-import java.util.Properties;
 
 /**
  * ClassName: MySQLDatabaseBackup
@@ -47,9 +46,7 @@ public class MySQLDatabaseBackup {
         BufferedReader bufferedReader = null;
         try {
             printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(savePath + fileName), "utf8"));
-          String command = "./bin/mysqldump -h" + hostIP + " --databases " + databaseName + " --tables " + tableName + " -u" + userName + " -p" + password + " --default-character-set=UTF8 ";
-//            String command = "mysqldump -h" + hostIP + " --databases " + databaseName + " --tables " + tableName + " -u" + userName + " -p" + password + " --default-character-set=UTF8 > " + savePath + fileName;
-//            System.out.println(command);
+            String command = "./bin/mysqldump -h" + hostIP + " --databases " + databaseName + " --tables " + tableName + " -u" + userName + " -p" + password + " --default-character-set=UTF8 ";
             Process process = Runtime.getRuntime().exec(command);
             InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream(), "utf8");
             bufferedReader = new BufferedReader(inputStreamReader);
@@ -77,7 +74,6 @@ public class MySQLDatabaseBackup {
         }
         return false;
     }
-
 
     /**
      * 数据库还原

@@ -432,7 +432,10 @@ export default defineComponent({
       updateWrittenScoreDialogVisibility.value = !updateWrittenScoreDialogVisibility.value
     }
     const updateScore = data => {
-      state.updateFormData = data
+      state.updateFormData = {...data}
+      if(state.updateFormData.educationScore == "-1") state.updateFormData.educationStatus = "没有报名考试"
+      if(state.updateFormData.educationPsychologyScore == "-1") state.updateFormData.educationPsychologyStatus = "没有报名考试"
+      if(state.updateFormData.professionalEthicScore == "-1") state.updateFormData.professionalEthicStatus = "没有报名考试"
       changeUpdateWrittenScoreDialogVisibility()
     }
 

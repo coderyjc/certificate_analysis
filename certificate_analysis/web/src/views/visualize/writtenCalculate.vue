@@ -54,7 +54,7 @@ export default {
       columns: [],
       tableData: [],
       form: {
-        start: '2016',
+        start: '2017',
         end: '2018',
       },
       chartData: {
@@ -164,7 +164,13 @@ export default {
           }
 
           this.tableData.forEach(e => {
-            this.chartData.series.push({ type: 'bar' })
+            this.chartData.series.push({ 
+              type: 'bar',
+              label: {
+                show: true,
+                position: 'top'
+              },
+            })
             this.chartData.source[0].push(String(e.year))
             this.chartData.source[1].push(e.educationAverageScore)
             this.chartData.source[2].push(e.educationPassRate)

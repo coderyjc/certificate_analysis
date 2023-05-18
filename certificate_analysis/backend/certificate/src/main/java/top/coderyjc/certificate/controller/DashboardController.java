@@ -61,7 +61,6 @@ public class DashboardController {
         return Msg.success().add("data", data);
     }
 
-
     /**
      * 5年之内的面试数据变化趋势
      * @return

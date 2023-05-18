@@ -20,21 +20,21 @@
     </sql>
     <update id="updateEducation">
         update tbl_written_statistic set education_pass_rate = (select 100 * count(id) / (select count(id) from tbl_written_score where exam_date = ${year}) rate
-        from tbl_written_score
-        where education_score > ${educationPassScore} and exam_date = ${year})
+        from tbl_written_score tws
+        where tws.education_score > ${educationPassScore} and tws.exam_date = ${year})
         where year=${year}
     </update>
     <update id="updatePsychology">
         update tbl_written_statistic set psychology_pass_rate = (select 100 * count(id) / (select count(id) from tbl_written_score where exam_date = ${year}) rate
-         from tbl_written_score
-     where psychology_pass_rate > ${psychologyPassScore}
-       and exam_date = ${year}) where year=${year}
+        from tbl_written_score tws
+        where tws.education_psychology_score > ${psychologyPassScore} and tws.exam_date = ${year})
+        where year=${year}
     </update>
     <update id="updateEthic">
         update tbl_written_statistic set ethic_pass_rate = (select 100 * count(id) / (select count(id) from tbl_written_score where exam_date = ${year}) rate
-        from tbl_written_score
-        where ethic_pass_rate > ${ethicPassScore}
-          and exam_date = ${year}) where year=${year}
+        from tbl_written_score tws
+        where tws.professional_ethic_score > ${ethicPassScore} and tws.exam_date = ${year})
+        where year=${year}
     </update>
     <update id="calculateEducationAverage">
         update tbl_written_statistic ts, (

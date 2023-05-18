@@ -4,6 +4,7 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -21,6 +22,7 @@ import java.util.List;
  * @Version 1.0
  */
 public class DownloadUtil {
+
 
     /**
      * 通用的文件下载工具,服务器 -> 客户端

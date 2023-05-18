@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.poi.ss.formula.functions.MatrixFunction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import top.coderyjc.certificate.model.entity.Backup;
@@ -29,6 +30,10 @@ public class BackupController {
 
     @Autowired
     IBackupService service;
+
+    @Value("${custom.backup-location}")
+    private String backupLocation;
+
 
     /**
      * 获取所有备份数据
@@ -73,7 +78,7 @@ public class BackupController {
     public Msg deleteItem(@RequestParam(value = "id")Integer id){
 //        获取备份数据
         Backup backup = service.getById(id);
-        File file = new File("./mysql_backup/" + backup.getFilename());
+        File file = new File(backupLocation + backup.getFilename());
         boolean rst = false;
         if(file.exists()) rst = file.delete();
         rst = service.removeById(id) && rst;

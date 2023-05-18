@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import top.coderyjc.certificate.model.entity.InterviewScore;
 import top.coderyjc.certificate.model.entity.WrittenScore;
 import top.coderyjc.certificate.service.IWrittenScoreService;
 import top.coderyjc.certificate.util.Msg;
@@ -155,28 +154,6 @@ public class WrittenScoreController {
         if (!(fileName.endsWith("xls") || fileName.endsWith("xlsx"))) {
             return Msg.fail().add("msg", "上传文件格式不正确，请传入正确的Excel文件");
         }
-
-        //验证导入工时的标题头是否合法
-//        Workbook wb = null;
-//        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
-//
-//        InputStream fin;
-//        try {
-//            fin = file.getInputStream();
-//            if ("xls".equals(suffix)) {
-//                wb = new HSSFWorkbook(fin);
-//            } else if ("xlsx".equals(suffix)) {
-//                wb = new XSSFWorkbook(fin);
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-        // 表头
-//        String[] columnName = {"姓名", "性别", "准考证号", "身份证号", "教育学成绩", "教育心理学成绩", "职业道德修养和高等教育法规成绩", "教育学考试状态", "教育心理学考试状态", "职业道德修养和高等教育法规状态", "工作单位", "考试时间"};
-//        boolean resultVali = VerificationUtil.verificationWrittenScoreExcelHeadLine(wb, columnName);
-//        if (!resultVali){
-//            return Msg.fail().add("msg", "导入Excel表头与模板不一致，请核对文件表头");
-//        }
 
         String msg;
         try {

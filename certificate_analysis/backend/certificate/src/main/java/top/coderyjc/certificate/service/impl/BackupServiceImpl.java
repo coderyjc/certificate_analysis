@@ -1,5 +1,6 @@
 package top.coderyjc.certificate.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import top.coderyjc.certificate.model.entity.Backup;
 import top.coderyjc.certificate.mapper.BackupMapper;
 import top.coderyjc.certificate.service.IBackupService;
@@ -21,15 +22,19 @@ import java.io.File;
 @Service
 public class BackupServiceImpl extends ServiceImpl<BackupMapper, Backup> implements IBackupService {
 
+    @Value("${custom.backup-location}")
+    private String backupLocation;
+
     @Override
     public void backup(String tableName, String description) {
+
         boolean rst;
         String timeNow = DateUtil.getCurrentTimeString();
         String filename = timeNow.replace(' ', '-').replace(':','-') + '-' + tableName + ".sql";
         try {
             rst = MySQLDatabaseBackup.exportDatabaseTool("localhost", "root",
                     "333",
-                    "./mysql_backup/",
+                    backupLocation,
                     tableName,
                     filename,
                     "certificate_analysis");
@@ -49,7 +54,7 @@ public class BackupServiceImpl extends ServiceImpl<BackupMapper, Backup> impleme
     @Override
     public void recover(Integer id) {
         Backup backup = this.getById(id);
-        String path = "./mysql_backup/" + File.separator + backup.getFilename();
+        String path = backupLocation + File.separator + backup.getFilename();
         try {
             MySQLDatabaseBackup.dbRestoreMysql("root", "333", path);
         } catch (Exception e) {

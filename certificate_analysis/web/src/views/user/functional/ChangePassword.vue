@@ -100,6 +100,21 @@ export default defineComponent({
           })
           return
         }
+        if (state.form.password != state.form.confirmPassword) {
+          ElMessage({
+            message: '两次密码不一致',
+            type: 'warning'
+          })
+          return
+        }
+        if (state.form.password.length < 6) {
+          ElMessage({
+            message: '密码太短了',
+            type: 'warning'
+          })
+          return
+        }
+
         const { code, data } = await changePwd(state.form)
         if (code == 200) {
           ElMessage({
@@ -115,7 +130,6 @@ export default defineComponent({
         }
       },
     })
-
 
     const formVisible = computed({
       get: () => {

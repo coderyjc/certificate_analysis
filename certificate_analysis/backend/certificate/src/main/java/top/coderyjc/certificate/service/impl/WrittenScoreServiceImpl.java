@@ -38,7 +38,6 @@ import java.util.List;
 @Service
 public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, WrittenScore> implements IWrittenScoreService {
 
-
     @Override
     public IPage<WrittenScore> listAll(Integer pn,Integer limit, JSONObject condition) {
 
@@ -54,7 +53,6 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
         if(!condition.get("educationStatus").equals("")) wrapper.eq("education_status", condition.get("educationStatus"));
         if(!condition.get("educationPsychologyStatus").equals("")) wrapper.eq("education_psychology_status", condition.get("educationPsychologyStatus"));
         if(!condition.get("professionalEthicStatus").equals("")) wrapper.eq("professional_ethic_status", condition.get("professionalEthicStatus"));
-
 
         String eduSort = condition.getString("educationSort");
         if(!eduSort.equals("")){
@@ -152,19 +150,19 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
         if(exportColumn.contains("教育学成绩")) {
             ExcelExportEntity educationScoreEntity = new ExcelExportEntity("教育学成绩", "educationScore");
             educationScoreEntity.setWidth(12);
-            educationScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            educationScoreEntity.setReplace(new String[]{"没有报名考试_-1"});
             beanList.add(educationScoreEntity);
         }
         if(exportColumn.contains("教育心理学成绩")) {
             ExcelExportEntity educationPsychologyScoreEntity = new ExcelExportEntity("教育心理学成绩", "educationPsychologyScore");
             educationPsychologyScoreEntity.setWidth(15);
-            educationPsychologyScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            educationPsychologyScoreEntity.setReplace(new String[]{"没有报名考试_-1"});
             beanList.add(educationPsychologyScoreEntity);
         }
         if(exportColumn.contains("职业道德修养和高等教育法规成绩")) {
             ExcelExportEntity professionalEthicScoreEntity = new ExcelExportEntity("职业道德修养和高等教育法规成绩", "professionalEthicScore");
             professionalEthicScoreEntity.setWidth(30);
-            professionalEthicScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            professionalEthicScoreEntity.setReplace(new String[]{"没有报名考试_-1"});
             beanList.add(professionalEthicScoreEntity);
         }
         if(exportColumn.contains("教育学考试状态")) {
@@ -209,11 +207,11 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
         ExcelImportResult<WrittenScoreImportDTO> result;
         result = ExcelImportUtil.importExcelMore(file.getInputStream(), WrittenScoreImportDTO.class, params);
 
-//        List<WrittenScoreImportDTO> failList = result.getFailList();
         List<WrittenScoreImportDTO> correctResultList = result.getList();
 
         for (WrittenScoreImportDTO writtenScoreImportDTO : correctResultList) {
             WrittenScore writtenScore = new WrittenScore();
+            if(writtenScoreImportDTO.getExamDate().endsWith("年")) writtenScoreImportDTO.setExamDate(writtenScore.getExamDate().substring(0, 4));
             BeanUtils.copyProperties(writtenScoreImportDTO, writtenScore);
             writtenScore.setGender(Integer.parseInt(writtenScore.getIdentificationId().substring(16,17)) % 2);
             resultData.add(writtenScore);
@@ -272,19 +270,19 @@ public class WrittenScoreServiceImpl extends ServiceImpl<WrittenScoreMapper, Wri
         if(statisticItemList.contains("education_score")) {
             ExcelExportEntity educationScoreEntity = new ExcelExportEntity("教育学成绩", "educationScore");
             educationScoreEntity.setWidth(12);
-            educationScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            educationScoreEntity.setReplace(new String[]{"没有报名考试_-1"});
             exportEntityList.add(educationScoreEntity);
         }
         if(statisticItemList.contains("education_psychology_score")) {
             ExcelExportEntity educationPsychologyScoreEntity = new ExcelExportEntity("教育心理学成绩", "educationPsychologyScore");
             educationPsychologyScoreEntity.setWidth(15);
-            educationPsychologyScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            educationPsychologyScoreEntity.setReplace(new String[]{"没有报名考试_-1"});
             exportEntityList.add(educationPsychologyScoreEntity);
         }
         if(statisticItemList.contains("professional_ethic_score")) {
             ExcelExportEntity professionalEthicScoreEntity = new ExcelExportEntity("职业道德修养和高等教育法规成绩", "professionalEthicScore");
             professionalEthicScoreEntity.setWidth(30);
-            professionalEthicScoreEntity.setReplace(new String[]{"未报名考试_-1"});
+            professionalEthicScoreEntity.setReplace(new String[]{"没有报名考试_-1"});
             exportEntityList.add(professionalEthicScoreEntity);
         }
         if(statisticItemList.contains("education_status")) {
