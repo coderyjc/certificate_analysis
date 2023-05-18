@@ -63,7 +63,7 @@ export default {
       },
       style: {
         width: '1200px',
-        height: '800px',
+        height: '600px',
       },
       map: {
         '时间': 'year',

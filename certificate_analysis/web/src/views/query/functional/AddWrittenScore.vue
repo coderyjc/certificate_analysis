@@ -13,7 +13,7 @@
       <el-form-item label="教育学考试状态" prop="educationStatus" :label-width="formShape.labelWidth">
         <el-select v-model="form.educationStatus" placeholder="选择教育学考试状态">
           <el-option label="正常" value="正常" />
-          <el-option label="未参加考试" value="未参加考试" />
+          <el-option label="没有报名考试" value="没有报名考试" />
           <el-option label="缺考" value="缺考" />
           <el-option label="作弊" value="作弊" />
         </el-select>
@@ -25,7 +25,7 @@
       <el-form-item label="教育心理学考试状态" prop="educationPsychologyStatus" :label-width="formShape.labelWidth">
         <el-select v-model="form.educationPsychologyStatus" placeholder="选择教育心理学考试状态">
           <el-option label="正常" value="正常" />
-          <el-option label="未参加考试" value="未参加考试" />
+          <el-option label="没有报名考试" value="没有报名考试" />
           <el-option label="缺考" value="缺考" />
           <el-option label="作弊" value="作弊" />
         </el-select>
@@ -38,7 +38,7 @@
       <el-form-item label="职业道德修养和高等教育法规状态" prop="professionalEthicStatus" :label-width="formShape.labelWidth">
         <el-select v-model="form.professionalEthicStatus" placeholder="选择职业道德修养和高等教育法规状态">
           <el-option label="正常" value="正常" />
-          <el-option label="未参加考试" value="未参加考试" />
+          <el-option label="没有报名考试" value="没有报名考试" />
           <el-option label="缺考" value="缺考" />
           <el-option label="作弊" value="作弊" />
         </el-select>
@@ -52,7 +52,7 @@
         <el-input v-model="form.workAddress" autocomplete="off" />
       </el-form-item>
       <el-form-item label="参考年份" prop="examDate" :label-width="formShape.labelWidth">
-        <el-input v-model="form.examDate" autocomplete="off" />
+        <el-date-picker v-model="form.examDate" type="year" placeholder="选择年份" />
       </el-form-item>
     </el-form>
     <template late #footer>
@@ -197,23 +197,26 @@ export default defineComponent({
       },
       async submit() {
 
-        // 考试状态为缺考或者作弊的时候分数为0,未参加考试分数为-1
+        // 考试状态为缺考或者作弊的时候分数为0,没有报名考试分数为-1
         if (state.form.educationStatus == '缺考' || state.form.educationStatus == '作弊') state.form.educationScore = 0
         if (state.form.educationPsychologyStatus == '缺考' || state.form.educationPsychologyStatus == '作弊') state.form.educationPsychologyScore = 0
         if (state.form.professionalEthicStatus == '缺考' || state.form.professionalEthicStatus == '作弊') state.form.professionalEthicScore = 0
-        if (state.form.educationStatus == '未参加考试') {
+        if (state.form.educationStatus == '没有报名考试') {
           state.form.educationScore = -1
           state.form.educationStatus = '正常'
         }
-        if (state.form.educationPsychologyStatus == '未参加考试') {
+        if (state.form.educationPsychologyStatus == '没有报名考试') {
           state.form.educationPsychologyScore = -1
           state.form.educationPsychologyStatus = '正常'
         }
-        if (state.form.professionalEthicStatus == '未参加考试') {
+        if (state.form.professionalEthicStatus == '没有报名考试') {
           state.form.professionalEthicScore = -1
           state.form.professionalEthicStatus = '正常'
         }
-        
+
+        var s = new Date(state.form.examDate)
+        state.form.examDate = s.getFullYear()
+
         // 发送请求
         const { data } = await addWrittenScore(state.form)
         if (data.data) {

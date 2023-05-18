@@ -22,7 +22,7 @@
         <el-input v-model="form.applyMajor" autocomplete="off" />
       </el-form-item>
       <el-form-item label="参考年份" prop="examDate" :label-width="formShape.labelWidth">
-        <el-input v-model="form.examDate" autocomplete="off" />
+        <el-date-picker v-model="form.examDate" type="year" placeholder="选择年份" />
       </el-form-item>
     </el-form>
     <template late #footer>
@@ -101,6 +101,9 @@ export default defineComponent({
         emit('visibilityChange')
       },
       async submit() {
+        var s = new Date(state.form.examDate)
+        state.form.examDate = s.getFullYear()
+
         const { data } = await addInterviewScore(state.form)
         if (data.data) {
           ElMessage({

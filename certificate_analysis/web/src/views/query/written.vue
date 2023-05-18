@@ -39,21 +39,25 @@
       </template>
 
       <template #educationScore="{ row }">
-        {{ row.educationScore == -1 ? '未参加考试' : row.educationScore }}
+        {{ row.educationScore == -1 ? '没有报名考试' : row.educationScore }}
       </template>
 
       <template #educationPsychologyScore="{ row }">
-        {{ row.educationPsychologyScore == -1 ? '未参加考试' : row.educationPsychologyScore }}
+        {{ row.educationPsychologyScore == -1 ? '没有报名考试' : row.educationPsychologyScore }}
       </template>
 
       <template #professionalEthicScore="{ row }">
-        {{ row.professionalEthicScore == -1 ? '未参加考试' : row.professionalEthicScore }}
+        {{ row.professionalEthicScore == -1 ? '没有报名考试' : row.professionalEthicScore }}
       </template>
 
       <template #educationStatus="{ row }">
         <el-tag :type="row.educationStatus === '正常' ? 'success' : 'error'">
           {{ row.educationStatus }}
         </el-tag>
+      </template>
+
+      <template #gender="{ row }">
+        {{ row.gender == 1 ? "男" : "女" }}
       </template>
 
       <template #educationPsychologyStatus="{ row }">
@@ -104,16 +108,6 @@ export default defineComponent({
   },
   setup() {
 
-    // 获取数据
-    async function listYears(){ 
-      let years = []
-      await listExamYear().then(res => res.data.data.forEach(e => years.push({name: e, value: e})))
-      return years
-    }
-    const years = []
-    listYears().then(res => res.forEach(e => years.push(e)))
-
-
     // 表格配置
     const state = reactive({
       // 字段配置
@@ -123,6 +117,12 @@ export default defineComponent({
           label: 'query/written.name',
           prop: 'name',
           width: 80,
+        },
+        {
+          label: 'public.gender',
+          prop: 'gender',
+          width: 80,
+          tdSlot: 'gender'
         },
         {
           label: 'query/written.examId',
@@ -235,9 +235,8 @@ export default defineComponent({
           {
             label: 'query/written.examDate',
             name: 'examDate',
-            type: 'select',
+            type: 'year',
             defaultValue: '',
-            options: years
           },
           {
             label: 'query/written.educationStatus',

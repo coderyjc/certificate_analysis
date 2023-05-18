@@ -44,7 +44,7 @@ export default defineComponent({
       }
     })
 
-    const action_url = ref(import.meta.env.VITE_BASE_URL + 'certification/importExcel')
+    const action_url = ref(import.meta.env.VITE_BASE_URL + '/certification/importExcel')
 
     return {
       ...toRefs(state),

@@ -80,17 +80,6 @@ export default defineComponent({
   },
   setup() {
 
-    // 获取数据
-    async function listYears() {
-      let years = []
-      await listInterviewYear().then(res => res.data.data.forEach(e => years.push({ name: e, value: e })))
-      return years
-    }
-    const years = []
-    listYears().then(res => res.forEach(e => years.push(e)))
-
-
-
     const state = reactive({
       // 字段配置
       columns: [
@@ -103,7 +92,7 @@ export default defineComponent({
         {
           label: 'public.gender',
           prop: 'gender',
-          width: 120,
+          width: 80,
           tdSlot: 'gender'
         },
         {
@@ -201,9 +190,8 @@ export default defineComponent({
           {
             label: 'query/interview.examDate',
             name: 'examDate',
-            type: 'select',
+            type: 'year',
             defaultValue: '',
-            options: years
           },
           {
             label: 'query/interview.applyMajor',

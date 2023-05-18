@@ -117,7 +117,7 @@ export default defineComponent({
         {
           label: 'public.gender',
           prop: 'gender',
-          width: 120,
+          width: 80,
           tdSlot: 'gender'
         },
         {

@@ -94,6 +94,16 @@
           </el-checkbox-button>
         </el-checkbox-group>
         <el-date-picker
+          v-else-if="item.type === 'year'"
+          v-model="searchModel[item.name]"
+          type="year"
+          format="YYYY"
+          clearable
+          @change="handleDateChange($event, item, 'YYYY')"
+          :placeholder="$t(item.label)"
+          :style="{ width: search.inputWidth, ...item.style }"
+        ></el-date-picker>
+        <el-date-picker
           v-else-if="item.type === 'date'"
           v-model="searchModel[item.name]"
           type="date"
