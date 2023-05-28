@@ -19,13 +19,13 @@ activate 操作系统
 activate Python数据分析程序
 Python数据分析程序 -> Python数据分析程序: 数据预测
 
-Python数据分析程序 -> 操作系统: 输出分析结果
+Python数据分析程序 --> 操作系统: 输出分析结果
 deactivate Python数据分析程序
 
-操作系统 -> Java后端: 输出数据预测结果
+操作系统 --> Java后端: 输出数据预测结果
 deactivate 操作系统
 
-Java后端 -> 前端页面: 返回数据预测结果
+Java后端 --> 前端页面: 返回数据预测结果
 deactivate Java后端
 
 前端页面 -> 前端页面: 页面渲染
