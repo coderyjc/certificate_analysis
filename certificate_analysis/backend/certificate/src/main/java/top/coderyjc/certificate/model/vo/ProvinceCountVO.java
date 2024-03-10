@@ -19,3 +19,6 @@ public class ProvinceCountVO {
     private Integer value;
 
 }
+
+
+//根据以下要求使用SQL语句创建视图：表中有身份证号，根据身份证号的前6位进行分组，给出分组结果和组内数据个数
